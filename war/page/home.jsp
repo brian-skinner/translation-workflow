@@ -52,7 +52,7 @@ limitations under the License.
     }
   } else {
     if ((token != null) && token.equals("alpha")) {
-      response.sendRedirect("about.jsp?token=" + token);
+      response.sendRedirect("/site-config/about.jsp?token=" + token);
     } else { %>
       <html>
         <head></head>

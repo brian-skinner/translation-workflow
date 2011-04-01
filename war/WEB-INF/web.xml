@@ -22,7 +22,7 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
-<!-- ---------------------------------------------------------------
+<!--
    Congratulations, if you're reading this comment, you're probably 
    one of first in the world to look at this code!  
   
@@ -31,7 +31,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
    is to get a proper code review and start improving the quality 
    of the code.  All the code below this line is eagerly awaiting 
    your review comments.
--------------------------------------------------------------- -->
+-->
 
   <servlet>
     <servlet-name>profileServlet</servlet-name>

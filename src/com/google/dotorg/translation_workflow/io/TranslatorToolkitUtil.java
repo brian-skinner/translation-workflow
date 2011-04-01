@@ -15,6 +15,7 @@
 package com.google.dotorg.translation_workflow.io;
 
 import com.google.gdata.client.gtt.GttService;
+import com.google.gdata.data.Link;
 import com.google.gdata.data.MediaContent;
 import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.acl.AclEntry;
@@ -22,8 +23,10 @@ import com.google.gdata.data.acl.AclRole;
 import com.google.gdata.data.acl.AclScope;
 import com.google.gdata.data.gtt.DocumentEntry;
 import com.google.gdata.data.gtt.DocumentSource;
+import com.google.gdata.data.gtt.GlossariesElement;
 import com.google.gdata.data.gtt.SourceLanguage;
 import com.google.gdata.data.gtt.TargetLanguage;
+import com.google.gdata.data.gtt.TmsElement;
 import com.google.gdata.data.media.MediaFileSource;
 import com.google.gdata.data.media.MediaSource;
 import com.google.gdata.util.AuthenticationException;
@@ -40,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,15 +63,21 @@ import java.util.logging.Logger;
  * @author Brian Douglas Skinner
  */
 public class TranslatorToolkitUtil {
-  public static final String FEED_URL = "http://translate.google.com/toolkit/feeds/documents";
-  public static final String DOC_FEED_URL = "http://translate.google.com/toolkit/feeds/documents/";
-  public static final String DOC_ACL_URL = 
-      "http://translate.google.com/toolkit/feeds/acl/documents/";
-  public static final String ARTICLE_URL = "http://translate.google.com/toolkit/workbench?did=";
+  private static final String TOOLKIT_URL = "http://translate.google.com/toolkit/";
+  public static final String FEED_URL = TOOLKIT_URL + "feeds/documents";
+  public static final String DOC_FEED_URL = TOOLKIT_URL + "feeds/documents/";
+  public static final String DOC_ACL_URL = TOOLKIT_URL + "feeds/acl/documents/";
+  public static final String ARTICLE_URL = TOOLKIT_URL + "workbench?did=";
+  public static final String MEMORY_URL = TOOLKIT_URL + "feeds/tm/";
+  public static final String GLOSSARY_URL = TOOLKIT_URL + "feeds/glossary/";
+  public static final String DUMMY_TRANSLATION_MEMORY_ID = "p_53cd889b570b0d4f";
+  public static final String PRODUCTION_TRANSLATION_MEMORY_KEYWORD = "PRODUCTION";
 
   private static final Logger logger = Logger.getLogger(TranslatorToolkitUtil.class.getName());
 
   private GttService service;
+  private String glossaryId;
+  private boolean useProductionTranslationMemory = false;
   
   private static class FakeHtmlFile extends File {
     private String htmlContent;
@@ -193,8 +203,8 @@ public class TranslatorToolkitUtil {
   }
   
   private DocumentEntry uploadHtmlDocument(
-      String sourceLangCode, String targetLangCode, String title, String articleUrl, 
-      String htmlContent) 
+      String sourceLangCode, String targetLangCode, String title, String articleUrl,
+      String htmlContent)
       throws IOException, ServiceException {
     
     if (service == null) {
@@ -211,9 +221,39 @@ public class TranslatorToolkitUtil {
         DocumentSource docSource = new DocumentSource(DocumentSource.Type.HTML, articleUrl);
         entry.setDocumentSource(docSource);
       }
+      
+      setGlossary(entry, glossaryId);
+      
+      if (!useProductionTranslationMemory) {
+        setTranslationMemory(entry, DUMMY_TRANSLATION_MEMORY_ID);
+      }
           
       URL feedUrl = new URL(DOC_FEED_URL);
       return service.insert(feedUrl, entry);     
+    }
+  }
+  
+  private void setGlossary(DocumentEntry entry, String glossaryId) {
+    if (glossaryId != null && !glossaryId.isEmpty()) {
+      GlossariesElement glossariesElement = new GlossariesElement();
+      String url = GLOSSARY_URL + glossaryId;
+      Link link = new Link();
+      link.setHref(url);
+
+      glossariesElement.addLink(link);
+      entry.setGlossary(glossariesElement);
+    }
+  }
+  
+  private void setTranslationMemory(DocumentEntry entry, String tmId) {
+    if (tmId != null) {
+      TmsElement tm = new TmsElement();
+      String url = MEMORY_URL + tmId;
+      Link tmLink = new Link();
+      tmLink.setHref(url);
+
+      tm.addLink(tmLink);
+      entry.setTranslationMemory(tm);
     }
   }
   
@@ -265,14 +305,19 @@ public class TranslatorToolkitUtil {
     String gttAppName= fields[0];
     String userName= fields[1];
     String password = fields[2];
-
+    glossaryId = fields[3];
+    useProductionTranslationMemory = false;
+    if (fields.length == 5 && PRODUCTION_TRANSLATION_MEMORY_KEYWORD.equals(fields[4])) {
+      useProductionTranslationMemory = true;
+    }
+    
     GttService service = new GttService(gttAppName);
     try {
       service.setUserCredentials(userName, password);
       return service;
     } catch (AuthenticationException e) {
-      logger.log(Level.SEVERE, "Error: AuthenticationException from GttService for user " + 
-          userName, e);
+      logger.log(
+          Level.SEVERE, "Error: AuthenticationException from GttService for user " + userName, e);
       return null;
     }
   }

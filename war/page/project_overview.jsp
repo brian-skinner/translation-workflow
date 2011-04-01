@@ -95,7 +95,7 @@ limitations under the License.
       "panic": "P0000001",
       "quarterly": "Q0000001",
       "refracture": "R0000001",
-      "smokestack: "S0000001","
+      "smokestack": "S0000001",
       "tapeworm": "T0000001",
       "U-shaped": "U0000001",
       "vaccary": "V0000001",
@@ -119,11 +119,11 @@ limitations under the License.
         string += "\"" + term + "\",\"" + getUrlForTermId(lexiconEntryList[term]) + "\"\n";
       }
       return string;
-    }; 
-  
+    };
+    
     populateProjectForm = function() {
-      document.getElementById('Name').value = '<%= lexiconExampleProjectName %>';
-      document.getElementById('Description').value = '<%= placeholderDescription %>';
+      document.getElementById('Name').value = "<%= lexiconExampleProjectName %>";
+      document.getElementById('Description').value = "<%= placeholderDescription %>";
       var selectElement = document.getElementById('Language');
       for (var i = 0; i < selectElement.length; i++) {
         // default to Arabic for this Example Project
