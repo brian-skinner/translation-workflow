@@ -41,7 +41,6 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String token = request.getParameter("token");
   String siteName = Website.getInstance().getName();
   
   String projectId = request.getParameter("project");
@@ -96,7 +95,7 @@ limitations under the License.
           </td>
           <td class="centered">
             <% if (translation.isAvailableToTranslate()) { %>
-              <form action="/claim_item?token=<%= token %>" method="post">
+              <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%= project.getId() %>">
                 <input type="hidden" name="language" value="<%= languageCode %>">
                 <input type="hidden" name="translationId" value="<%= translation.getId() %>">
@@ -109,7 +108,7 @@ limitations under the License.
           </td>
           <td class="centered">
             <% if (translation.isAvailableToReview() && !translation.isUserTheTranslator(user)) { %>
-              <form action="/claim_item?token=<%= token %>" method="post">
+              <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%= project.getId() %>">
                 <input type="hidden" name="language" value="<%= languageCode %>">
                 <input type="hidden" name="translationId" value="<%= translation.getId() %>">

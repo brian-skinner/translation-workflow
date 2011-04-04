@@ -36,7 +36,6 @@ limitations under the License.
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
   
-  String token = request.getParameter("token");
   String signInUrl = userService.createLoginURL(request.getRequestURI());
   
   Cloud cloud = Cloud.open();
@@ -46,20 +45,12 @@ limitations under the License.
   if (user != null) {
     Volunteer volunteer = cloud.getVolunteerByUser(user);
     if (volunteer == null) {
-      response.sendRedirect("profile.jsp?token=" + token);
+      response.sendRedirect("profile.jsp");
     } else {
-      response.sendRedirect("my_projects.jsp?token=" + token);
+      response.sendRedirect("my_projects.jsp");
     }
   } else {
-    if ((token != null) && token.equals("alpha")) {
-      response.sendRedirect("/site-config/about.jsp?token=" + token);
-    } else { %>
-      <html>
-        <head></head>
-        <body>empty</body>
-      </html>
-    <%
-    }
+    response.sendRedirect("/site-config/about.jsp");
   }
 
   cloud.close();

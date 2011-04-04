@@ -73,28 +73,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
 
-  <filter>
-    <filter-name>ensureTokenFilter</filter-name>
-    <filter-class>com.google.dotorg.translation_workflow.servlet.EnsureAlphaTesterTokenFilterImpl</filter-class>
-    <init-param>
-      <param-name>expected-token</param-name>
-      <param-value>alpha</param-value>
-    </init-param>
-    <init-param>
-      <param-name>allow</param-name>
-      <param-value>/page/home.jsp</param-value>
-    </init-param>
-    <init-param>
-      <param-name>allow</param-name>
-      <param-value>/page/about.jsp</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>ensureTokenFilter</filter-name>
-    <url-pattern>*</url-pattern>
-  </filter-mapping>
-
-
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>page/home.jsp</welcome-file>

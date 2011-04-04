@@ -39,8 +39,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Brian Douglas Skinner
  */
 public class ProjectServlet extends HttpServlet {
-  private static final Logger logger = Logger.getLogger(ProjectServlet.class.getName());
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String projectId = request.getParameter("projectId");
@@ -68,10 +66,9 @@ public class ProjectServlet extends HttpServlet {
     cloud.close();
 
     if (csvArticleList.isEmpty()) {
-      response.sendRedirect("/page/all_projects.jsp?token=" + request.getParameter("token"));
+      response.sendRedirect("/page/all_projects.jsp");
     } else {
-      response.sendRedirect("/page/project_overview.jsp?project=" + projectId + "&token=" + 
-          request.getParameter("token"));
+      response.sendRedirect("/page/project_overview.jsp?project=" + projectId);
     }
   }
   

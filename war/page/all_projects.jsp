@@ -37,7 +37,6 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String token = request.getParameter("token");
   String siteName = Website.getInstance().getName();
 %>
 
@@ -67,7 +66,7 @@ limitations under the License.
           %>
           <tr>
             <td style="vertical-align:top;">
-              <a href="project_overview.jsp?project=<%= project.getId() %>&token=<%= token %>"><%= project.getName() %></a>
+              <a href="project_overview.jsp?project=<%= project.getId() %>"><%= project.getName() %></a>
             </td>
             <td><%= project.getDescription() %></td>
           </tr>
@@ -77,7 +76,7 @@ limitations under the License.
       %>
       <% if (userService.isUserAdmin()) { %>  
         <tr>
-          <td><input type="button" value="Create a new project" onclick="window.location='project_overview.jsp?project=0&token=<%= token %>'"></td>
+          <td><input type="button" value="Create a new project" onclick="window.location='project_overview.jsp?project=0'"></td>
           <td></td>
         </tr>
       <% } %>

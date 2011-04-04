@@ -71,7 +71,6 @@ public class ClaimServlet extends HttpServlet {
     String languageCode = request.getParameter("language");
     String translationId = request.getParameter("translationId");
     String actionName = request.getParameter("action");
-    String token = request.getParameter("token");
     Action action = Action.valueOf(actionName);
     
     String requestUrl = request.getRequestURL().toString();
@@ -115,8 +114,8 @@ public class ClaimServlet extends HttpServlet {
     }
     
     cloud.close();
-    response.sendRedirect("/page/my_translations.jsp?project=" + projectId + "&language=" + 
-        languageCode + "&token=" + token);
+    response.sendRedirect(
+        "/page/my_translations.jsp?project=" + projectId + "&language=" + languageCode);
   }
 
   /*

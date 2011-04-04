@@ -115,7 +115,6 @@ limitations under the License.
 <%
   UserService headerUserService = UserServiceFactory.getUserService();
   User headerUser = headerUserService.getCurrentUser();
-  String headerToken = request.getParameter("token");
   String siteLogo = Website.getInstance().getLogoFilename();
 %>
 
@@ -129,17 +128,17 @@ limitations under the License.
           <a href="sign_in.jsp"><%= headerUser.getNickname() %></a>
           <%= headerUserService.isUserAdmin() ? "(admin)" : "" %>
         </span>
-      | <span><a href="<%= headerUserService.createLogoutURL("/?token=" + headerToken) %>">sign out</a></span>
+      | <span><a href="<%= headerUserService.createLogoutURL("/") %>">sign out</a></span>
       </span>
     <% } else { %>
       <span id="upper-right">
         <span>
-          <a href="<%= headerUserService.createLoginURL(request.getRequestURI()) %>?token=<%= headerToken %>">sign in</a>
+          <a href="<%= headerUserService.createLoginURL(request.getRequestURI()) %>">sign in</a>
         </span>
       </span>
     <% } %>
   </div>
-  <a href="/?token=<%= headerToken %>"><img id="logo" border="0" src="/site-config/<%= siteLogo %>" ></img></a>
+  <a href="/"><img id="logo" border="0" src="/site-config/<%= siteLogo %>" ></img></a>
 </div>
 <%
 if (headerUser != null) {
@@ -152,11 +151,11 @@ if (headerUser != null) {
   <div>
     <ul class="navbar">
         <li class="navbar-item"></li> <!-- hack to create a little whitespace -->
-        <li class="navbar-item <%= aboutPageSelected %> "><a href="/site-config/about.jsp?token=<%= headerToken %>">about</a></li>
-        <li class="navbar-item <%= myProfilePageSelected %>"><a href="/page/profile.jsp?token=<%= headerToken %>">my profile</a></li>
-        <li class="navbar-item <%= myProjectsPageSelected %>"><a href="/page/my_projects.jsp?token=<%= headerToken %>">my projects</a></li>
-        <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/page/my_translations.jsp?token=<%= headerToken %>">my translations</a></li>
-        <li class="navbar-item <%= allProjectsPageSelected %>"><a href="/page/all_projects.jsp?token=<%= headerToken %>">all projects</a></td>
+        <li class="navbar-item <%= aboutPageSelected %> "><a href="/site-config/about.jsp">about</a></li>
+        <li class="navbar-item <%= myProfilePageSelected %>"><a href="/page/profile.jsp">my profile</a></li>
+        <li class="navbar-item <%= myProjectsPageSelected %>"><a href="/page/my_projects.jsp">my projects</a></li>
+        <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/page/my_translations.jsp">my translations</a></li>
+        <li class="navbar-item <%= allProjectsPageSelected %>"><a href="/page/all_projects.jsp">all projects</a></td>
         <li class="navbar-item"><a href="http://goto.ext.google.com/urjfr" target="_blank">help</a></li>
         <% if (headerUserService.isUserAdmin()) { %>
           <li class="navbar-item admin"><a href="https://code.google.com/p/translation-workflow/wiki/AdminHelp" target="_blank">admin help</a></li>

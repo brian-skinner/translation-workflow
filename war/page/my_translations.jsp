@@ -44,7 +44,6 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String token = request.getParameter("token");
   String siteName = Website.getInstance().getName();
   
   String projectId = request.getParameter("project");
@@ -79,7 +78,7 @@ limitations under the License.
     <input 
         type="button"
         value="Add more languages that I speak"
-        onclick="window.location='profile.jsp?token=<%= token %>'" />
+        onclick="window.location='profile.jsp'" />
   <% } else { %>
     <table cellspacing="0" cellpadding="4" class="listing">
       <% for (Project project : projects) { 
@@ -130,7 +129,7 @@ limitations under the License.
               <% if ((item.getReviewerId() == null) && (item.getStage() != Stage.AVAILABLE_TO_REVIEW)) { %>
                 <% if (item.getPercentComplete() > 75) { %>
                   <div>
-                  <form action="/claim_item?token=<%= token %>" method="post">
+                  <form action="/claim_item" method="post">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
                     <input type="hidden" name="language" value="<%=project.getLanguage()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -139,7 +138,7 @@ limitations under the License.
                   </form>
                   </div>
                 <% } else { %>
-                  <form action="/claim_item?token=<%= token %>0" method="post">
+                  <form action="/claim_item" method="post">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
                     <input type="hidden" name="language" value="<%=project.getLanguage()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -158,7 +157,7 @@ limitations under the License.
                   type="button" 
                   value="I want a new item to translate" 
                   <% if (mayClaimMore) {%> 
-                    onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguage()%>&token=<%=token%>'"
+                    onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguage()%>'"
                   <% } else { %>
                     onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');" 
                   <% } %>
@@ -199,14 +198,14 @@ limitations under the License.
             <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
             <td><%=translator.getNickname()%></td>
             <td>
-              <form action="/claim_item?token=<%= token %>" method="post">
+              <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
                 <input type="hidden" name="language" value="<%=project.getLanguage()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_REVIEW.toString()%>">
                 <input type="submit" value="Let someone else review this item" onclick="javascript:lockPage()" />
               </form>
-              <form action="/claim_item?token=<%= token %>" method="post">
+              <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
                 <input type="hidden" name="language" value="<%=project.getLanguage()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -221,7 +220,7 @@ limitations under the License.
             <input 
                 type="button" 
                 value="I want a new item to review" 
-                onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguage()%>&token=<%=token%>'" ></input>
+                onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguage()%>'" ></input>
           </td>
           <td></td>
           <td></td>

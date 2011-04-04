@@ -40,7 +40,6 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String token = request.getParameter("token");
   String siteName = Website.getInstance().getName();
 
   boolean readOnly = !userService.isUserAdmin();
@@ -109,7 +108,7 @@ limitations under the License.
       var uri = "<%= request.getRequestURI() %>";
       var urlWithUri = "<%= request.getRequestURL() %>";
       var baseUrl = urlWithUri.replace(uri, '');
-      var url = baseUrl + "/term/" + id + "?token=<%= token %>";
+      var url = baseUrl + "/term/" + id;
       return url;
     };
       
@@ -145,7 +144,7 @@ limitations under the License.
 
 <body>
   <%@ include file="/resource/header.jsp" %>
-  <form action="/project?token=<%= token %>" method="post">
+  <form action="/project" method="post">
   
   <h2>Project Overview</h2>
 
@@ -318,9 +317,9 @@ limitations under the License.
         <th>Reviewer</th>
       </tr>    
       <tr style="background-color: #e5ecf9;">
-        <td><a href="/term/B0024400?token=<%= token %>">basal metabolic rate</a></td>
+        <td><a href="/term/B0024400">basal metabolic rate</a></td>
         <td>342</td>
-        <td><a href="/term/B0024400?token=<%= token %>">основной обмен</a></td>
+        <td><a href="/term/B0024400">основной обмен</a></td>
         <td>314</th>
         <td>100%</th>
         <td>2010-06-18 3:20 PM PST</th>

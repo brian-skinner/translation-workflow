@@ -40,7 +40,6 @@ limitations under the License.
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
   String userNickname = user.getNickname().split("@")[0];
-  String token = request.getParameter("token");
   String siteName = Website.getInstance().getName();
   
   Cloud cloud = Cloud.open();
@@ -106,7 +105,7 @@ limitations under the License.
 
   <h2>My Profile</h2>
     
-  <form action="/profile?token=<%= token %>" method="post">
+  <form action="/profile" method="post">
     <table cellpadding="0" cellspacing="18" border="0">
       <tbody>
         <tr id="AttrRowNickname" style="&quot;display: table-row&quot;">

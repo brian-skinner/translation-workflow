@@ -79,7 +79,7 @@ public class ProfileServlet extends HttpServlet {
     volunteer.setLanguages(selectedLanguages);
     cloud.close();
 
-    response.sendRedirect("/page/my_projects.jsp?token=" + request.getParameter("token"));
+    response.sendRedirect("/page/my_projects.jsp");
   }
 
 }

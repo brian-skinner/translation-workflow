@@ -39,7 +39,6 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String token = request.getParameter("token");
   String siteName = Website.getInstance().getName();
 %>
 
@@ -79,7 +78,7 @@ limitations under the License.
             <% } else { %>
               <td>
               <% for (Project project : projects) { %>
-                <div style="font-size:large; padding-bottom:0.5em;"><a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>&token=<%= token %>"><%= project.getName() %></a></div>
+                <div style="font-size:large; padding-bottom:0.5em;"><a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><%= project.getName() %></a></div>
                 <div><%= project.getDescription() %></div><br />
               <% } %>
               </td>
@@ -95,7 +94,7 @@ limitations under the License.
           <input 
               type="button"
               value="Add more languages that I speak"
-              onclick="window.location='profile.jsp?token=<%= token %>'" />
+              onclick="window.location='profile.jsp'" />
         </td>
       </tr>
     </tbody>
