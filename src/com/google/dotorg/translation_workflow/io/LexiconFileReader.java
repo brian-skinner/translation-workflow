@@ -55,43 +55,57 @@ public class LexiconFileReader {
     HashMap<String, LexiconTerm> terms = new HashMap<String, LexiconTerm>();
     String line;
     while ((line = reader.readLine()) != null) {
-      if (line.startsWith("<mentry")) {
+      line = line.trim();
+      if (line.startsWith("<ar")) {
+        line += getRemainderOfElement("ar");
         LexiconTerm term = new LexiconTerm();
-        List<String> txList = new ArrayList<String>();
-        term.termId = line.substring(12, 20); // TODO: ugly hack
-        term.term = getSnippet(line, "bltkw");
+        List<String> definitionList = new ArrayList<String>();
+        term.termId = line.substring(8, 16); // TODO: fix the ugly hack
+        term.term = getSnippet(line, "k");
         term.partOfSpeech = getSnippet(line, "pos");
         int fromIndex = 0;
         int nextFromIndex;
-        int i = 0;
-        while ((nextFromIndex = hasNextSnippet(line, "tx", fromIndex)) != -1) {
-          txList.add(getSnippet(line, "tx", fromIndex));
+        while ((nextFromIndex = hasNextSnippet(line, "dtrn", fromIndex)) != -1) {
+          definitionList.add(getSnippet(line, "dtrn", fromIndex));
           fromIndex = nextFromIndex;
         }
-        term.definitions = txList.toArray(new String[txList.size()]);
+        term.definitions = definitionList.toArray(new String[definitionList.size()]);
         terms.put(term.termId, term);
       }
     }
     return terms;
   }
+  
+  private String getRemainderOfElement(String tag) throws IOException {
+    String remainder = "";
+    String line;
+    while (((line = reader.readLine()) != null) && !line.trim().startsWith(endTag(tag))) {
+      remainder += line;
+    }
+    return remainder;
+  }
 
   private int hasNextSnippet(String line, String tag, int fromIndex) {
-    String startTag = "<" + tag + ">";
-    String endTag = "</" + tag + ">";
-    int start = line.indexOf(startTag, fromIndex);
-    return (start == -1) ? -1 : line.indexOf(endTag, start);
+    int start = line.indexOf(startTag(tag), fromIndex);
+    return (start == -1) ? -1 : line.indexOf(endTag(tag), start);
   }
 
   private String getSnippet(String line, String tag, int fromIndex) {
-    String startTag = "<" + tag + ">";
-    String endTag = "</" + tag + ">";
-    int foundAt = line.indexOf(startTag, fromIndex);
-    int start = foundAt + startTag.length();
-    return (foundAt == -1) ? "" : line.substring(start, line.indexOf(endTag, start));
+    int foundAt = line.indexOf(startTag(tag), fromIndex);
+    int start = foundAt + startTag(tag).length();
+    return (foundAt == -1) ? "" : line.substring(start, line.indexOf(endTag(tag), start));
   }
-
+  
+  private String startTag(String tag) {
+    return "<" + tag + ">";
+  }
+  
+  private String endTag(String tag) {
+    return "</" + tag + ">";
+    }
+  
   private String getSnippet(String line, String tag) {
     return getSnippet(line, tag, 0);
   }
- 
+
 }
