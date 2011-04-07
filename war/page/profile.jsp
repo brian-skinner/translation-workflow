@@ -160,8 +160,8 @@ limitations under the License.
                     <td><span id="discussion_<%= language.getCode() %>" style="display:<%= selected ? "inline" : "none" %>;">
                       <% String link = language.getDiscussionLink();
                            if (link != null) { %>
-                             - <a href="<%= link %>">discussion group</a> on Google Groups - 
-                             <a href="<%= language.getJoinDiscussionLink() %>">Join</a> 
+                             - <a target= "_blank" href="<%= link %>">discussion group</a> on Google Groups - 
+                             <a target="_blank" href="<%= language.getJoinDiscussionLink() %>">Join</a> 
                       <% } %>
                     </span></td>
                   </tr>
