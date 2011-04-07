@@ -75,7 +75,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>page/home.jsp</welcome-file>
+    <welcome-file>page/start.jsp</welcome-file>
   </welcome-file-list>  
   
 </web-app>
