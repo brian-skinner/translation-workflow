@@ -18,6 +18,7 @@ import com.google.dotorg.translation_workflow.model.Cloud;
 import com.google.dotorg.translation_workflow.model.Project;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -41,17 +42,21 @@ import javax.servlet.http.HttpServletResponse;
 public class ProjectServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    InputFilter textSieve = InputFilter.ALPHA_NUMERIC_FILTER; 
+    
     String projectId = request.getParameter("projectId");
-    String name = request.getParameter("name");
+    String name = textSieve.filter(request.getParameter("name"));
     String language = request.getParameter("language");
-    String description = request.getParameter("description");
+    String description = textSieve.filter(request.getParameter("description"));
     String csvArticleList = request.getParameter("articles");
     
     Cloud cloud = Cloud.open();
     
     int id = Integer.parseInt(projectId);
     Project project = (id == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
-    project.setName(name);
+    if (!name.isEmpty()) {
+      project.setName(name);
+    }
     project.setDescription(description);
     project.setLanguage(language);
     
@@ -60,7 +65,9 @@ public class ProjectServlet extends HttpServlet {
       for (String line : lines) {
         line = line.replaceAll("\"", "");
         String[] fields = line.split(",");
-        project.createTranslation(fields[0], fields[1]);
+        String articleName = textSieve.filter(fields[0]);
+        URL url = new URL(fields[1]);
+        project.createTranslation(articleName, url.toString());
       }
     }
     cloud.close();
