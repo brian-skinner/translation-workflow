@@ -41,5 +41,5 @@ limitations under the License.
 <div class="footer" align="center"> 
   <%@ include file="/site-config/footer-text.jsp" %>
   -
-  <%= SystemProperty.version.get() %>
+  Version <%= SystemProperty.version.get() %>
 </div> 
