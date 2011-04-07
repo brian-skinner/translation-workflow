@@ -52,6 +52,7 @@ public class ResourceFileReader {
     readCsvLine();
   }
   
+  // TODO: consider using java.util.Scanner to do this
   public String[] readCsvLine() throws IOException {
     Preconditions.checkNotNull(buffer);
     String line = buffer.readLine();

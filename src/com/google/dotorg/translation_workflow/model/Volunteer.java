@@ -97,6 +97,8 @@ public class Volunteer {
   }
   
   // TODO: double check to make sure this isn't available in a standard google/app-engine library
+  // TODO: replace with with com.google.common.base.Joiner
+  // http://guava-libraries.googlecode.com/svn/tags/release08/javadoc/index.html
   private String join(List<String> list, String delimiter) {
     if (list.isEmpty()) {
       return "";
