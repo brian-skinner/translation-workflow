@@ -38,7 +38,7 @@ limitations under the License.
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
-  <title>About <%= siteName %></title>
+  <title>Home <%= siteName %></title>
 </head>
 
 <body>
@@ -67,7 +67,7 @@ limitations under the License.
       </td>
       
       <td>
-        <img src="/site-config/about-page-image.png"></img>
+        <img src="/site-config/home-page-image.png"></img>
       </td>
     </tr>
   </table>

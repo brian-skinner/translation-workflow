@@ -142,7 +142,7 @@ limitations under the License.
 </div>
 <%
 if (headerUser != null) {
-  String aboutPageSelected = request.getRequestURI().equals("/page/about.jsp") ? "selected-navbar-item" : "";
+  String homePageSelected = request.getRequestURI().equals("/page/home.jsp") ? "selected-navbar-item" : "";
   String myProfilePageSelected = request.getRequestURI().equals("/page/profile.jsp") ? "selected-navbar-item" : "";
   String myProjectsPageSelected = request.getRequestURI().equals("/page/my_projects.jsp") ? "selected-navbar-item" : "";
   String myTranslationsPageSelected = request.getRequestURI().equals("/page/my_translations.jsp") ? "selected-navbar-item" : "";
@@ -151,7 +151,7 @@ if (headerUser != null) {
   <div>
     <ul class="navbar">
         <li class="navbar-item"></li> <!-- hack to create a little whitespace -->
-        <li class="navbar-item <%= aboutPageSelected %> "><a href="/site-config/about.jsp">about</a></li>
+        <li class="navbar-item <%= homePageSelected %> "><a href="/site-config/home.jsp">home</a></li>
         <li class="navbar-item <%= myProfilePageSelected %>"><a href="/page/profile.jsp">my profile</a></li>
         <li class="navbar-item <%= myProjectsPageSelected %>"><a href="/page/my_projects.jsp">my projects</a></li>
         <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/page/my_translations.jsp">my translations</a></li>
