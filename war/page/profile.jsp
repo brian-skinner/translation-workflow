@@ -103,7 +103,7 @@ limitations under the License.
 <body>
   <%@ include file="/resource/header.jsp" %>
 
-  <h2>My Profile</h2>
+  <h2>My Profile - <%= userNickname %></h2>
     
   <form action="/profile" method="post">
     <table cellpadding="0" cellspacing="18" border="0">
