@@ -39,7 +39,8 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String userNickname = user.getNickname().split("@")[0];
+  String userNickname = user.getNickname();
+  String userShortNickname = userNickname.split("@")[0];
   String siteName = Website.getInstance().getName();
   
   Cloud cloud = Cloud.open();
@@ -118,7 +119,7 @@ limitations under the License.
                   name="nickname"
                   value="<%= volunteerNickname %>" 
                   size="30" id="Nickname" 
-                  placeholder="<%= userNickname %>" 
+                  placeholder="<%= userShortNickname %>" 
                   onkeyup="javascript:validateNickname()"
                   onchange="javascript:validateNickname()">
               <span class="error-message" id="nickname-error" style="display:none">That name is already taken.</span>
