@@ -36,10 +36,16 @@ limitations under the License.
   padding: 0.4em;
   text-align: center;
 }
+.version {
+  padding-top: 0.3em;
+  color: gray;
+}
 </style>
 
 <div class="footer" align="center"> 
   <%@ include file="/site-config/footer-text.jsp" %>
-  -
-  Version <%= SystemProperty.version.get() %>
+  <div class="version">
+    App Engine Version <%= SystemProperty.version.get() %>
+    - App Version <%= SystemProperty.applicationVersion.get() %>
+  </div>
 </div> 
