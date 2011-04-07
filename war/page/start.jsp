@@ -50,7 +50,7 @@ limitations under the License.
       response.sendRedirect("my_projects.jsp");
     }
   } else {
-    response.sendRedirect("/site-config/about.jsp");
+    response.sendRedirect("/site-config/home.jsp");
   }
 
   cloud.close();
