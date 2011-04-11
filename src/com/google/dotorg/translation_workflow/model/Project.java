@@ -56,7 +56,7 @@ public class Project {
 
   @Persistent private String name;
   @Persistent private String description;
-  @Persistent private String language;
+  @Persistent private String languageCode;
 
   @Persistent(mappedBy = "project")
   @Element(dependent = "true")
@@ -77,12 +77,12 @@ public class Project {
     return name;
   }
 
-  public String getLanguage() {
-    return language;
+  public String getLanguageCode() {
+    return languageCode;
   }
   
-  public boolean includesLanguage(String languageCode) {
-    return (languageCode.equals(getLanguage()));
+  public boolean includesLanguageCode(String languageCode) {
+    return (languageCode.equals(getLanguageCode()));
   }
   
   /**
@@ -192,7 +192,7 @@ public class Project {
       Translation translation = new Translation();
       translation.setOriginalTitle(title);
       translation.setOriginalUrl(url);
-      translation.setLanguageCode(getLanguage());
+      translation.setLanguageCode(getLanguageCode());
       getTranslations().add(translation);
       return translation;
     }
@@ -214,8 +214,8 @@ public class Project {
     return this;
   }
 
-  public Project setLanguage(String languageCode) {
-    this.language = languageCode;
+  public Project setLanguageCode(String languageCode) {
+    this.languageCode = languageCode;
     return this;
   }
   

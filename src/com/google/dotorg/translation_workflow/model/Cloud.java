@@ -107,9 +107,9 @@ public class Cloud {
     }
   }
   
-  public Translation getTranslationByIds(String projectId, String translationId) {
-    Key key = new KeyFactory.Builder(Project.class.getSimpleName(), Integer.parseInt(projectId))
-      .addChild(Translation.class.getSimpleName(), Integer.parseInt(translationId)).getKey();
+  public Translation getTranslationByIds(int projectId, int translationId) {
+    Key key = new KeyFactory.Builder(Project.class.getSimpleName(), projectId)
+      .addChild(Translation.class.getSimpleName(), translationId).getKey();
     return pm.getObjectById(Translation.class, key);
   }
 
@@ -272,7 +272,7 @@ public class Cloud {
   public List<Project> getProjectsForLanguage(String languageCode) {
     List<Project> selectedProjects = new ArrayList<Project>();
     for (Project project : getAllProjects()) {
-      if (project.includesLanguage(languageCode)) {
+      if (project.includesLanguageCode(languageCode)) {
         selectedProjects.add(project);
       }
     }
@@ -283,9 +283,9 @@ public class Cloud {
     List<Project> selectedProjects = new ArrayList<Project>();
     Volunteer volunteer = getVolunteerByUser(user);
     if (volunteer != null) {
-      List<String> volunteerLanguages = volunteer.getLanguages();
+      List<String> volunteerLanguages = volunteer.getLanguageCodes();
       for (Project project : getAllProjects()) {
-        if (volunteerLanguages.contains(project.getLanguage())) {
+        if (volunteerLanguages.contains(project.getLanguageCode())) {
           selectedProjects.add(project);
           refreshTranslationStatusFromToolkit(user, project);
         }

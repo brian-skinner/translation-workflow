@@ -52,7 +52,7 @@ public class Volunteer {
   @Persistent private String nickname;
   @Persistent private String city;
   @Persistent private boolean anonymous;
-  @Persistent private String languages;
+  @Persistent private String languageCodes;
 
   public String getNickname() {
     return nickname;
@@ -66,8 +66,8 @@ public class Volunteer {
     return anonymous;
   }
   
-  public List<String> getLanguages() {
-    String[] arrayOfCodes = (languages.isEmpty() ? new String[0] : languages.split(","));
+  public List<String> getLanguageCodes() {
+    String[] arrayOfCodes = (languageCodes.isEmpty() ? new String[0] : languageCodes.split(","));
     return Arrays.asList(arrayOfCodes);
   }
 
@@ -90,9 +90,9 @@ public class Volunteer {
     return this;
   }
 
-  public Volunteer setLanguages(List<String> languageCodes) {
+  public Volunteer setLanguageCodes(List<String> languageCodes) {
     String commaSeparatedValues = join(languageCodes, ",");
-    this.languages = commaSeparatedValues;
+    this.languageCodes = commaSeparatedValues;
     return this;
   }
   
