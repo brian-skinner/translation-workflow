@@ -15,6 +15,7 @@
 package com.google.dotorg.translation_workflow.servlet;
 
 import com.google.dotorg.translation_workflow.model.Cloud;
+import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.Project;
 
 import java.io.IOException;
@@ -42,37 +43,45 @@ import javax.servlet.http.HttpServletResponse;
 public class ProjectServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    InputFilter textSieve = InputFilter.ALPHA_NUMERIC_FILTER; 
-    
-    String projectId = request.getParameter("projectId");
-    String name = textSieve.filter(request.getParameter("name"));
-    String language = request.getParameter("language");
-    String description = textSieve.filter(request.getParameter("description"));
-    String csvArticleList = request.getParameter("articles");
-    
     Cloud cloud = Cloud.open();
     
-    int id = Integer.parseInt(projectId);
-    Project project = (id == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
+    // read the input parameters from the client and validate them all before using the values
+    Validator textValidator = Validator.ALPHA_NUMERIC; 
+    
+    String rawProjectId = request.getParameter("projectId");
+    int projectId = Integer.parseInt(rawProjectId);
+    
+    String rawName = request.getParameter("name");
+    String name = textValidator.filter(rawName);
+    
+    String rawLanguageCode = request.getParameter("languageCode");
+    Language language = cloud.getLanguageByCode(rawLanguageCode);
+    
+    String rawDescription = request.getParameter("description");
+    String description = textValidator.filter(rawDescription);
+    
+    String rawCsvArticleList = request.getParameter("articles");
+    
+    Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
     if (!name.isEmpty()) {
       project.setName(name);
     }
     project.setDescription(description);
-    project.setLanguage(language);
+    project.setLanguageCode(language.getCode());
     
-    if (!csvArticleList.isEmpty()) {
-      String[] lines = csvArticleList.split("\n");
+    if (!rawCsvArticleList.isEmpty()) {
+      String[] lines = rawCsvArticleList.split("\n");
       for (String line : lines) {
         line = line.replaceAll("\"", "");
         String[] fields = line.split(",");
-        String articleName = textSieve.filter(fields[0]);
+        String articleName = textValidator.filter(fields[0]);
         URL url = new URL(fields[1]);
         project.createTranslation(articleName, url.toString());
       }
     }
     cloud.close();
 
-    if (csvArticleList.isEmpty()) {
+    if (rawCsvArticleList.isEmpty()) {
       response.sendRedirect("/page/all_projects.jsp");
     } else {
       response.sendRedirect("/page/project_overview.jsp?project=" + projectId);

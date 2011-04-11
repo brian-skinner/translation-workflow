@@ -19,13 +19,13 @@ package com.google.dotorg.translation_workflow.servlet;
  * 
  * @author Brian Douglas Skinner
  */
-public class InputFilter {
+public class Validator {
   // Accept only A-Z, a-z, 0-9, -, _, and the space character. Discard everything else.
-  public static final InputFilter ALPHA_NUMERIC_FILTER = new InputFilter("[^-_ \\da-zA-Z]");
+  public static final Validator ALPHA_NUMERIC = new Validator("[^-_ \\da-zA-Z]");
   
   private String filterOutRegex;
   
-  private InputFilter(String filterOutRegex) {
+  private Validator(String filterOutRegex) {
     this.filterOutRegex = filterOutRegex;
   }
   

@@ -51,7 +51,7 @@ limitations under the License.
   String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
   String volunteerCity = (volunteer != null) ? volunteer.getCity() : "";
   boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
-  List<String> volunteerLanguages = (volunteer != null) ? volunteer.getLanguages() : new ArrayList<String>();
+  List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -146,7 +146,7 @@ limitations under the License.
               <%
                 List<Language> languages = cloud.getAllLanguages();
                 for (Language language : languages) {
-                  boolean selected = volunteerLanguages.contains(language.getCode()); %>
+                  boolean selected = volunteerLanguageCodes.contains(language.getCode()); %>
                   <tr>
                     <td>
                       <input 

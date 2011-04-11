@@ -53,8 +53,15 @@ public class ProfileServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 
-    String nickname = request.getParameter("nickname");
-    String city = request.getParameter("city");
+    // read the input parameters from the client and validate them all before using the values
+    Validator textValidator = Validator.ALPHA_NUMERIC; 
+
+    String rawNickname = request.getParameter("nickname");
+    String nickname = textValidator.filter(rawNickname);
+    
+    String rawCity = request.getParameter("city");
+    String city = textValidator.filter(rawCity);
+    
     String recognition = request.getParameter("recognition");
     boolean anonymous = !"public".equals(recognition);
 
@@ -76,7 +83,7 @@ public class ProfileServlet extends HttpServlet {
     volunteer.setNickname(nickname);
     volunteer.setCity(city);
     volunteer.setAnonymous(anonymous);
-    volunteer.setLanguages(selectedLanguages);
+    volunteer.setLanguageCodes(selectedLanguages);
     cloud.close();
 
     response.sendRedirect("/page/my_projects.jsp");

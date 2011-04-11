@@ -84,7 +84,7 @@ limitations under the License.
       <% for (Project project : projects) { 
           List<Translation> itemsToTranslate = project.getTranslationItemsForTranslator(user);
           boolean mayClaimMore = project.mayUserClaimMoreForTranslation(user);
-          String languageCode = project.getLanguage();
+          String languageCode = project.getLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
         %>
         <tr>
@@ -131,7 +131,7 @@ limitations under the License.
                   <div>
                   <form action="/claim_item" method="post">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                    <input type="hidden" name="language" value="<%=project.getLanguage()%>">
+                    <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
                     <input type="hidden" name="action" value="<%=ClaimServlet.Action.MARK_TRANSLATION_COMPLETE.toString()%>">
                     <input type="submit" value="Request a review" onclick="javascript:lockPage()" />
@@ -140,7 +140,7 @@ limitations under the License.
                 <% } else { %>
                   <form action="/claim_item" method="post">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                    <input type="hidden" name="language" value="<%=project.getLanguage()%>">
+                    <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
                     <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_TRANSLATION.toString()%>">
                     <input type="submit" value="Let someone else do this item" onclick="javascript:lockPage()" />
@@ -157,7 +157,7 @@ limitations under the License.
                   type="button" 
                   value="I want a new item to translate" 
                   <% if (mayClaimMore) {%> 
-                    onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguage()%>'"
+                    onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguageCode()%>'"
                   <% } else { %>
                     onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');" 
                   <% } %>
@@ -178,7 +178,7 @@ limitations under the License.
       <%
         for (Project project : projects) {
            List<Translation> itemsToReview = project.getTranslationItemsForReviewer(user);
-           String languageCode = project.getLanguage();
+           String languageCode = project.getLanguageCode();
            String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>
@@ -200,14 +200,14 @@ limitations under the License.
             <td>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                <input type="hidden" name="language" value="<%=project.getLanguage()%>">
+                <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_REVIEW.toString()%>">
                 <input type="submit" value="Let someone else review this item" onclick="javascript:lockPage()" />
               </form>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                <input type="hidden" name="language" value="<%=project.getLanguage()%>">
+                <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.MARK_REVIEW_COMPLETE.toString()%>">
                 <input type="submit" value="Mark this as successfully reviewed!" onclick="javascript:lockPage()" />
@@ -220,7 +220,7 @@ limitations under the License.
             <input 
                 type="button" 
                 value="I want a new item to review" 
-                onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguage()%>'" ></input>
+                onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguageCode()%>'" ></input>
           </td>
           <td></td>
           <td></td>
@@ -236,7 +236,7 @@ limitations under the License.
       <%
         for (Project project : projects) {  
           List<Translation> completedItems = project.getTranslationItemsCompletedByUser(user);
-          String languageCode = project.getLanguage();
+          String languageCode = project.getLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>
