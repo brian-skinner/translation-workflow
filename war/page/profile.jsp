@@ -39,8 +39,8 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String userNickname = user.getNickname();
-  String userShortNickname = userNickname.split("@")[0];
+  String userNickname = user.getNickname(); // example: "foo@bar.com"
+  String userShortNickname = userNickname.split("@")[0]; // example: "foo"
   String siteName = Website.getInstance().getName();
   
   Cloud cloud = Cloud.open();
@@ -74,10 +74,13 @@ limitations under the License.
     validateNickname = function() {
       var nickname = document.getElementById('nickname').value;
       var nicknameErrorSpan = document.getElementById('nickname-error');
+      var saveButton = document.getElementById('save-button');
       if (isDuplicateNickname(nickname)) {
         nicknameErrorSpan.style.display = "inline";
+        saveButton.disabled = true;
       } else {
         nicknameErrorSpan.style.display = "none";
+        saveButton.disabled = false;
       }
     };
     
@@ -174,7 +177,7 @@ limitations under the License.
 
         <tr>
           <td></td>
-          <td><input type="submit" value="Continue" style="font-size:large;"/></td>
+          <td><input id="save-button" type="submit" value="Save" style="font-size:large;"/></td>
         </tr>
         
       </tbody>
