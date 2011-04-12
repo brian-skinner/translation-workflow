@@ -105,8 +105,16 @@ limitations under the License.
             <% } else { %>
               <% if (!item.isSharedWithUser(user)) { %>
                 <td>Error: This item has not yet been successfully shared with you in Translator Toolkit.</td>
-              <% } else { %>
-                <td class="term"><%=(item.getToolkitArticleUrl() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">" + item.getTranslatedTitle() + "</a>"%></td>
+              <% } else { 
+                String messageToUser = "When you have finished your translation, mark translation as complete and save and close Google Translator Toolkit";
+                %>
+                <td class="term">
+                  <% if (item.getToolkitArticleUrl() != null) { %>
+                    <a href="<%= item.getToolkitArticleUrl() %>"
+                        onclick="javascript:window.alert('<%= messageToUser %>');"
+                        target="_blank"><%= item.getTranslatedTitle() %></a>
+                  <% } %>
+                </td>
               <% } %>
             <% } %>
             <td>
