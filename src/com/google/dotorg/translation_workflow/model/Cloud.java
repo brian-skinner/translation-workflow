@@ -191,7 +191,6 @@ public class Cloud {
   private HashMap<String, LexiconTerm> readLexiconTermsFromConfigFile() {
     String configFile = "WEB-INF/content-config/lexicon.xml";
     LexiconFileReader reader;
-    HashMap<String, LexiconTerm> results = null;
     try {
       reader = new LexiconFileReader(configFile);
     } catch (FileNotFoundException e) {
@@ -253,6 +252,19 @@ public class Cloud {
       }
     }
     return returnValues;
+  }
+  
+  public boolean isNicknameAvailable(String nickname) {
+    if (nickname == null || nickname.isEmpty()) {
+      return false;
+    }
+    
+    for (Volunteer volunteer : getAllVolunteers()) {
+      if (nickname.equals(volunteer.getNickname())) {
+        return false;
+      }
+    }
+    return true;
   }
   
   public LexiconTerm getLexiconTermByTermId(String termId) {

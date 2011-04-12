@@ -52,6 +52,7 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
+    
 
     // read the input parameters from the client and validate them all before using the values
     Validator textValidator = Validator.ALPHA_NUMERIC; 
@@ -64,7 +65,7 @@ public class ProfileServlet extends HttpServlet {
     
     String recognition = request.getParameter("recognition");
     boolean anonymous = !"public".equals(recognition);
-
+    
     Cloud cloud = Cloud.open();
     
     List<String> selectedLanguages = new ArrayList<String>();
@@ -80,7 +81,9 @@ public class ProfileServlet extends HttpServlet {
     if (volunteer == null) {
       volunteer = cloud.createVolunteer(user);
     }
-    volunteer.setNickname(nickname);
+    if (cloud.isNicknameAvailable(nickname)) {
+      volunteer.setNickname(nickname);
+    }
     volunteer.setCity(city);
     volunteer.setAnonymous(anonymous);
     volunteer.setLanguageCodes(selectedLanguages);
