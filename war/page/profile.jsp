@@ -143,7 +143,7 @@ limitations under the License.
         </tr>
         
         <tr id="AttrRowCountry" style="&quot;display: table-row&quot;">
-          <td nowrap valign="top" id="AttrLabelCellCountry"><span class="label">Nearest country:</span></td>
+          <td nowrap valign="top" id="AttrLabelCellCountry"><span class="label">Country:</span></td>
           <td id="AttrValueCellCountry">
           	<input type="text" name="country" value="<%= volunteerCountry %>" size="30" id="Country" placeholder="Egypt">
           </td>

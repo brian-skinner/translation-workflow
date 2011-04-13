@@ -316,7 +316,7 @@ public class Cloud {
   
   public Project createProject() {
     Project project = createRecord(Project.class);
-    project.setHasBeenDeleted(false);
+    project.setDeleted(false);
     return project;
   }
   
