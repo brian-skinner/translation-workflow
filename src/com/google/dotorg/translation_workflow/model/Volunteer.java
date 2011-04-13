@@ -75,25 +75,21 @@ public class Volunteer {
     this.key = key;
   }
   
-  public Volunteer setNickname(String nickname) {
+  public void setNickname(String nickname) {
     this.nickname = nickname;
-    return this;
   }
   
-  public Volunteer setCity(String city) {
+  public void setCity(String city) {
     this.city = city;
-    return this;
   }
   
-  public Volunteer setAnonymous(boolean anonymous) {
+  public void setAnonymous(boolean anonymous) {
     this.anonymous = anonymous;
-    return this;
   }
 
-  public Volunteer setLanguageCodes(List<String> languageCodes) {
+  public void setLanguageCodes(List<String> languageCodes) {
     String commaSeparatedValues = join(languageCodes, ",");
     this.languageCodes = commaSeparatedValues;
-    return this;
   }
   
   // TODO: double check to make sure this isn't available in a standard google/app-engine library

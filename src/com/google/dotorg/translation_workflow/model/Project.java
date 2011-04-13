@@ -57,6 +57,7 @@ public class Project {
   @Persistent private String name;
   @Persistent private String description;
   @Persistent private String languageCode;
+  @Persistent private boolean hasBeenDeleted;
 
   @Persistent(mappedBy = "project")
   @Element(dependent = "true")
@@ -90,6 +91,10 @@ public class Project {
    */
   public String getDescription() {
     return description;
+  }
+  
+  public boolean hasBeenDeleted() {
+    return hasBeenDeleted;
   }
 
   public List<Translation> getTranslationItemsForTranslator(User user) {
@@ -190,6 +195,7 @@ public class Project {
       return null;
     } else {
       Translation translation = new Translation();
+      translation.setHasBeenDeleted(false);
       translation.setOriginalTitle(title);
       translation.setOriginalUrl(url);
       translation.setLanguageCode(getLanguageCode());
@@ -201,22 +207,23 @@ public class Project {
   /**
    * @param name the name to set
    */
-  public Project setName(String name) {
+  public void setName(String name) {
     this.name = name;
-    return this;
+  }
+  
+  public void setHasBeenDeleted(boolean hasBeenDeleted) {
+    this.hasBeenDeleted = hasBeenDeleted;
   }
 
   /**
    * @param description the description to set
    */
-  public Project setDescription(String description) {
+  public void setDescription(String description) {
     this.description = description;
-    return this;
   }
 
-  public Project setLanguageCode(String languageCode) {
+  public void setLanguageCode(String languageCode) {
     this.languageCode = languageCode;
-    return this;
   }
   
 }

@@ -315,7 +315,9 @@ public class Cloud {
   }
   
   public Project createProject() {
-    return createRecord(Project.class);
+    Project project = createRecord(Project.class);
+    project.setHasBeenDeleted(false);
+    return project;
   }
   
   public Volunteer createVolunteer(User user) {
