@@ -109,7 +109,7 @@ public class Translation {
     return languageCode;
   }
   
-  public boolean hasBeenDeleted() {
+  public boolean isDeleted() {
     return hasBeenDeleted;
   }
 
@@ -250,8 +250,8 @@ public class Translation {
     this.languageCode = languageCode;
   }
   
-  public void setHasBeenDeleted(boolean hasBeenDeleted) {
-    this.hasBeenDeleted = hasBeenDeleted;
+  public void setDeleted(boolean deleted) {
+    this.hasBeenDeleted = deleted;
   }
   
   public void setToolkitDocId(String toolkitDocId) {

@@ -93,7 +93,7 @@ public class Project {
     return description;
   }
   
-  public boolean hasBeenDeleted() {
+  public boolean isDeleted() {
     return hasBeenDeleted;
   }
 
@@ -195,7 +195,7 @@ public class Project {
       return null;
     } else {
       Translation translation = new Translation();
-      translation.setHasBeenDeleted(false);
+      translation.setDeleted(false);
       translation.setOriginalTitle(title);
       translation.setOriginalUrl(url);
       translation.setLanguageCode(getLanguageCode());
@@ -211,8 +211,8 @@ public class Project {
     this.name = name;
   }
   
-  public void setHasBeenDeleted(boolean hasBeenDeleted) {
-    this.hasBeenDeleted = hasBeenDeleted;
+  public void setDeleted(boolean deleted) {
+    this.hasBeenDeleted = deleted;
   }
 
   /**
