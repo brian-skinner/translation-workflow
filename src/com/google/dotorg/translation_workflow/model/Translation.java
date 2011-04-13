@@ -65,6 +65,7 @@ public class Translation {
   @Persistent private String originalTitle;
   @Persistent private String originalUrl;
   @Persistent private String languageCode;
+  @Persistent private boolean hasBeenDeleted;
   
   private String toolkitDocIdTail;
   private int numberOfSourceWords;
@@ -108,6 +109,10 @@ public class Translation {
     return languageCode;
   }
   
+  public boolean hasBeenDeleted() {
+    return hasBeenDeleted;
+  }
+
   public String getTranslatedTitle() {
     // TODO: this is just a stub for now, to be replaced with
     // an implementation that returns the non-English titles
@@ -233,78 +238,69 @@ public class Translation {
     }
   }
 
-  public Translation setOriginalTitle(String originalTitle) {
+  public void setOriginalTitle(String originalTitle) {
     this.originalTitle = originalTitle;
-    return this;
   }
 
-  public Translation setOriginalUrl(String originalUrl) {
+  public void setOriginalUrl(String originalUrl) {
     this.originalUrl = originalUrl;
-    return this;
   }
 
-  public Translation setLanguageCode(String languageCode) {
+  public void setLanguageCode(String languageCode) {
     this.languageCode = languageCode;
-    return this;
   }
   
-  public Translation setToolkitDocId(String toolkitDocId) {
+  public void setHasBeenDeleted(boolean hasBeenDeleted) {
+    this.hasBeenDeleted = hasBeenDeleted;
+  }
+  
+  public void setToolkitDocId(String toolkitDocId) {
     this.toolkitDocIdTail = toolkitDocId;
-    return this;
   }
   
-  public Translation setNumberOfSourceWords(int numberOfSourceWords) {
+  public void setNumberOfSourceWords(int numberOfSourceWords) {
     this.numberOfSourceWords = numberOfSourceWords;
-    return this;
   }
   
-  public Translation setPercentComplete(int percentComplete) {
+  public void setPercentComplete(int percentComplete) {
     this.percentComplete = percentComplete;
-    return this;
   }
   
-  public Translation claimForTranslation(String translatorId) {
+  public void claimForTranslation(String translatorId) {
     Preconditions.checkState(isAtStage(Stage.AVAILABLE_TO_TRANSLATE));
     this.translatorId = translatorId;
-    return this;
   }
   
-  public Translation releaseClaimForTranslation() {
+  public void releaseClaimForTranslation() {
     Preconditions.checkState(isAtStage(Stage.CLAIMED_FOR_TRANSLATION));
     this.translatorId = null;
-    return this;
   }
   
-  public Translation markTranslationComplete() {
+  public void markTranslationComplete() {
     Preconditions.checkState(isAtStage(Stage.CLAIMED_FOR_TRANSLATION));
     translationComplete = true;
-    return this;
   }
 
-  public Translation claimForReview(String reviewerId) {
+  public void claimForReview(String reviewerId) {
     Preconditions.checkState(isAtStage(Stage.AVAILABLE_TO_REVIEW));
     this.reviewerId = reviewerId;
-    return this;
   }
 
-  public Translation releaseClaimForReview() {
+  public void releaseClaimForReview() {
     Preconditions.checkState(isAtStage(Stage.CLAIMED_FOR_REVIEW));
     this.reviewerId = null;
-    return this;
   }
   
-  public Translation markReviewComplete() {
+  public void markReviewComplete() {
     Preconditions.checkState(isAtStage(Stage.CLAIMED_FOR_REVIEW));
     reviewComplete = true;
-    return this;
   }
 
-  public Translation addSharedWithUser(User user) {
+  public void addSharedWithUser(User user) {
     if (!isSharedWithUser(user)) {
       sharedWithUserIds = (sharedWithUserIds == null) ? "" : sharedWithUserIds;
       sharedWithUserIds += user.getUserId() + ",";
     }
-    return this;
   }
   
 }

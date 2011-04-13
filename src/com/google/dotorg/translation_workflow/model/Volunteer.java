@@ -53,7 +53,7 @@ public class Volunteer {
   @Persistent private String city;
   @Persistent private String country;
   @Persistent private boolean anonymous;
-  @Persistent private String languages;
+  @Persistent private String languageCodes;
 
   public String getNickname() {
     return nickname;
@@ -71,8 +71,8 @@ public class Volunteer {
     return anonymous;
   }
   
-  public List<String> getLanguages() {
-    String[] arrayOfCodes = (languages.isEmpty() ? new String[0] : languages.split(","));
+  public List<String> getLanguageCodes() {
+    String[] arrayOfCodes = (languageCodes.isEmpty() ? new String[0] : languageCodes.split(","));
     return Arrays.asList(arrayOfCodes);
   }
 
@@ -80,30 +80,25 @@ public class Volunteer {
     this.key = key;
   }
   
-  public Volunteer setNickname(String nickname) {
+  public void setNickname(String nickname) {
     this.nickname = nickname;
-    return this;
   }
   
-  public Volunteer setCity(String city) {
+  public void setCity(String city) {
     this.city = city;
-    return this;
   }
   
-  public Volunteer setCountry(String country) {
+  public void setCountry(String country) {
 	  this.country = country;
-	  return this;
-  }
-  
-  public Volunteer setAnonymous(boolean anonymous) {
-    this.anonymous = anonymous;
-    return this;
   }
 
-  public Volunteer setLanguages(List<String> languageCodes) {
+  public void setAnonymous(boolean anonymous) {
+    this.anonymous = anonymous;
+  }
+
+  public void setLanguageCodes(List<String> languageCodes) {
     String commaSeparatedValues = join(languageCodes, ",");
-    this.languages = commaSeparatedValues;
-    return this;
+    this.languageCodes = commaSeparatedValues;
   }
   
   // TODO: double check to make sure this isn't available in a standard google/app-engine library

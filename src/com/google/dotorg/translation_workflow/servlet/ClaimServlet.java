@@ -19,6 +19,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.dotorg.translation_workflow.io.TranslatorToolkitUtil;
 import com.google.dotorg.translation_workflow.model.Cloud;
+import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.LexiconTerm;
 import com.google.dotorg.translation_workflow.model.Translation;
 import com.google.dotorg.translation_workflow.view.LexiconUrl;
@@ -66,21 +67,24 @@ public class ClaimServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
+    Cloud cloud = Cloud.open();
 
-    String projectId = request.getParameter("projectId");
-    String languageCode = request.getParameter("language");
-    String translationId = request.getParameter("translationId");
-    String actionName = request.getParameter("action");
-    Action action = Action.valueOf(actionName);
+    // read the input parameters from the client and validate them all before using the values
+    String rawProjectId = request.getParameter("projectId");
+    int projectId = Integer.parseInt(rawProjectId);
+    
+    String rawLanguageCode = request.getParameter("languageCode");
+    Language language = cloud.getLanguageByCode(rawLanguageCode);
+    
+    String rawTranslationId = request.getParameter("translationId");
+    int translationId = Integer.parseInt(rawTranslationId);
+    
+    String rawActionName = request.getParameter("action");
+    Action action = Action.valueOf(rawActionName);
     
     String requestUrl = request.getRequestURL().toString();
 
-    Cloud cloud = Cloud.open();
-
-    if (translationId == null) {
-      translationId = "(No key)";
-    }
-    logger.warning("Item claimed by user " + user.getNickname() + ": " + translationId);
+    logger.info("Item claimed by user " + user.getNickname() + ": " + translationId);
     String claimerId = user.getUserId();
     Translation translation = cloud.getTranslationByIds(projectId, translationId);
     
@@ -115,7 +119,7 @@ public class ClaimServlet extends HttpServlet {
     
     cloud.close();
     response.sendRedirect(
-        "/page/my_translations.jsp?project=" + projectId + "&language=" + languageCode);
+        "/page/my_translations.jsp?project=" + projectId + "&language=" + language.getCode());
   }
 
   /*
@@ -187,7 +191,7 @@ public class ClaimServlet extends HttpServlet {
         return null;
       } catch (RuntimeException e) {
         Throwable cause = e.getCause();
-        logger.log(Level.SEVERE, "Error: RuntimeException uploading Translation", e);
+        logger.log(Level.SEVERE, "Error: RuntimeException uploading Translation", cause);
         return null;
       }
       String docId = toolkitUtil.getDocIdFromDocumentEntry(docEntry);

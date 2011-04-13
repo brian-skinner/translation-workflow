@@ -39,8 +39,8 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
-  String userNickname = user.getNickname();
-  String userShortNickname = userNickname.split("@")[0];
+  String userNickname = user.getNickname(); // example: "foo@bar.com"
+  String userShortNickname = userNickname.split("@")[0]; // example: "foo"
   String siteName = Website.getInstance().getName();
   
   Cloud cloud = Cloud.open();
@@ -52,7 +52,7 @@ limitations under the License.
   String volunteerCity = (volunteer != null) ? volunteer.getCity() : "";
   String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
   boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
-  List<String> volunteerLanguages = (volunteer != null) ? volunteer.getLanguages() : new ArrayList<String>();
+  List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -75,10 +75,13 @@ limitations under the License.
     validateNickname = function() {
       var nickname = document.getElementById('nickname').value;
       var nicknameErrorSpan = document.getElementById('nickname-error');
+      var saveButton = document.getElementById('save-button');
       if (isDuplicateNickname(nickname)) {
         nicknameErrorSpan.style.display = "inline";
+        saveButton.disabled = true;
       } else {
         nicknameErrorSpan.style.display = "none";
+        saveButton.disabled = false;
       }
     };
     
@@ -154,7 +157,7 @@ limitations under the License.
               <%
                 List<Language> languages = cloud.getAllLanguages();
                 for (Language language : languages) {
-                  boolean selected = volunteerLanguages.contains(language.getCode()); %>
+                  boolean selected = volunteerLanguageCodes.contains(language.getCode()); %>
                   <tr>
                     <td>
                       <input 
@@ -182,7 +185,7 @@ limitations under the License.
 
         <tr>
           <td></td>
-          <td><input type="submit" value="Continue" style="font-size:large;"/></td>
+          <td><input id="save-button" type="submit" value="Save" style="font-size:large;"/></td>
         </tr>
         
       </tbody>

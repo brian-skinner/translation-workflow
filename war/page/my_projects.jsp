@@ -61,8 +61,8 @@ limitations under the License.
       <%
       Cloud cloud = Cloud.open();
       Volunteer volunteer = cloud.getVolunteerByUser(user);
-      if ((volunteer != null) && (volunteer.getLanguages() != null)) {
-        List<String> languageCodes = volunteer.getLanguages();
+      if ((volunteer != null) && (volunteer.getLanguageCodes() != null)) {
+        List<String> languageCodes = volunteer.getLanguageCodes();
         for (String languageCode : languageCodes) {
           Language language = cloud.getLanguageByCode(languageCode);
           String languageName = language.getName();

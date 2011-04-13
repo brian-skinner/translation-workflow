@@ -97,7 +97,7 @@ limitations under the License.
             <% if (translation.isAvailableToTranslate()) { %>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%= project.getId() %>">
-                <input type="hidden" name="language" value="<%= languageCode %>">
+                <input type="hidden" name="languageCode" value="<%= languageCode %>">
                 <input type="hidden" name="translationId" value="<%= translation.getId() %>">
                 <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_TRANSLATION.toString() %>">
                 <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
@@ -110,7 +110,7 @@ limitations under the License.
             <% if (translation.isAvailableToReview() && !translation.isUserTheTranslator(user)) { %>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%= project.getId() %>">
-                <input type="hidden" name="language" value="<%= languageCode %>">
+                <input type="hidden" name="languageCode" value="<%= languageCode %>">
                 <input type="hidden" name="translationId" value="<%= translation.getId() %>">
                 <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_REVIEW.toString() %>">
                 <input type="submit" value="I will review this" onclick="javascript:lockPage()" />

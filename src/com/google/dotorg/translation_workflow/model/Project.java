@@ -56,7 +56,8 @@ public class Project {
 
   @Persistent private String name;
   @Persistent private String description;
-  @Persistent private String language;
+  @Persistent private String languageCode;
+  @Persistent private boolean hasBeenDeleted;
 
   @Persistent(mappedBy = "project")
   @Element(dependent = "true")
@@ -77,12 +78,12 @@ public class Project {
     return name;
   }
 
-  public String getLanguage() {
-    return language;
+  public String getLanguageCode() {
+    return languageCode;
   }
   
-  public boolean includesLanguage(String languageCode) {
-    return (languageCode.equals(getLanguage()));
+  public boolean includesLanguageCode(String languageCode) {
+    return (languageCode.equals(getLanguageCode()));
   }
   
   /**
@@ -90,6 +91,10 @@ public class Project {
    */
   public String getDescription() {
     return description;
+  }
+  
+  public boolean hasBeenDeleted() {
+    return hasBeenDeleted;
   }
 
   public List<Translation> getTranslationItemsForTranslator(User user) {
@@ -190,9 +195,10 @@ public class Project {
       return null;
     } else {
       Translation translation = new Translation();
+      translation.setHasBeenDeleted(false);
       translation.setOriginalTitle(title);
       translation.setOriginalUrl(url);
-      translation.setLanguageCode(getLanguage());
+      translation.setLanguageCode(getLanguageCode());
       getTranslations().add(translation);
       return translation;
     }
@@ -201,22 +207,23 @@ public class Project {
   /**
    * @param name the name to set
    */
-  public Project setName(String name) {
+  public void setName(String name) {
     this.name = name;
-    return this;
+  }
+  
+  public void setHasBeenDeleted(boolean hasBeenDeleted) {
+    this.hasBeenDeleted = hasBeenDeleted;
   }
 
   /**
    * @param description the description to set
    */
-  public Project setDescription(String description) {
+  public void setDescription(String description) {
     this.description = description;
-    return this;
   }
 
-  public Project setLanguage(String languageCode) {
-    this.language = languageCode;
-    return this;
+  public void setLanguageCode(String languageCode) {
+    this.languageCode = languageCode;
   }
   
 }
