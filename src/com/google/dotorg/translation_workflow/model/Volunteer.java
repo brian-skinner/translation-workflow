@@ -51,6 +51,7 @@ public class Volunteer {
 
   @Persistent private String nickname;
   @Persistent private String city;
+  @Persistent private String country;
   @Persistent private boolean anonymous;
   @Persistent private String languages;
 
@@ -60,6 +61,10 @@ public class Volunteer {
   
   public String getCity() {
     return city;
+  }
+  
+  public String getCountry() {
+	  return country;
   }
   
   public boolean isAnonymous() {
@@ -83,6 +88,11 @@ public class Volunteer {
   public Volunteer setCity(String city) {
     this.city = city;
     return this;
+  }
+  
+  public Volunteer setCountry(String country) {
+	  this.country = country;
+	  return this;
   }
   
   public Volunteer setAnonymous(boolean anonymous) {

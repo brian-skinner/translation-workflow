@@ -50,6 +50,7 @@ limitations under the License.
 
   String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
   String volunteerCity = (volunteer != null) ? volunteer.getCity() : "";
+  String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
   boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
   List<String> volunteerLanguages = (volunteer != null) ? volunteer.getLanguages() : new ArrayList<String>();
 %>
@@ -134,7 +135,14 @@ limitations under the License.
         <tr id="AttrRowCity" style="&quot;display: table-row&quot;">
           <td nowrap valign="top" id="AttrLabelCellCity"><span class="label">Nearest city:</span></td> 
           <td id="AttrValueCellCity">
-            <input type="text" name="city" value="<%= volunteerCity %>" size="30" id="City" placeholder="Cairo, Egypt">
+            <input type="text" name="city" value="<%= volunteerCity %>" size="30" id="City" placeholder="Cairo">
+          </td>
+        </tr>
+        
+        <tr id="AttrRowCountry" style="&quot;display: table-row&quot;">
+          <td nowrap valign="top" id="AttrLabelCellCountry"><span class="label">Nearest country:</span></td>
+          <td id="AttrValueCellCountry">
+          	<input type="text" name="country" value="<%= volunteerCountry %>" size="30" id="Country" placeholder="Egypt">
           </td>
         </tr>
         

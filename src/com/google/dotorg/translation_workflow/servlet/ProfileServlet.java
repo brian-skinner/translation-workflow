@@ -55,6 +55,7 @@ public class ProfileServlet extends HttpServlet {
 
     String nickname = request.getParameter("nickname");
     String city = request.getParameter("city");
+    String country = request.getParameter("country");
     String recognition = request.getParameter("recognition");
     boolean anonymous = !"public".equals(recognition);
 
@@ -75,6 +76,7 @@ public class ProfileServlet extends HttpServlet {
     }
     volunteer.setNickname(nickname);
     volunteer.setCity(city);
+    volunteer.setCountry(country);
     volunteer.setAnonymous(anonymous);
     volunteer.setLanguages(selectedLanguages);
     cloud.close();
