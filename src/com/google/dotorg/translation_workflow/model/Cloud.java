@@ -107,9 +107,9 @@ public class Cloud {
     }
   }
   
-  public Translation getTranslationByIds(String projectId, String translationId) {
-    Key key = new KeyFactory.Builder(Project.class.getSimpleName(), Integer.parseInt(projectId))
-      .addChild(Translation.class.getSimpleName(), Integer.parseInt(translationId)).getKey();
+  public Translation getTranslationByIds(int projectId, int translationId) {
+    Key key = new KeyFactory.Builder(Project.class.getSimpleName(), projectId)
+      .addChild(Translation.class.getSimpleName(), translationId).getKey();
     return pm.getObjectById(Translation.class, key);
   }
 
@@ -191,7 +191,6 @@ public class Cloud {
   private HashMap<String, LexiconTerm> readLexiconTermsFromConfigFile() {
     String configFile = "WEB-INF/content-config/lexicon.xml";
     LexiconFileReader reader;
-    HashMap<String, LexiconTerm> results = null;
     try {
       reader = new LexiconFileReader(configFile);
     } catch (FileNotFoundException e) {
@@ -255,6 +254,19 @@ public class Cloud {
     return returnValues;
   }
   
+  public boolean isNicknameAvailable(String nickname) {
+    if (nickname == null || nickname.isEmpty()) {
+      return false;
+    }
+    
+    for (Volunteer volunteer : getAllVolunteers()) {
+      if (nickname.equals(volunteer.getNickname())) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
   public LexiconTerm getLexiconTermByTermId(String termId) {
     return getAllLexiconTerms().get(termId);
   }
@@ -272,7 +284,7 @@ public class Cloud {
   public List<Project> getProjectsForLanguage(String languageCode) {
     List<Project> selectedProjects = new ArrayList<Project>();
     for (Project project : getAllProjects()) {
-      if (project.includesLanguage(languageCode)) {
+      if (project.includesLanguageCode(languageCode)) {
         selectedProjects.add(project);
       }
     }
@@ -283,9 +295,9 @@ public class Cloud {
     List<Project> selectedProjects = new ArrayList<Project>();
     Volunteer volunteer = getVolunteerByUser(user);
     if (volunteer != null) {
-      List<String> volunteerLanguages = volunteer.getLanguages();
+      List<String> volunteerLanguages = volunteer.getLanguageCodes();
       for (Project project : getAllProjects()) {
-        if (volunteerLanguages.contains(project.getLanguage())) {
+        if (volunteerLanguages.contains(project.getLanguageCode())) {
           selectedProjects.add(project);
           refreshTranslationStatusFromToolkit(user, project);
         }
@@ -303,7 +315,9 @@ public class Cloud {
   }
   
   public Project createProject() {
-    return createRecord(Project.class);
+    Project project = createRecord(Project.class);
+    project.setHasBeenDeleted(false);
+    return project;
   }
   
   public Volunteer createVolunteer(User user) {

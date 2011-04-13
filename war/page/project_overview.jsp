@@ -59,7 +59,7 @@ limitations under the License.
 
   String projectName = (project != null) ? project.getName() : "";
   String projectDescription = (project != null) ? project.getDescription() : placeholderDescription;
-  String projectLanguage = (project != null) ? project.getLanguage() : ""; 
+  String projectLanguageCode = (project != null) ? project.getLanguageCode() : ""; 
   List<String> projectLanguages = new ArrayList<String>();
   
   String lexiconExampleProjectName = "Lexicon Example Project";
@@ -167,7 +167,7 @@ limitations under the License.
         <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Language:</span></td> 
         <td id="AttrValueCellLangauge">
           <select 
-              name="language"
+              name="languageCode"
               id="Language"
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>>
             <option></option>
@@ -177,7 +177,7 @@ limitations under the License.
               %>
               <option 
                   value="<%= language.getCode() %>" 
-                  <%= (projectLanguage.equals(language.getCode()) ? "selected" : "") %>><%= language.getName() %></option> 
+                  <%= (projectLanguageCode.equals(language.getCode()) ? "selected" : "") %>><%= language.getName() %></option> 
             <% } %>
           </select>
         </td>

@@ -52,13 +52,23 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
+    
 
-    String nickname = request.getParameter("nickname");
-    String city = request.getParameter("city");
-    String country = request.getParameter("country");
+    // read the input parameters from the client and validate them all before using the values
+    Validator textValidator = Validator.ALPHA_NUMERIC; 
+
+    String rawNickname = request.getParameter("nickname");
+    String nickname = textValidator.filter(rawNickname);
+    
+    String rawCity = request.getParameter("city");
+    String city = textValidator.filter(rawCity);
+    
+    String rawCountry = request.getParameter("country");
+    String country = textValidator.filter(rawCountry);
+    
     String recognition = request.getParameter("recognition");
     boolean anonymous = !"public".equals(recognition);
-
+    
     Cloud cloud = Cloud.open();
     
     List<String> selectedLanguages = new ArrayList<String>();
@@ -74,11 +84,13 @@ public class ProfileServlet extends HttpServlet {
     if (volunteer == null) {
       volunteer = cloud.createVolunteer(user);
     }
-    volunteer.setNickname(nickname);
+    if (cloud.isNicknameAvailable(nickname)) {
+      volunteer.setNickname(nickname);
+    }
     volunteer.setCity(city);
     volunteer.setCountry(country);
     volunteer.setAnonymous(anonymous);
-    volunteer.setLanguages(selectedLanguages);
+    volunteer.setLanguageCodes(selectedLanguages);
     cloud.close();
 
     response.sendRedirect("/page/my_projects.jsp");
