@@ -254,42 +254,70 @@ limitations under the License.
   <table class="listing" cellpadding="0" cellspacing="0" border="0">
     <tbody>
       <tr style="background-color: #e5ecf9;">
+        <th></th>
         <th>Original</th>
-        <th style="text-align:center;">Progress</th>
+        <th>Word count</th>
+        <th>Translation</th>
+        <th>TODO: Word count</th>
+        <th style="text-align:center;">% Translated</th>
         <th style="text-align:center;">Status</th>
-        <th style="text-align:right;">Word count</th>
+        <th>TODO: Reviewed</th>
+        <th>TODO: Published</th>
+        <th>TODO: Translator</th>
+        <th>TODO: Reviewer</th>
       </tr>
       <%
-      if (project != null) {
-        List<Translation> translations = project.getTranslations();
-        for (Translation translation : translations) {
+      List<Translation> translations = (project == null) ? 
+          new ArrayList<Translation>() : 
+          project.getTranslations();
+      for (Translation translation : translations) {
+        if (!translation.isDeleted()) {
           %>
           <tr>
+            <td>
+              <% if (!readOnly) { %>
+                <input type="checkbox" name="translation_<%= translation.getId() %>"></input>
+              <% } %>
+            </td>
             <td class="term"><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
-            <td style="text-align:center;"><%= translation.getPercentComplete() %>% translated</td>
-            <td style="text-align:center;"><%= translation.getStage() %></td>
             <td style="text-align:right;"><%= translation.getNumberOfSourceWords() %></td>
+            <td><a href="<%= translation.getToolkitArticleUrl() %>" target="_blank">translation</a></td>
+            <td style="text-align:right;"></td>
+            <td style="text-align:center;"><%= translation.getPercentComplete() %>% translated</td>
+            <% if (translation.isDeleted()) { %>
+              <td style="text-align:center;">DELETED</td>
+            <% } else { %>
+              <td style="text-align:center;"><%= translation.getStage().toString().toLowerCase().replaceAll("_", " ") %></td>
+            <% } %>
+            <td class="muted">2010-06-18 3:20 PM PST</td>
+            <td class="muted"></td>
+            <td class="muted">mr.darcy</td>
+            <td class="muted">ms.bennet</td>
           </tr>
-          <%
-        }
-      }
-      %>
+        <% } %>
+      <% } %>
       
       <% if (!readOnly) { %>
+        <% if (!translations.isEmpty()) { %>
+          <tr>
+            <td><input type="checkbox" name="delete_translations"></input></td>
+            <td colspan="10"><input type="submit" value="Delete selected articles" style="font-size:large;"/></td>
+          </tr>
+        <% } %>
         <tr>
-          <td colspan="3">
+          <td></td>
+          <td colspan="9">
             <textarea 
-                rows="24" cols="80" id="Articles" name="articles"
+                rows="24" cols="110" id="Articles" name="articles"
                 placeholder="&quot;Oral rehydration therapy&quot;,&quot;http://en.wikipedia.org/wiki/Oral_rehydration_therapy&quot;"></textarea>
           </td>
           <td>
-            <% if (projectName.equals(lexiconExampleProjectName) && project.getTranslations().isEmpty()) { %>
+            <% if (projectName.equals(lexiconExampleProjectName) && translations.isEmpty()) { %>
               <input type="button" 
                   value="start the '<%= lexiconExampleProjectName %>' articles" 
                   style="background-color:pink;"
                   onclick="javascript:populateArticleForm();"/>
-    
-            <% } %>      
+            <% } %>
             <input type="submit" value="Add articles" style="font-size:large;"/>
           </td>
         </tr>
@@ -299,36 +327,6 @@ limitations under the License.
   </table>
   
   </form>
-  
-  <p>Or, alternatively, we could include more detail in the table above, more 
-  like the example table below...</p>
-      
-  <table class="listing" cellpadding="0" cellspacing="0" border="0">
-    <tbody>
-      <tr style="background-color: #e5ecf9;">
-        <th>Original</th>
-        <th>Word count</th>
-        <th>Translation</th>
-        <th>Word count</th>
-        <th>% Translated</th>
-        <th>Reviewed</th>
-        <th>Published</th>
-        <th>Translator</th>
-        <th>Reviewer</th>
-      </tr>    
-      <tr style="background-color: #e5ecf9;">
-        <td><a href="/term/B0024400">basal metabolic rate</a></td>
-        <td>342</td>
-        <td><a href="/term/B0024400">основной обмен</a></td>
-        <td>314</th>
-        <td>100%</th>
-        <td>2010-06-18 3:20 PM PST</th>
-        <td>2010-06-18 4:50 PM PST</th>
-        <td>mr.darcy@example.com</th>
-        <td>ms.bennet@example.com</th>
-      </tr>    
-    </tbody>
-  </table>
   
   <% if ((project != null) && userService.isUserAdmin()) { %>
     <p></p>
