@@ -188,6 +188,7 @@ limitations under the License.
            List<Translation> itemsToReview = project.getTranslationItemsForReviewer(user);
            String languageCode = project.getLanguageCode();
            String languageName = cloud.getLanguageByCode(languageCode).getName();
+           boolean translationsAvailable = project.translationsAvailableForReview(user);
       %>
         <tr>
           <th rowspan="<%=2 + itemsToReview.size()%>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getName()%> (<%=languageName%>)</th>
@@ -225,10 +226,16 @@ limitations under the License.
         <% } %>
         <tr>
           <td>
+            <% if (translationsAvailable) { %>
             <input 
                 type="button" 
                 value="I want a new item to review" 
                 onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguageCode()%>'" ></input>
+            <% } else if (itemsToReview.size() > 0) { %>
+                No more translations are available to review.
+            <% } else { %>
+                No translations are available to review. 
+            <% } %>
           </td>
           <td></td>
           <td></td>
