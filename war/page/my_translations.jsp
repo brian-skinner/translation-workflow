@@ -230,7 +230,7 @@ limitations under the License.
     <table cellspacing="0" cellpadding="4" class="listing">
       <%
         for (Project project : projects) {
-           List<Translation> itemsToReview = project.getTranslationItemsForReviewer(user);
+           List<Translation> itemsToReview = cloud.getTranslationItemsForReviewer(user);
            String languageCode = project.getLanguageCode();
            String languageName = cloud.getLanguageByCode(languageCode).getName();
            boolean translationsAvailable = project.hasTranslationsAvailableForReview(user);
