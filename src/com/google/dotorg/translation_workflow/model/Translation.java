@@ -58,9 +58,6 @@ public class Translation {
   @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
   @PrimaryKey private Key key;
 
-  /**
-   * The original document that this is a translation of.
-   */
   @Persistent private Project project; // bi-directional with Project.translations
   @Persistent private String originalTitle;
   @Persistent private String originalUrl;

@@ -97,6 +97,10 @@ public class Project {
     return hasBeenDeleted;
   }
 
+  /** 
+   * @deprecated Use Cloud getTranslationItemsForTranslator(User user) instead
+   */
+  @Deprecated
   public List<Translation> getTranslationItemsForTranslator(User user) {
     List<Translation> returnValues = new ArrayList<Translation>();
     for (Translation translation : getTranslations()) {
