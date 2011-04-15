@@ -22,6 +22,7 @@ import com.google.appengine.api.users.User;
 import com.google.dotorg.translation_workflow.io.LexiconFileReader;
 import com.google.dotorg.translation_workflow.io.ResourceFileReader;
 import com.google.dotorg.translation_workflow.io.TranslatorToolkitUtil;
+import com.google.dotorg.translation_workflow.model.Translation.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,6 +36,7 @@ import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
 
   // -------------------------------------------------------------------
   // Congratulations, if you're reading this comment, you're probably 
@@ -313,6 +315,54 @@ public class Cloud {
       toolkit.refreshStatus(translation);
     }
   }
+  
+  public List<Translation> getReviewerTranslationsForUser(User user) {
+	  List<Translation> translations = null;
+	  
+	  Query query = pm.newQuery(Translation.class);
+	  query.setFilter("reviewerId == userIdParam");
+	  query.declareParameters("String userIdParam");
+	  
+	  try {
+		  translations = (List<Translation>) query.execute(user.getUserId());
+	  } finally {
+		  query.closeAll();
+	  }
+	  
+	  return translations;
+  }
+  
+  public List<Translation> getTranslatorTranslationsForUser(User user) {
+	  List<Translation> translations = null;
+	  
+	  Query query = pm.newQuery(Translation.class);
+	  query.setFilter("translatorId == userIdParam");
+	  query.declareParameters("String userIdParam");
+	  
+	  try {
+		  translations = (List<Translation>) query.execute(user.getUserId());
+	  } finally {
+		  query.closeAll();
+	  }
+	  
+	  return translations;
+  }
+  
+  public List<Translation> getTranslationItemsForTranslator(User user) {
+    List<Translation> translations = getTranslatorTranslationsForUser(user);
+    List<Translation> returnValues = new ArrayList<Translation>();
+
+    for (Translation translation : translations) {
+      Stage stage = translation.getStage();
+      if ((stage == Stage.CLAIMED_FOR_TRANSLATION) || 
+           (stage == Stage.AVAILABLE_TO_REVIEW) || 
+           (stage == Stage.CLAIMED_FOR_REVIEW)) {
+        returnValues.add(translation);
+      }
+    }    
+    return returnValues;
+  }
+
   
   public Project createProject() {
     Project project = createRecord(Project.class);
