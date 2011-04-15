@@ -317,35 +317,35 @@ public class Cloud {
   }
   
   public List<Translation> getReviewerTranslationsForUser(User user) {
-	  List<Translation> translations = null;
-	  
-	  Query query = pm.newQuery(Translation.class);
-	  query.setFilter("reviewerId == userIdParam");
-	  query.declareParameters("String userIdParam");
-	  
-	  try {
-		  translations = (List<Translation>) query.execute(user.getUserId());
-	  } finally {
-		  query.closeAll();
-	  }
-	  
-	  return translations;
+    List<Translation> translations = null;
+    
+    Query query = pm.newQuery(Translation.class);
+    query.setFilter("reviewerId == userIdParam");
+    query.declareParameters("String userIdParam");
+    
+    try {
+      translations = (List<Translation>) query.execute(user.getUserId());
+    } finally {
+      query.closeAll();
+    }
+    
+    return translations;
   }
   
   public List<Translation> getTranslatorTranslationsForUser(User user) {
-	  List<Translation> translations = null;
-	  
-	  Query query = pm.newQuery(Translation.class);
-	  query.setFilter("translatorId == userIdParam");
-	  query.declareParameters("String userIdParam");
-	  
-	  try {
-		  translations = (List<Translation>) query.execute(user.getUserId());
-	  } finally {
-		  query.closeAll();
-	  }
-	  
-	  return translations;
+    List<Translation> translations = null;
+    
+    Query query = pm.newQuery(Translation.class);
+    query.setFilter("translatorId == userIdParam");
+    query.declareParameters("String userIdParam");
+    
+    try {
+      translations = (List<Translation>) query.execute(user.getUserId());
+    } finally {
+      query.closeAll();
+    }
+  
+    return translations;
   }
   
   public List<Translation> getTranslationItemsForTranslator(User user) {
