@@ -94,3 +94,8 @@ hr {
 .error-message {
   color: red;
 }
+tr.closed-choices td {
+  background-color: #e5ecf9;
+}
+
+
