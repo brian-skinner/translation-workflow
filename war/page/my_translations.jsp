@@ -67,6 +67,32 @@ limitations under the License.
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Translations</title>
+  <script type="text/javascript" language="javascript">
+    showHideItemsToTranslate = function() {
+      var rowForItemsToTranslate = document.getElementById('RowForItemsToTranslate');
+      var divForItemsToTranslate = document.getElementById('DivForItemsToTranslate');
+      if (rowForItemsToTranslate.class == "open-choices") {
+        rowForItemsToTranslate.class = "closed-choices";
+        divForItemsToTranslate.style.display = "none";
+      } else {
+        rowForItemsToTranslate.class = "open-choices";
+        divForItemsToTranslate.style.display = "block";
+      }
+    };
+    
+    showHideItemsToReview = function() {
+      var rowForItemsToReview = document.getElementById('RowForItemsToReview');
+      var divForItemsToReview = document.getElementById('DivForItemsToReview');
+      if (rowForItemsToReview.class == "open-choices") {
+        rowForItemsToReview.class = "closed-choices";
+        divForItemsToReview.style.display = "none";
+      } else {
+        rowForItemsToReview.class = "open-choices";
+        divForItemsToReview.style.display = "block";
+      }
+    };
+  </script>
+  
 </head>
   
 <body>
@@ -158,23 +184,42 @@ limitations under the License.
             </td>
           </tr>
         <% } %>
-        <tr>
-          <td>
+        <tr id="RowForItemsToTranslate" class="closed-choices">
+          <td style="vertical-align:top;">
             <% if (project != null) { %>
               <input 
                   type="button" 
                   value="I want a new item to translate" 
                   <% if (mayClaimMore) {%> 
-                    onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguageCode()%>'"
+                    onclick="javascript:showHideItemsToTranslate();"
                   <% } else { %>
-                    onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');" 
+                    onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');"
                   <% } %>
                   ></input>
             <% } %>
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td colspan="3">
+            <div id="DivForItemsToTranslate" style="display:none;">
+              <table>
+                <% for (Translation translation : project.getTranslations()) { %>
+                  <% if (translation.getLanguageCode().equals(languageCode) && !translation.isDeleted() && translation.isAvailableToTranslate()) { %>
+                    <tr>
+                      <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
+                      <td>
+                        <form action="/claim_item" method="post">
+                          <input type="hidden" name="projectId" value="<%= project.getId() %>">
+                          <input type="hidden" name="languageCode" value="<%= languageCode %>">
+                          <input type="hidden" name="translationId" value="<%= translation.getId() %>">
+                          <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_TRANSLATION.toString() %>">
+                          <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
+                        </form>
+                      </td>
+                    </tr>
+                  <% } %>
+                <% } %>
+              </table>
+            </div>
+          </td>
         </tr>
       <% } %>
     </table>
@@ -224,22 +269,42 @@ limitations under the License.
             </td>
           </tr>
         <% } %>
-        <tr>
-          <td>
+        <tr id="RowForItemsToReview" class="closed-choices">
+          <td style="vertical-align:top;">
             <% if (translationsAvailable) { %>
-            <input 
-                type="button" 
-                value="I want a new item to review" 
-                onclick="window.location='pick_item_to_translate.jsp?project=<%=project.getId()%>&language=<%=project.getLanguageCode()%>'" ></input>
+              <input 
+                  type="button" 
+                  value="I want a new item to review" 
+                  onclick="javascript:showHideItemsToReview();" ></input>
             <% } else if (itemsToReview.size() > 0) { %>
                 No more translations are available to review.
             <% } else { %>
                 No translations are available to review. 
             <% } %>
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td colspan="3">
+            <div id="DivForItemsToReview" style="display:none;">
+              <table>
+                <% for (Translation translation : project.getTranslations()) { %>
+                  <% if (translation.getLanguageCode().equals(languageCode) && !translation.isDeleted() && 
+                      translation.isAvailableToReview() && !translation.isUserTheTranslator(user)) { %>
+                    <tr>
+                      <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
+                      <td>
+                        <form action="/claim_item" method="post">
+                          <input type="hidden" name="projectId" value="<%= project.getId() %>">
+                          <input type="hidden" name="languageCode" value="<%= languageCode %>">
+                          <input type="hidden" name="translationId" value="<%= translation.getId() %>">
+                          <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_REVIEW.toString() %>">
+                          <input type="submit" value="I will review this" onclick="javascript:lockPage()" />
+                        </form>
+                      </td>
+                    </tr>
+                  <% } %>
+                <% } %>
+              </table>
+            </div>
+          </td>
         </tr>
       <% } %>
     </table>
@@ -255,21 +320,20 @@ limitations under the License.
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>
-          <th rowspan="<%=1 + completedItems.size()%>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getName()%> (<%=languageName%>)</th>
+          <th rowspan="<%= 1 + Math.max(1, completedItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getName()%> (<%=languageName%>)</th>
           <th>Original</th>
           <th>Translation</th>
           <th>Finished on</th>
         </tr>
         <% if (completedItems.isEmpty()) { %>
           <tr>
-            <td colspan="2">your finished articles will show up here</td>
-            <td></td>
+            <td colspan="3">your finished articles will show up here</td>
           </tr>
         <% } else { %>
           <% for (Translation item : completedItems) { %>
             <tr>
-              <td class="term"><a href="<%=item.getOriginalUrl()%>" target="_blank"><%=item.getOriginalTitle()%></a></td>
-              <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
+              <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
+              <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
               <td></td>
             </tr>
           <% } %>
