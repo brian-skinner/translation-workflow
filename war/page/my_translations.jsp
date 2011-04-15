@@ -108,7 +108,7 @@ limitations under the License.
   <% } else { %>
     <table cellspacing="0" cellpadding="4" class="listing">
       <% for (Project project : projects) { 
-          List<Translation> itemsToTranslate = project.getTranslationItemsForTranslator(user);
+          List<Translation> itemsToTranslate = cloud.getTranslationItemsForTranslator(user);
           boolean mayClaimMore = project.mayUserClaimMoreForTranslation(user);
           String languageCode = project.getLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
