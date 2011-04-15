@@ -362,7 +362,19 @@ public class Cloud {
     }    
     return returnValues;
   }
-
+  
+  public List<Translation> getTranslationItemsForReviewer(User user) {
+    List<Translation> returnValues = new ArrayList<Translation>();
+    List<Translation> translations = getReviewerTranslationsForUser(user);
+    
+    for (Translation translation : translations) {
+      Stage stage = translation.getStage();
+      if (stage == Stage.CLAIMED_FOR_REVIEW) {
+        returnValues.add(translation);
+      }
+    }    
+    return returnValues;
+  }
   
   public Project createProject() {
     Project project = createRecord(Project.class);
