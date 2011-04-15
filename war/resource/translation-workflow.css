@@ -48,7 +48,7 @@ table.chart td {
   background-color: #eef2fa;
 }
 td.term  {
-  font-size: large;
+  font-size: inherit;
 }
 table.review th {
   background-color: #bff;

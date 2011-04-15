@@ -17,9 +17,12 @@ package com.google.dotorg.translation_workflow.servlet;
 import com.google.dotorg.translation_workflow.model.Cloud;
 import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.Project;
+import com.google.dotorg.translation_workflow.model.Translation;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -63,6 +66,18 @@ public class ProjectServlet extends HttpServlet {
     String rawCsvArticleList = request.getParameter("articles");
     
     Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
+    
+    String deleteRequested = request.getParameter("delete_translations");
+    if (deleteRequested != null) {
+      for (Translation translation : project.getTranslations()) {
+        String parameterName = "translation_" + translation.getId();
+        String value = request.getParameter(parameterName);
+        if (value != null) {
+          translation.setDeleted(true);
+        }
+      }
+    }
+    
     if (!name.isEmpty()) {
       project.setName(name);
     }

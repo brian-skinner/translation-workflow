@@ -188,8 +188,8 @@ limitations under the License.
            List<Translation> itemsToReview = project.getTranslationItemsForReviewer(user);
            String languageCode = project.getLanguageCode();
            String languageName = cloud.getLanguageByCode(languageCode).getName();
-           boolean translationsAvailable = project.translationsAvailableForReview(user);
-      %>
+           boolean translationsAvailable = project.hasTranslationsAvailableForReview(user);
+           %>
         <tr>
           <th rowspan="<%=2 + itemsToReview.size()%>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getName()%> (<%=languageName%>)</th>
           <th>Original</th>
@@ -201,7 +201,7 @@ limitations under the License.
           for (Translation item : itemsToReview) { 
             String translatorId = item.getTranslatorId();
             Volunteer translator = cloud.getVolunteerByUserId(translatorId);
-        %>
+            %>
           <tr>
             <td class="term"><a href="<%=item.getOriginalUrl()%>" target="_blank"><%=item.getOriginalTitle()%></a></td>
             <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>

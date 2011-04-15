@@ -85,7 +85,7 @@ limitations under the License.
     </tr>
   
     <% for (Translation translation : project.getTranslations()) { %>
-      <% if (translation.getLanguageCode().equals(languageCode)) { %>
+      <% if (translation.getLanguageCode().equals(languageCode) && !translation.isDeleted()) { %>
         <tr>
           <td class="term"><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
           <td>
