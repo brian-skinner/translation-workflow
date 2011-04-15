@@ -170,12 +170,12 @@ public class Project {
     return (unfinishedItems < MAX_UNFINISHED_ITEMS);
   }
   
-  public boolean translationsAvailableForReview(User user) {
-	boolean available = false;
+  public boolean hasTranslationsAvailableForReview(User user) {
+    boolean available = false;
     for (Translation translation : getTranslations()) {
-    	if (translation.isAvailableToReview() && !translation.isUserTheTranslator(user)) {
-    		available = true;
-    	}
+      if (translation.isAvailableToReview() && !translation.isUserTheTranslator(user)) {
+        available = true;
+      }
     }
     return available;
   }

@@ -172,7 +172,7 @@ public class Translation {
   }
   
   public boolean isAtStage(Stage stage) {
-    return (getStage() == stage);
+    return ((getStage() == stage) && !isDeleted());
   }
   
   public String getTranslatorId() {
