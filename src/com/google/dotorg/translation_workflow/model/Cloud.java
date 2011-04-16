@@ -316,15 +316,16 @@ public class Cloud {
     }
   }
   
-  public List<Translation> getReviewerTranslationsForUser(User user) {
+  public List<Translation> getReviewerTranslationsForUser(User user, Project project) {
     List<Translation> translations = null;
     
     Query query = pm.newQuery(Translation.class);
-    query.setFilter("reviewerId == userIdParam");
+    query.setFilter("reviewerId == userIdParam && project == projectParam");
     query.declareParameters("String userIdParam");
+    query.declareParameters("String projectParam");
     
     try {
-      translations = (List<Translation>) query.execute(user.getUserId());
+      translations = (List<Translation>) query.execute(user.getUserId(), project);
     } finally {
       query.closeAll();
     }
@@ -332,15 +333,16 @@ public class Cloud {
     return translations;
   }
   
-  public List<Translation> getTranslatorTranslationsForUser(User user) {
+  public List<Translation> getTranslatorTranslationsForUser(User user, Project project) {
     List<Translation> translations = null;
     
     Query query = pm.newQuery(Translation.class);
-    query.setFilter("translatorId == userIdParam");
+    query.setFilter("translatorId == userIdParam && project == projectParam");
     query.declareParameters("String userIdParam");
+    query.declareParameters("String projectParam");
     
     try {
-      translations = (List<Translation>) query.execute(user.getUserId());
+      translations = (List<Translation>) query.execute(user.getUserId(), project);
     } finally {
       query.closeAll();
     }
@@ -348,8 +350,8 @@ public class Cloud {
     return translations;
   }
   
-  public List<Translation> getTranslationItemsForTranslator(User user) {
-    List<Translation> translations = getTranslatorTranslationsForUser(user);
+  public List<Translation> getTranslationItemsForTranslator(User user, Project project) {
+    List<Translation> translations = getTranslatorTranslationsForUser(user, project);
     List<Translation> returnValues = new ArrayList<Translation>();
 
     for (Translation translation : translations) {
@@ -363,9 +365,9 @@ public class Cloud {
     return returnValues;
   }
   
-  public List<Translation> getTranslationItemsForReviewer(User user) {
+  public List<Translation> getTranslationItemsForReviewer(User user, Project project) {
     List<Translation> returnValues = new ArrayList<Translation>();
-    List<Translation> translations = getReviewerTranslationsForUser(user);
+    List<Translation> translations = getReviewerTranslationsForUser(user, project);
     
     for (Translation translation : translations) {
       Stage stage = translation.getStage();
