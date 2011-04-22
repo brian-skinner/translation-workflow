@@ -315,7 +315,7 @@ limitations under the License.
     <table cellspacing="0" cellpadding="4" class="listing">
       <%
         for (Project project : projects) {  
-          List<Translation> completedItems = project.getTranslationItemsCompletedByUser(user);
+          List<Translation> completedItems = cloud.getTranslationItemsCompletedByUser(user, project);
           String languageCode = project.getLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
