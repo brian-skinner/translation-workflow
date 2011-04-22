@@ -321,8 +321,7 @@ public class Cloud {
     
     Query query = pm.newQuery(Translation.class);
     query.setFilter("reviewerId == userIdParam && project == projectParam");
-    query.declareParameters("String userIdParam");
-    query.declareParameters("String projectParam");
+    query.declareParameters("String userIdParam, String projectParam");
     
     try {
       translations = (List<Translation>) query.execute(user.getUserId(), project);
@@ -338,8 +337,7 @@ public class Cloud {
     
     Query query = pm.newQuery(Translation.class);
     query.setFilter("translatorId == userIdParam && project == projectParam");
-    query.declareParameters("String userIdParam");
-    query.declareParameters("String projectParam");
+    query.declareParameters("String userIdParam, String projectParam");
     
     try {
       translations = (List<Translation>) query.execute(user.getUserId(), project);
@@ -376,6 +374,24 @@ public class Cloud {
       }
     }    
     return returnValues;
+  }
+  
+  public List<Translation> getTranslationItemsCompletedByUser(User user, Project project) {
+      List<Translation> returnValues = new ArrayList<Translation>();
+      
+      for (Translation translation: getTranslatorTranslationsForUser(user, project)) {
+          if (translation.getStage() == Stage.COMPLETED) {
+              returnValues.add(translation);
+          }
+      }
+      
+      for (Translation translation: getReviewerTranslationsForUser(user, project)) {
+          if (translation.getStage() == Stage.COMPLETED) {
+              returnValues.add(translation);
+          }
+      }
+      
+      return returnValues;
   }
   
   public Project createProject() {

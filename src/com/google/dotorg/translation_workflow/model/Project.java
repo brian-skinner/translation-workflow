@@ -141,6 +141,10 @@ public class Project {
     return returnValues;
   }
   
+  /** 
+   * @deprecated Use Cloud getTranslationItemsCompletedByUser(User user, Project project) instead
+   */
+  @Deprecated
   public List<Translation> getTranslationItemsCompletedByUser(User user) {
     List<Translation> returnValues = new ArrayList<Translation>();
     for (Translation translation : getTranslationItemsForUser(user)) {
