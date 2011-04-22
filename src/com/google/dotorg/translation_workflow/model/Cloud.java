@@ -310,7 +310,7 @@ public class Cloud {
   
   public void refreshTranslationStatusFromToolkit(User user, Project project) {
     TranslatorToolkitUtil toolkit = new TranslatorToolkitUtil();
-    List<Translation> translations = project.getTranslationItemsForUser(user);
+    List<Translation> translations = getTranslationItemsForUser(user, project);
     for (Translation translation : translations) {
       toolkit.refreshStatus(translation);
     }
@@ -376,22 +376,29 @@ public class Cloud {
     return returnValues;
   }
   
+  public List<Translation> getTranslationItemsForUser(User user, Project project) {
+    List<Translation> returnValues = new ArrayList<Translation>();
+    
+    for (Translation translation: getTranslatorTranslationsForUser(user, project)) {
+      returnValues.add(translation);
+    }
+    
+    for (Translation translation: getReviewerTranslationsForUser(user, project)) {
+      returnValues.add(translation);
+    }
+    return returnValues;
+  }
+  
   public List<Translation> getTranslationItemsCompletedByUser(User user, Project project) {
-      List<Translation> returnValues = new ArrayList<Translation>();
-      
-      for (Translation translation: getTranslatorTranslationsForUser(user, project)) {
-          if (translation.getStage() == Stage.COMPLETED) {
-              returnValues.add(translation);
-          }
+    List<Translation> returnValues = new ArrayList<Translation>();
+    
+    for (Translation translation: getTranslationItemsForUser(user, project)) {
+      if (translation.getStage() == Stage.COMPLETED) {
+        returnValues.add(translation);
       }
-      
-      for (Translation translation: getReviewerTranslationsForUser(user, project)) {
-          if (translation.getStage() == Stage.COMPLETED) {
-              returnValues.add(translation);
-          }
-      }
-      
-      return returnValues;
+    }
+    
+    return returnValues;
   }
   
   public Project createProject() {
