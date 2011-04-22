@@ -98,7 +98,7 @@ public class Project {
   }
 
   /** 
-   * @deprecated Use Cloud getTranslationItemsForTranslator(User user) instead
+   * @deprecated Use Cloud getTranslationItemsForTranslator(User user, Project project) instead
    */
   @Deprecated
   public List<Translation> getTranslationItemsForTranslator(User user) {
@@ -116,6 +116,10 @@ public class Project {
     return returnValues;
   }
   
+  /** 
+   * @deprecated Use Cloud getTranslationItemsForReviewer(User user, Project project) instead
+   */
+  @Deprecated
   public List<Translation> getTranslationItemsForReviewer(User user) {
     List<Translation> returnValues = new ArrayList<Translation>();
     for (Translation translation : getTranslations()) {
@@ -128,6 +132,10 @@ public class Project {
     return returnValues;
   }
   
+  /** 
+   * @deprecated Use Cloud getTranslationItemsForUser(User user, Project project) instead
+   */
+  @Deprecated  
   public List<Translation> getTranslationItemsForUser(User user) {
     List<Translation> returnValues = new ArrayList<Translation>();
     for (Translation translation : getTranslations()) {
