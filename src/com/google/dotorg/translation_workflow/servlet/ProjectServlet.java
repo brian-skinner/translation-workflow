@@ -26,6 +26,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -94,14 +96,21 @@ public class ProjectServlet extends HttpServlet {
       project.setLanguageCode(language.getCode());
       
       if (!rawCsvArticleList.isEmpty()) {
+        PersistenceManager pm = cloud.getPersistenceManager();
+        Transaction tx = pm.currentTransaction();
+        tx.begin();
         String[] lines = rawCsvArticleList.split("\n");
+        List<Translation> newTranslations = new ArrayList<Translation>();
         for (String line : lines) {
           line = line.replaceAll("\"", "");
           String[] fields = line.split(",");
           String articleName = textValidator.filter(fields[0]);
           URL url = new URL(fields[1]);
           Translation translation = project.createTranslation(articleName, url.toString());
+          newTranslations.add(translation);
         }
+        pm.makePersistentAll(newTranslations);
+        tx.commit();
       }
       cloud.close();
   
