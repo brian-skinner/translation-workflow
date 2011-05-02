@@ -59,7 +59,11 @@ public class Project {
   @Persistent private String languageCode;
   @Persistent private boolean hasBeenDeleted;
 
-  @Persistent(mappedBy = "project")
+  /* This is an JDO "owned" relationship, so all of the Translation objects
+   * will automatically be placed in the same entity group as the Project. See
+   * http://code.google.com/appengine/docs/java/datastore/jdo/relationships.html
+   */
+  @Persistent(mappedBy = "project") // bi-directional with Translation.project
   @Element(dependent = "true")
   @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="originalTitle asc"))
   private List<Translation> translations;
