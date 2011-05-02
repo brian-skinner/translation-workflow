@@ -65,13 +65,13 @@ public class Cloud {
   
   private Cloud() {}
   
-  private PersistenceManager getPersistenceManager() {
+  private static PersistenceManager getNewPersistenceManager() {
     return pmfInstance.getPersistenceManager();
   }
   
   public static Cloud open() {
     Cloud cloud = new Cloud();
-    cloud.pm = cloud.getPersistenceManager();
+    cloud.pm = Cloud.getNewPersistenceManager();
     return cloud;
   }
   
@@ -79,6 +79,10 @@ public class Cloud {
     pm.close();
   }
 
+  public PersistenceManager getPersistenceManager() {
+    return pm;
+  }
+  
   public <T> T createRecord(Class<T> clazz) {
     T instance = null;
     try {

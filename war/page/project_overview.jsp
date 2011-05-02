@@ -303,6 +303,12 @@ limitations under the License.
             <td><input type="checkbox" name="delete_translations"></input></td>
             <td colspan="10"><input type="submit" value="Delete selected articles" style="font-size:large;"/></td>
           </tr>
+          <% if (projectName.equals("READY_TO_BE_NUKED")) { %>
+            <tr>
+              <td><input type="checkbox" name="nuke_translations"></input></td>
+              <td colspan="10"><input type="submit" value="Nuke ALL articles" style="font-size:large;"/></td>
+            </tr>
+          <% } %>
         <% } %>
         <tr>
           <td></td>
