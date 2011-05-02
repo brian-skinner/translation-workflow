@@ -14,6 +14,8 @@
 
 package com.google.dotorg.translation_workflow.servlet;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.dotorg.translation_workflow.model.Cloud;
 import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.Project;
@@ -23,7 +25,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,60 +47,71 @@ import javax.servlet.http.HttpServletResponse;
 public class ProjectServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Cloud cloud = Cloud.open();
-    
-    // read the input parameters from the client and validate them all before using the values
-    Validator textValidator = Validator.ALPHA_NUMERIC; 
-    
-    String rawProjectId = request.getParameter("projectId");
-    int projectId = Integer.parseInt(rawProjectId);
-    
-    String rawName = request.getParameter("name");
-    String name = textValidator.filter(rawName);
-    
-    String rawLanguageCode = request.getParameter("languageCode");
-    Language language = cloud.getLanguageByCode(rawLanguageCode);
-    
-    String rawDescription = request.getParameter("description");
-    String description = textValidator.filter(rawDescription);
-    
-    String rawCsvArticleList = request.getParameter("articles");
-    
-    Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
-    
-    String deleteRequested = request.getParameter("delete_translations");
-    if (deleteRequested != null) {
-      for (Translation translation : project.getTranslations()) {
-        String parameterName = "translation_" + translation.getId();
-        String value = request.getParameter(parameterName);
-        if (value != null) {
-          translation.setDeleted(true);
+    UserService userService = UserServiceFactory.getUserService();
+    boolean userCanEdit = userService.isUserAdmin();
+    if (userCanEdit) {
+      Cloud cloud = Cloud.open();
+      
+      // read the input parameters from the client and validate them all before using the values
+      Validator textValidator = Validator.ALPHA_NUMERIC; 
+      
+      String rawProjectId = request.getParameter("projectId");
+      int projectId = Integer.parseInt(rawProjectId);
+      
+      String rawName = request.getParameter("name");
+      String name = textValidator.filter(rawName);
+      
+      String rawLanguageCode = request.getParameter("languageCode");
+      Language language = cloud.getLanguageByCode(rawLanguageCode);
+      
+      String rawDescription = request.getParameter("description");
+      String description = textValidator.filter(rawDescription);
+      
+      String rawCsvArticleList = request.getParameter("articles");
+      
+      Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
+      
+      String nukeRequested = request.getParameter("nuke_translations");
+      if (nukeRequested != null) {
+        cloud.getPersistenceManager().deletePersistentAll(project.getTranslations());
+      }
+      
+      String deleteRequested = request.getParameter("delete_translations");
+      if (deleteRequested != null) {
+        for (Translation translation : project.getTranslations()) {
+          String parameterName = "translation_" + translation.getId();
+          String value = request.getParameter(parameterName);
+          if (value != null) {
+            translation.setDeleted(true);
+          }
         }
       }
-    }
-    
-    if (!name.isEmpty()) {
-      project.setName(name);
-    }
-    project.setDescription(description);
-    project.setLanguageCode(language.getCode());
-    
-    if (!rawCsvArticleList.isEmpty()) {
-      String[] lines = rawCsvArticleList.split("\n");
-      for (String line : lines) {
-        line = line.replaceAll("\"", "");
-        String[] fields = line.split(",");
-        String articleName = textValidator.filter(fields[0]);
-        URL url = new URL(fields[1]);
-        project.createTranslation(articleName, url.toString());
+      
+      if (!name.isEmpty()) {
+        project.setName(name);
       }
-    }
-    cloud.close();
-
-    if (rawCsvArticleList.isEmpty()) {
-      response.sendRedirect("/page/all_projects.jsp");
+      project.setDescription(description);
+      project.setLanguageCode(language.getCode());
+      
+      if (!rawCsvArticleList.isEmpty()) {
+        String[] lines = rawCsvArticleList.split("\n");
+        for (String line : lines) {
+          line = line.replaceAll("\"", "");
+          String[] fields = line.split(",");
+          String articleName = textValidator.filter(fields[0]);
+          URL url = new URL(fields[1]);
+          Translation translation = project.createTranslation(articleName, url.toString());
+        }
+      }
+      cloud.close();
+  
+      if (rawCsvArticleList.isEmpty()) {
+        response.sendRedirect("/page/all_projects.jsp");
+      } else {
+        response.sendRedirect("/page/project_overview.jsp?project=" + projectId);
+      }
     } else {
-      response.sendRedirect("/page/project_overview.jsp?project=" + projectId);
+      response.sendRedirect("/page/all_projects.jsp");
     }
   }
   
