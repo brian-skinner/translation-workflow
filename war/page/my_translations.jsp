@@ -114,7 +114,7 @@ limitations under the License.
           String languageName = cloud.getLanguageByCode(languageCode).getName();
         %>
         <tr>
-          <th rowspan="<%= 2 + itemsToTranslate.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%= project.getName() %> (<%= languageName %>)</th>
+          <th rowspan="<%= 2 + itemsToTranslate.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center; vertical-align:top;"><%= project.getName() %> (<%= languageName %>)</th>
           <th>Original</th>
           <th>Translation</th>
           <th>Status</th>
@@ -201,21 +201,19 @@ limitations under the License.
           <td colspan="3">
             <div id="DivForItemsToTranslate" style="display:none;">
               <table>
-                <% for (Translation translation : project.getTranslations()) { %>
-                  <% if (translation.getLanguageCode().equals(languageCode) && !translation.isDeleted() && translation.isAvailableToTranslate()) { %>
-                    <tr>
-                      <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
-                      <td>
-                        <form action="/claim_item" method="post">
-                          <input type="hidden" name="projectId" value="<%= project.getId() %>">
-                          <input type="hidden" name="languageCode" value="<%= languageCode %>">
-                          <input type="hidden" name="translationId" value="<%= translation.getId() %>">
-                          <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_TRANSLATION.toString() %>">
-                          <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
-                        </form>
-                      </td>
-                    </tr>
-                  <% } %>
+                <% for (Translation translation : cloud.getSomeTranslationItemsToTranslate(project)) { %>
+                  <tr>
+                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
+                    <td>
+                      <form action="/claim_item" method="post">
+                        <input type="hidden" name="projectId" value="<%= project.getId() %>">
+                        <input type="hidden" name="languageCode" value="<%= languageCode %>">
+                        <input type="hidden" name="translationId" value="<%= translation.getId() %>">
+                        <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_TRANSLATION.toString() %>">
+                        <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
+                      </form>
+                    </td>
+                  </tr>
                 <% } %>
               </table>
             </div>
