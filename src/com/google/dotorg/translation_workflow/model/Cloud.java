@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -320,6 +321,7 @@ public class Cloud {
     }
   }
   
+  @SuppressWarnings(value = {"unchecked"})
   public List<Translation> getReviewerTranslationsForUser(User user, Project project) {
     List<Translation> translations = null;
     
@@ -336,6 +338,7 @@ public class Cloud {
     return translations;
   }
   
+  @SuppressWarnings(value = {"unchecked"})
   public List<Translation> getTranslatorTranslationsForUser(User user, Project project) {
     List<Translation> translations = null;
     
@@ -383,7 +386,7 @@ public class Cloud {
   public List<Translation> getTranslationItemsForUser(User user, Project project) {
     List<Translation> returnValues = new ArrayList<Translation>();
     
-    for (Translation translation: getTranslatorTranslationsForUser(user, project)) {
+    for (Translation translation : getTranslatorTranslationsForUser(user, project)) {
       returnValues.add(translation);
     }
     
@@ -396,7 +399,7 @@ public class Cloud {
   public List<Translation> getTranslationItemsCompletedByUser(User user, Project project) {
     List<Translation> returnValues = new ArrayList<Translation>();
     
-    for (Translation translation: getTranslationItemsForUser(user, project)) {
+    for (Translation translation : getTranslationItemsForUser(user, project)) {
       if (translation.getStage() == Stage.COMPLETED) {
         returnValues.add(translation);
       }
@@ -405,6 +408,42 @@ public class Cloud {
     return returnValues;
   }
   
+  @SuppressWarnings(value = {"unchecked"})
+  public List<Translation> getSomeTranslationItemsToTranslate(Project project) {
+    List<Translation> translations = null;
+    List<Translation> returnValues = new ArrayList<Translation>();
+    int numberOfItemsToReturn = 5;
+    
+    Query query = pm.newQuery(Translation.class);
+    query.setFilter("project == projectParam");
+    query.declareParameters("String projectParam");
+    
+    try {
+      translations = (List<Translation>) query.execute(project);
+    } finally {
+      query.closeAll();
+    }
+    
+    if (translations != null) {
+      List<Translation> availableItems = new ArrayList<Translation>();
+      for (Translation translation : translations) {
+        if (!translation.isDeleted() && translation.isAvailableToTranslate()) {
+          availableItems.add(translation);
+        }
+      }
+
+      numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
+      int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
+      Random generator = new Random();
+      int startAt = generator.nextInt(lastPossibleStartingPoint);
+      for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
+        returnValues.add(availableItems.get(i));
+      }
+    }
+    
+    return returnValues;
+  }
+
   public Project createProject() {
     Project project = createRecord(Project.class);
     project.setDeleted(false);
