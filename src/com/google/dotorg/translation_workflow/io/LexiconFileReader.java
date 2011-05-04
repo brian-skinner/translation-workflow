@@ -38,7 +38,7 @@ import java.util.List;
  * @author Brian Douglas Skinner
  */
 public class LexiconFileReader {
-  ResourceFileReader reader;
+  private ResourceFileReader reader;
 
   public LexiconFileReader(String configFile) throws FileNotFoundException {
     reader = new ResourceFileReader(configFile);
@@ -46,7 +46,7 @@ public class LexiconFileReader {
   
   public HashMap<String, LexiconTerm> readTerms(String configFile) throws IOException {
     // TODO: replace this with cleaner code using Pattern / Matcher
-    //   String regxForTerm = "\\<bltkw>(.*?)\\</bltkw>";
+    //   String regxForTerm = "\\<k>(.*?)\\</k>";
     //   Pattern patternFormTerm = Pattern.compile(regxForTerm);
     //   Matcher matcher = patternFormTerm.matcher(line);
     //   while (matcher.find()) {
@@ -57,7 +57,9 @@ public class LexiconFileReader {
     while ((line = reader.readLine()) != null) {
       line = line.trim();
       if (line.startsWith("<ar")) {
-        line += getRemainderOfElement("ar");
+        if (!line.contains(endTag("ar"))) {
+          line += getRemainderOfElement("ar");
+        }
         LexiconTerm term = new LexiconTerm();
         List<String> definitionList = new ArrayList<String>();
         term.termId = line.substring(8, 16); // TODO: fix the ugly hack
@@ -102,7 +104,7 @@ public class LexiconFileReader {
   
   private String endTag(String tag) {
     return "</" + tag + ">";
-    }
+  }
   
   private String getSnippet(String line, String tag) {
     return getSnippet(line, tag, 0);
