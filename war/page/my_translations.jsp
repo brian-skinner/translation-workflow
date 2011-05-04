@@ -53,7 +53,6 @@ limitations under the License.
   List<Project> projects = new ArrayList<Project>();
   if (projectId != null) {
     Project project = cloud.getProjectById(projectId);
-    cloud.refreshTranslationStatusFromToolkit(user, project);
     projects.add(project);
   } else {
     projects = cloud.getProjectsForUser(user);
@@ -117,7 +116,12 @@ limitations under the License.
           <th rowspan="<%= 2 + itemsToTranslate.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center; vertical-align:top;"><%= project.getName() %> (<%= languageName %>)</th>
           <th>Original</th>
           <th>Translation</th>
-          <th>Status</th>
+          <th>Status
+            <form action="/refresh_progress" method="post">
+              <input type="hidden" name="projectId" value="<%=project.getId()%>">
+              <input type="submit" value="Refresh progress" onclick="javascript:lockPage()" />
+            </form>
+          </th>
           <th>Action</th>
         </tr>
         <% for (Translation item : itemsToTranslate) { 
