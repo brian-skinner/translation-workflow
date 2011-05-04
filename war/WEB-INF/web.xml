@@ -73,6 +73,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   </servlet-mapping>
 
 
+  <servlet>
+    <servlet-name>refreshProgressServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.RefreshProgressServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>refreshProgressServlet</servlet-name>
+    <url-pattern>/refresh_progress</url-pattern>
+  </servlet-mapping>
+
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>page/start.jsp</welcome-file>

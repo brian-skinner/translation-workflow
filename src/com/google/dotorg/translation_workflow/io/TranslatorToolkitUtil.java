@@ -70,7 +70,7 @@ public class TranslatorToolkitUtil {
   public static final String ARTICLE_URL = TOOLKIT_URL + "workbench?did=";
   public static final String MEMORY_URL = TOOLKIT_URL + "feeds/tm/";
   public static final String GLOSSARY_URL = TOOLKIT_URL + "feeds/glossary/";
-  public static final String DUMMY_TRANSLATION_MEMORY_ID = "p_53cd889b570b0d4f";
+  public static final String DUMMY_TRANSLATION_MEMORY_ID = "p_dcca8b9e545d8403";
   public static final String PRODUCTION_TRANSLATION_MEMORY_KEYWORD = "PRODUCTION";
 
   private static final Logger logger = Logger.getLogger(TranslatorToolkitUtil.class.getName());
@@ -305,7 +305,11 @@ public class TranslatorToolkitUtil {
     String gttAppName= fields[0];
     String userName= fields[1];
     String password = fields[2];
-    glossaryId = fields[3];
+    
+    // For development and testing, leave the field empty and don't set a glossary
+    if (fields.length >= 4) {
+        glossaryId = fields[3];
+    }
     useProductionTranslationMemory = false;
     if (fields.length == 5 && PRODUCTION_TRANSLATION_MEMORY_KEYWORD.equals(fields[4])) {
       useProductionTranslationMemory = true;
