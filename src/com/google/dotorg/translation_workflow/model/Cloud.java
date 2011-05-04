@@ -306,7 +306,6 @@ public class Cloud {
       for (Project project : getAllProjects()) {
         if (volunteerLanguages.contains(project.getLanguageCode())) {
           selectedProjects.add(project);
-          refreshTranslationStatusFromToolkit(user, project);
         }
       }
     }
