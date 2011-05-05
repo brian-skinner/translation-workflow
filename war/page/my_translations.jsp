@@ -70,11 +70,11 @@ limitations under the License.
     showHideItemsToTranslate = function() {
       var rowForItemsToTranslate = document.getElementById('RowForItemsToTranslate');
       var divForItemsToTranslate = document.getElementById('DivForItemsToTranslate');
-      if (rowForItemsToTranslate.class == "open-choices") {
-        rowForItemsToTranslate.class = "closed-choices";
+      if (rowForItemsToTranslate.className == "open-choices") {
+        rowForItemsToTranslate.className = "closed-choices";
         divForItemsToTranslate.style.display = "none";
       } else {
-        rowForItemsToTranslate.class = "open-choices";
+        rowForItemsToTranslate.className = "open-choices";
         divForItemsToTranslate.style.display = "block";
       }
     };
@@ -82,11 +82,11 @@ limitations under the License.
     showHideItemsToReview = function() {
       var rowForItemsToReview = document.getElementById('RowForItemsToReview');
       var divForItemsToReview = document.getElementById('DivForItemsToReview');
-      if (rowForItemsToReview.class == "open-choices") {
-        rowForItemsToReview.class = "closed-choices";
+      if (rowForItemsToReview.className == "open-choices") {
+        rowForItemsToReview.className = "closed-choices";
         divForItemsToReview.style.display = "none";
       } else {
-        rowForItemsToReview.class = "open-choices";
+        rowForItemsToReview.className = "open-choices";
         divForItemsToReview.style.display = "block";
       }
     };
