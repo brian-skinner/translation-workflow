@@ -67,9 +67,9 @@ limitations under the License.
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Translations</title>
   <script type="text/javascript" language="javascript">
-    showHideItemsToTranslate = function() {
-      var rowForItemsToTranslate = document.getElementById('RowForItemsToTranslate');
-      var divForItemsToTranslate = document.getElementById('DivForItemsToTranslate');
+    showHideItemsToTranslate = function(projectId) {
+      var rowForItemsToTranslate = document.getElementById('RowForItemsToTranslate'+projectId);
+      var divForItemsToTranslate = document.getElementById('DivForItemsToTranslate'+projectId);
       if (rowForItemsToTranslate.className == "open-choices") {
         rowForItemsToTranslate.className = "closed-choices";
         divForItemsToTranslate.style.display = "none";
@@ -79,9 +79,9 @@ limitations under the License.
       }
     };
     
-    showHideItemsToReview = function() {
-      var rowForItemsToReview = document.getElementById('RowForItemsToReview');
-      var divForItemsToReview = document.getElementById('DivForItemsToReview');
+    showHideItemsToReview = function(projectId) {
+      var rowForItemsToReview = document.getElementById('RowForItemsToReview'+projectId);
+      var divForItemsToReview = document.getElementById('DivForItemsToReview'+projectId);
       if (rowForItemsToReview.className == "open-choices") {
         rowForItemsToReview.className = "closed-choices";
         divForItemsToReview.style.display = "none";
@@ -188,14 +188,22 @@ limitations under the License.
             </td>
           </tr>
         <% } %>
-        <tr id="RowForItemsToTranslate" class="closed-choices">
+        
+        <% 
+        String rowId = "RowForItemsToTranslate";
+        if (project != null) {
+            rowId = rowId + project.getId();
+        }
+        %>
+        
+        <tr id=<%= rowId %> class="closed-choices">
           <td style="vertical-align:top;">
             <% if (project != null) { %>
               <input 
                   type="button" 
                   value="I want a new item to translate" 
                   <% if (mayClaimMore) {%> 
-                    onclick="javascript:showHideItemsToTranslate();"
+                    onclick="javascript:showHideItemsToTranslate(<%= project.getId() %>);"
                   <% } else { %>
                     onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');"
                   <% } %>
@@ -203,7 +211,15 @@ limitations under the License.
             <% } %>
           </td>
           <td colspan="3">
-            <div id="DivForItemsToTranslate" style="display:none;">
+          
+          <%
+            String divId = "DivForItemsToTranslate";
+            if (project != null) {
+              divId = divId + project.getId();
+            }
+          %>
+          
+            <div id=<%= divId %> style="display:none;">
               <table>
                 <% for (Translation translation : cloud.getSomeTranslationItemsToTranslate(project)) { %>
                   <tr>
@@ -271,13 +287,21 @@ limitations under the License.
             </td>
           </tr>
         <% } %>
-        <tr id="RowForItemsToReview" class="closed-choices">
+
+        <% 
+        String rowId = "RowForItemsToReview";
+        if (project != null) {
+            rowId = rowId + project.getId();
+        }
+        %>
+
+        <tr id=<%= rowId %> class="closed-choices">
           <td style="vertical-align:top;">
             <% if (translationsAvailable) { %>
               <input 
                   type="button" 
                   value="I want a new item to review" 
-                  onclick="javascript:showHideItemsToReview();" ></input>
+                  onclick="javascript:showHideItemsToReview(<%= project.getId() %>);" ></input>
             <% } else if (itemsToReview.size() > 0) { %>
                 No more translations are available to review.
             <% } else { %>
@@ -285,7 +309,15 @@ limitations under the License.
             <% } %>
           </td>
           <td colspan="3">
-            <div id="DivForItemsToReview" style="display:none;">
+          
+          <%
+            String divId = "DivForItemsToReview";
+            if (project != null) {
+              divId = divId + project.getId();
+            }
+          %>
+          
+            <div id=<%= divId %> style="display:none;">
               <table>
                 <% for (Translation translation : project.getTranslations()) { %>
                   <% if (translation.getLanguageCode().equals(languageCode) && !translation.isDeleted() && 
