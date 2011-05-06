@@ -23,6 +23,7 @@ limitations under the License.
 <%@ page import="com.google.dotorg.translation_workflow.model.Language" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Project" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Translation" %>
+<%@ page import="com.google.dotorg.translation_workflow.model.Volunteer" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 
@@ -261,10 +262,8 @@ limitations under the License.
         <th>TODO: Word count</th>
         <th style="text-align:center;">% Translated</th>
         <th style="text-align:center;">Status</th>
-        <th>TODO: Reviewed</th>
-        <th>TODO: Published</th>
-        <th>TODO: Translator</th>
-        <th>TODO: Reviewer</th>
+        <th>Translator</th>
+        <th>Reviewer</th>
       </tr>
       <%
       List<Translation> translations = (project == null) ? 
@@ -272,6 +271,10 @@ limitations under the License.
           project.getTranslations();
       for (Translation translation : translations) {
         if (!translation.isDeleted()) {
+            String translatorId = translation.getTranslatorId();
+            Volunteer translator = (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
+            String reviewerId = translation.getReviewerId();
+            Volunteer reviewer = (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
           %>
           <tr>
             <td>
@@ -289,10 +292,8 @@ limitations under the License.
             <% } else { %>
               <td style="text-align:center;"><%= translation.getStage().toString().toLowerCase().replaceAll("_", " ") %></td>
             <% } %>
-            <td class="muted">2010-06-18 3:20 PM PST</td>
-            <td class="muted"></td>
-            <td class="muted">mr.darcy</td>
-            <td class="muted">ms.bennet</td>
+            <td class="muted"><%=(translator == null) ? "" : translator.getNickname()%></td>
+            <td class="muted"><%=(reviewer == null) ? "" : reviewer.getNickname()%></td>
           </tr>
         <% } %>
       <% } %>

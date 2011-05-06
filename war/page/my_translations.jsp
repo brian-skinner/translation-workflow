@@ -335,15 +335,15 @@ limitations under the License.
         <% } else { %>
           <% for (Translation item : completedItems) { 
               String translatorId = item.getTranslatorId();
-              Volunteer translator = cloud.getVolunteerByUserId(translatorId);
+              Volunteer translator = (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
               String reviewerId = item.getReviewerId();
-              Volunteer reviewer = cloud.getVolunteerByUserId(reviewerId);
+              Volunteer reviewer = (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
           %>
             <tr>
               <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
               <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
-              <td><%=translator.getNickname()%></td>
-              <td><%=reviewer.getNickname()%></td>
+              <td><%= (translator == null) ? "" : translator.getNickname()%></td>
+              <td><%= (reviewer == null) ? "" : reviewer.getNickname()%></td>
             </tr>
           <% } %>
         <% } %>
