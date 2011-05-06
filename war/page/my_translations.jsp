@@ -325,18 +325,25 @@ limitations under the License.
           <th rowspan="<%= 1 + Math.max(1, completedItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getName()%> (<%=languageName%>)</th>
           <th>Original</th>
           <th>Translation</th>
-          <th>Finished on</th>
+          <th>Translated by</th>
+          <th>Reviewed by</th>
         </tr>
         <% if (completedItems.isEmpty()) { %>
           <tr>
-            <td colspan="3">your finished articles will show up here</td>
+            <td colspan="4">your finished articles will show up here</td>
           </tr>
         <% } else { %>
-          <% for (Translation item : completedItems) { %>
+          <% for (Translation item : completedItems) { 
+              String translatorId = item.getTranslatorId();
+              Volunteer translator = cloud.getVolunteerByUserId(translatorId);
+              String reviewerId = item.getReviewerId();
+              Volunteer reviewer = cloud.getVolunteerByUserId(reviewerId);
+          %>
             <tr>
               <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
               <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
-              <td></td>
+              <td><%=translator.getNickname()%></td>
+              <td><%=reviewer.getNickname()%></td>
             </tr>
           <% } %>
         <% } %>
