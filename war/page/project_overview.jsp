@@ -259,7 +259,6 @@ limitations under the License.
         <th>Original</th>
         <th>Word count</th>
         <th>Translation</th>
-        <th>TODO: Word count</th>
         <th style="text-align:center;">% Translated</th>
         <th style="text-align:center;">Status</th>
         <th>Translator</th>
@@ -285,7 +284,6 @@ limitations under the License.
             <td class="term"><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
             <td style="text-align:right;"><%= translation.getNumberOfSourceWords() %></td>
             <td><a href="<%= translation.getToolkitArticleUrl() %>" target="_blank">translation</a></td>
-            <td style="text-align:right;"></td>
             <td style="text-align:center;"><%= translation.getPercentComplete() %>% translated</td>
             <% if (translation.isDeleted()) { %>
               <td style="text-align:center;">DELETED</td>
