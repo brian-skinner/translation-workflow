@@ -47,6 +47,7 @@ public class Volunteer {
 
   // TODO: index off of User object instead of Identity key 
   // @Persistent(valueStrategy = IdGeneratorStrategy. IDENTITY)
+  @SuppressWarnings(value = {"unused"}) 
   @PrimaryKey private Key key;
 
   @Persistent private String nickname;

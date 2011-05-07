@@ -23,7 +23,6 @@ import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.Volunteer;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +45,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Brian Douglas Skinner
  */
 public class ProfileServlet extends HttpServlet {
-  private static final Logger logger = Logger.getLogger(ProfileServlet.class.getName());
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
