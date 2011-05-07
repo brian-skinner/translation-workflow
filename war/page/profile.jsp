@@ -75,12 +75,15 @@ limitations under the License.
     validateNickname = function() {
       var nickname = document.getElementById('nickname').value;
       var nicknameErrorSpan = document.getElementById('nickname-error');
+      var nicknameTipSpan = document.getElementById('nickname-tip');
       var saveButton = document.getElementById('save-button');
       if (isDuplicateNickname(nickname)) {
         nicknameErrorSpan.style.display = "inline";
+        nicknameTipSpan.style.display = "none";
         saveButton.disabled = true;
       } else {
         nicknameErrorSpan.style.display = "none";
+        nicknameTipSpan.style.display = "inline";
         saveButton.disabled = false;
       }
     };
@@ -127,6 +130,7 @@ limitations under the License.
                   onkeyup="javascript:validateNickname()"
                   onchange="javascript:validateNickname()">
               <span class="error-message" id="nickname-error" style="display:none">That name is already taken.</span>
+              <span id="nickname-tip" >Your nickname will be visible to other registered Health Speaks volunteers</span>
             </div>
             <div class="errorbox-good">
               <input type="radio" name="recognition" value="public" <%= volunteerAnonymous ? "" : "checked" %>/>Tell people how great I am<br />
@@ -139,6 +143,7 @@ limitations under the License.
           <td nowrap valign="top" id="AttrLabelCellCity"><span class="label">Nearest city:</span></td> 
           <td id="AttrValueCellCity">
             <input type="text" name="city" value="<%= volunteerCity %>" size="30" id="City" placeholder="Cairo">
+            We will notify you of any events in your city
           </td>
         </tr>
         
