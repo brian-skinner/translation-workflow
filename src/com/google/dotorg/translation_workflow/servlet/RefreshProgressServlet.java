@@ -8,7 +8,6 @@ import com.google.dotorg.translation_workflow.model.Project;
 
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
