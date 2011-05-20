@@ -431,12 +431,14 @@ public class Cloud {
         }
       }
 
-      numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
-      int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
-      Random generator = new Random();
-      int startAt = generator.nextInt(lastPossibleStartingPoint);
-      for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
-        returnValues.add(availableItems.get(i));
+      if (!availableItems.isEmpty()) {
+        numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
+        int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
+        Random generator = new Random();
+        int startAt = generator.nextInt(lastPossibleStartingPoint);
+        for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
+          returnValues.add(availableItems.get(i));
+        }
       }
     }
     
