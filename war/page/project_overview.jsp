@@ -58,8 +58,8 @@ limitations under the License.
     "to donate $1 for every definition completed by December 31.  The donations will all go " +
     "to the ____ Children's Hospital in ___ to fund _____.";
 
-  String projectName = (project != null) ? project.getName() : "";
-  String projectDescription = (project != null) ? project.getDescription() : placeholderDescription;
+  String usProjectName = (project != null) ? project.getUsName() : "";
+  String usProjectDescription = (project != null) ? project.getUsDescription() : placeholderDescription;
   String projectLanguageCode = (project != null) ? project.getLanguageCode() : ""; 
   List<String> projectLanguages = new ArrayList<String>();
   
@@ -72,7 +72,7 @@ limitations under the License.
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
-  <title><%= siteName %> - <%= projectName %></title>
+  <title><%= siteName %> - <%= usProjectName %></title>
   <script type="text/javascript" language="javascript">
     lexiconEntryList = {
       // TODO: replace this hard-coded this list with a
@@ -158,7 +158,7 @@ limitations under the License.
           <input 
               type="text" 
               name="name" 
-              value="<%= projectName %>" 
+              value="<%= usProjectName %>" 
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>
               size="30" 
               id="Name">
@@ -192,7 +192,7 @@ limitations under the License.
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>
               id="Description" name="description"
               placeholder="<%= placeholderDescription %>"
-              rows="6" cols="80"><%= projectDescription %></textarea>
+              rows="6" cols="80"><%= usProjectDescription %></textarea>
         </td>
       </tr>
 
@@ -290,8 +290,8 @@ limitations under the License.
             <% } else { %>
               <td style="text-align:center;"><%= translation.getStage().toString().toLowerCase().replaceAll("_", " ") %></td>
             <% } %>
-            <td class="muted"><%=(translator == null) ? "" : translator.getNickname()%></td>
-            <td class="muted"><%=(reviewer == null) ? "" : reviewer.getNickname()%></td>
+            <td class="muted"><%=(translator == null) ? "" : translator.getUsNickname()%></td>
+            <td class="muted"><%=(reviewer == null) ? "" : reviewer.getUsNickname()%></td>
           </tr>
         <% } %>
       <% } %>
@@ -302,7 +302,7 @@ limitations under the License.
             <td><input type="checkbox" name="delete_translations"></input></td>
             <td colspan="10"><input type="submit" value="Delete selected articles" style="font-size:large;"/></td>
           </tr>
-          <% if (projectName.equals("READY_TO_BE_NUKED")) { %>
+          <% if (usProjectName.equals("READY_TO_BE_NUKED")) { %>
             <tr>
               <td><input type="checkbox" name="nuke_translations"></input></td>
               <td colspan="10"><input type="submit" value="Nuke ALL articles" style="font-size:large;"/></td>
@@ -317,7 +317,7 @@ limitations under the License.
                 placeholder="&quot;Oral rehydration therapy&quot;,&quot;http://en.wikipedia.org/wiki/Oral_rehydration_therapy&quot;"></textarea>
           </td>
           <td>
-            <% if (projectName.equals(lexiconExampleProjectName) && translations.isEmpty()) { %>
+            <% if (usProjectName.equals(lexiconExampleProjectName) && translations.isEmpty()) { %>
               <input type="button" 
                   value="start the '<%= lexiconExampleProjectName %>' articles" 
                   style="background-color:pink;"

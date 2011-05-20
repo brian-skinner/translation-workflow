@@ -32,7 +32,7 @@ public class RefreshProgressServlet extends HttpServlet {
       cloud.refreshTranslationStatusFromToolkit(user, project);
       cloud.close();
       
-      logger.info("Update translation status for user:" + user.getNickname() + " and project: " + project.getName());
+      logger.info("Update translation status for user:" + user.getNickname() + " and project: " + project.getUsName());
       
       response.sendRedirect(
           "/page/my_translations.jsp?project=" + projectId);

@@ -78,8 +78,8 @@ limitations under the License.
             <% } else { %>
               <td>
               <% for (Project project : projects) { %>
-                <div style="font-size:large; padding-bottom:0.5em;"><a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><%= project.getName() %></a></div>
-                <div><%= project.getDescription() %></div><br />
+                <div style="font-size:large; padding-bottom:0.5em;"><a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><%= project.getUsName() %></a></div>
+                <div><%= project.getUsDescription() %></div><br />
               <% } %>
               </td>
             <% } %>
