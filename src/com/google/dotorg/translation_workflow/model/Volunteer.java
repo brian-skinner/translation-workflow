@@ -50,22 +50,22 @@ public class Volunteer {
   @SuppressWarnings(value = {"unused"}) 
   @PrimaryKey private Key key;
 
-  @Persistent private String nickname;
-  @Persistent private String city;
-  @Persistent private String country;
+  @Persistent private String usNickname;
+  @Persistent private String usCity;
+  @Persistent private String usCountry;
   @Persistent private boolean anonymous;
   @Persistent private String languageCodes;
 
-  public String getNickname() {
-    return nickname;
+  public String getUsNickname() {
+    return usNickname;
   }
   
-  public String getCity() {
-    return city;
+  public String getUsCity() {
+    return usCity;
   }
   
-  public String getCountry() {
-	  return country;
+  public String getUsCountry() {
+	  return usCountry;
   }
   
   public boolean isAnonymous() {
@@ -81,16 +81,16 @@ public class Volunteer {
     this.key = key;
   }
   
-  public void setNickname(String nickname) {
-    this.nickname = nickname;
+  public void setUsNickname(String nickname) {
+    this.usNickname = nickname;
   }
   
-  public void setCity(String city) {
-    this.city = city;
+  public void setUsCity(String city) {
+    this.usCity = city;
   }
   
-  public void setCountry(String country) {
-	  this.country = country;
+  public void setUsCountry(String country) {
+	  this.usCountry = country;
   }
 
   public void setAnonymous(boolean anonymous) {

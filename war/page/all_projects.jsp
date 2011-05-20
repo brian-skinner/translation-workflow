@@ -66,9 +66,9 @@ limitations under the License.
           %>
           <tr>
             <td style="vertical-align:top;">
-              <a href="project_overview.jsp?project=<%= project.getId() %>"><%= project.getName() %></a>
+              <a href="project_overview.jsp?project=<%= project.getId() %>"><%= project.getUsName() %></a>
             </td>
-            <td><%= project.getDescription() %></td>
+            <td><%= project.getUsDescription() %></td>
           </tr>
           <%
         }
