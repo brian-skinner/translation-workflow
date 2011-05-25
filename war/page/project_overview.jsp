@@ -318,7 +318,7 @@ limitations under the License.
                 placeholder="&quot;Oral rehydration therapy&quot;,&quot;http://en.wikipedia.org/wiki/Oral_rehydration_therapy&quot;"></textarea>
           </td>
           <td>
-            <% if (usProjectName.equals(lexiconExampleProjectName) && translations.isEmpty()) { %>
+            <% if (projectName.equals(lexiconExampleProjectName) && translations.isEmpty()) { %>
               <input type="button" 
                   value="start the '<%= lexiconExampleProjectName %>' articles" 
                   style="background-color:pink;"
