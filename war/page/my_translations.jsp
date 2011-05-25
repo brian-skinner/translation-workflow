@@ -227,7 +227,7 @@ limitations under the License.
               <table>
                 <% for (Translation translation : cloud.getSomeTranslationItemsToTranslate(project)) { %>
                   <tr>
-                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
+                    <td><%= translation.getOriginalTitle() %></td>
                     <td>
                       <form action="/claim_item" method="post">
                         <input type="hidden" name="projectId" value="<%= project.getId() %>">
@@ -237,6 +237,7 @@ limitations under the License.
                         <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
                       </form>
                     </td>
+                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank">Preview</a></td>
                   </tr>
                 <% } %>
               </table>
