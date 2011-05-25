@@ -54,8 +54,8 @@ public class Project {
   @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
   @PrimaryKey private Key key;
 
-  @Persistent private String usName;
-  @Persistent private String usDescription;
+  @Persistent private String name;
+  @Persistent private String description;
   @Persistent private String languageCode;
   @Persistent private boolean hasBeenDeleted;
 
@@ -78,8 +78,8 @@ public class Project {
   /**
    * @return the name
    */
-  public String getUsName() {
-    return usName;
+  public String getName() {
+    return name;
   }
 
   public String getLanguageCode() {
@@ -93,8 +93,8 @@ public class Project {
   /**
    * @return the description
    */
-  public String getUsDescription() {
-    return usDescription;
+  public String getDescription() {
+    return description;
   }
   
   public boolean isDeleted() {
@@ -237,8 +237,8 @@ public class Project {
   /**
    * @param name the name to set
    */
-  public void setUsName(String name) {
-    this.usName = name;
+  public void setName(String name) {
+    this.name = name;
   }
   
   public void setDeleted(boolean deleted) {
@@ -248,8 +248,8 @@ public class Project {
   /**
    * @param description the description to set
    */
-  public void setUsDescription(String description) {
-    this.usDescription = description;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public void setLanguageCode(String languageCode) {

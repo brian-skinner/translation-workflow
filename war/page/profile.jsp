@@ -48,9 +48,9 @@ limitations under the License.
   
   List<String> volunteerNicknames = cloud.getAllVolunteerNicknames();
 
-  String usVolunteerNickname = (volunteer != null) ? volunteer.getUsNickname() : "";
-  String usVolunteerCity = (volunteer != null) ? volunteer.getUsCity() : "";
-  String usVolunteerCountry = (volunteer != null) ? volunteer.getUsCountry() : "";
+  String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
+  String volunteerCity = (volunteer != null) ? volunteer.getCity() : "";
+  String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
   boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
   List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
 %>
@@ -63,7 +63,7 @@ limitations under the License.
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Profile</title>
   <script type="text/javascript" language="javascript">
-    myNickname = "<%= usVolunteerNickname %>";
+    myNickname = "<%= volunteerNickname %>";
     
     allNicknames = [
       <% for (String nickname : volunteerNicknames) { %>
@@ -124,7 +124,7 @@ limitations under the License.
                   type="text" 
                   id="nickname"
                   name="nickname"
-                  value="<%= usVolunteerNickname %>" 
+                  value="<%= volunteerNickname %>" 
                   size="30" id="Nickname" 
                   placeholder="<%= userShortNickname %>" 
                   onkeyup="javascript:validateNickname()"
@@ -142,7 +142,7 @@ limitations under the License.
         <tr id="AttrRowCity" style="&quot;display: table-row&quot;">
           <td nowrap valign="top" id="AttrLabelCellCity"><span class="label">Nearest city:</span></td> 
           <td id="AttrValueCellCity">
-            <input type="text" name="city" value="<%= usVolunteerCity %>" size="30" id="City" placeholder="Cairo">
+            <input type="text" name="city" value="<%= volunteerCity %>" size="30" id="City" placeholder="Cairo">
             We will notify you of any events in your city
           </td>
         </tr>
@@ -150,7 +150,7 @@ limitations under the License.
         <tr id="AttrRowCountry" style="&quot;display: table-row&quot;">
           <td nowrap valign="top" id="AttrLabelCellCountry"><span class="label">Country:</span></td>
           <td id="AttrValueCellCountry">
-          	<input type="text" name="country" value="<%= usVolunteerCountry %>" size="30" id="Country" placeholder="Egypt">
+          	<input type="text" name="country" value="<%= volunteerCountry %>" size="30" id="Country" placeholder="Egypt">
           </td>
         </tr>
         

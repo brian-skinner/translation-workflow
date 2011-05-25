@@ -253,7 +253,7 @@ public class Cloud {
   public List<String> getAllVolunteerNicknames() {
     List<String> returnValues = new ArrayList<String>();
     for (Volunteer volunteer : getAllVolunteers()) {
-      String nickname = volunteer.getUsNickname();
+      String nickname = volunteer.getNickname();
       if ((nickname != null) && !nickname.isEmpty()) {
         returnValues.add(nickname);
       }
@@ -267,7 +267,7 @@ public class Cloud {
     }
     
     for (Volunteer volunteer : getAllVolunteers()) {
-      if (nickname.equals(volunteer.getUsNickname())) {
+      if (nickname.equals(volunteer.getNickname())) {
         return false;
       }
     }
