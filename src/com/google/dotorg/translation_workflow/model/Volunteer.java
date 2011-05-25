@@ -51,17 +51,12 @@ public class Volunteer {
   @PrimaryKey private Key key;
 
   @Persistent private String nickname;
-  @Persistent private String city;
   @Persistent private String country;
   @Persistent private boolean anonymous;
   @Persistent private String languageCodes;
 
   public String getNickname() {
     return nickname;
-  }
-  
-  public String getCity() {
-    return city;
   }
   
   public String getCountry() {
@@ -83,10 +78,6 @@ public class Volunteer {
   
   public void setNickname(String nickname) {
     this.nickname = nickname;
-  }
-  
-  public void setCity(String city) {
-    this.city = city;
   }
   
   public void setCountry(String country) {

@@ -53,7 +53,6 @@ limitations under the License.
   List<String> volunteerNicknames = cloud.getAllVolunteerNicknames();
 
   String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
-  String volunteerCity = (volunteer != null) ? volunteer.getCity() : "";
   String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
   boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
   List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
@@ -141,19 +140,6 @@ limitations under the License.
               <input type="radio" name="recognition" value="private"<%= volunteerAnonymous ? "checked" : "" %> />Do not use my nickname in public <span class="comment"> (for example, in a list of contributors)</span>
             </div> 
             
-          </td>
-        </tr>
-        <tr id="AttrRowCity" style="&quot;display: table-row&quot;">
-          <td nowrap valign="top" id="AttrLabelCellCity"><span class="label">Nearest city:</span></td> 
-          <td id="AttrValueCellCity">
-            <input 
-              type="text" 
-              name="city" 
-              value="<c:out value="<%= volunteerCity %>"/>" 
-              size="30" 
-              id="City" 
-              placeholder="Cairo">
-            We will notify you of any events in your city
           </td>
         </tr>
         

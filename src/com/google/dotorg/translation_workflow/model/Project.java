@@ -183,7 +183,7 @@ public class Project {
     int unfinishedItems = 0;
     for (Translation translation : getTranslations()) {
       if (translation.isUserTheTranslator(user) && 
-          translation.isAtStage(Stage.CLAIMED_FOR_TRANSLATION)) {
+          translation.existsAtStage(Stage.CLAIMED_FOR_TRANSLATION)) {
         unfinishedItems++;
       }
     }

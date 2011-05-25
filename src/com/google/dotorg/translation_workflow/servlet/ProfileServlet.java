@@ -58,9 +58,6 @@ public class ProfileServlet extends HttpServlet {
     String rawNickname = request.getParameter("nickname");
     String nickname = textValidator.filter(rawNickname);
     
-    String rawCity = request.getParameter("city");
-    String city = textValidator.filter(rawCity);
-    
     String rawCountry = request.getParameter("country");
     String country = textValidator.filter(rawCountry);
     
@@ -85,7 +82,6 @@ public class ProfileServlet extends HttpServlet {
     if (cloud.isNicknameAvailable(nickname)) {
       volunteer.setNickname(nickname);
     }
-    volunteer.setCity(city);
     volunteer.setCountry(country);
     volunteer.setAnonymous(anonymous);
     volunteer.setLanguageCodes(selectedLanguages);
