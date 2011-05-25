@@ -15,6 +15,7 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -63,7 +64,7 @@ limitations under the License.
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Profile</title>
   <script type="text/javascript" language="javascript">
-    myNickname = "<%= usVolunteerNickname %>";
+    myNickname = "<c:out value="<%= usVolunteerNickname %>"/>";
     
     allNicknames = [
       <% for (String nickname : volunteerNicknames) { %>
@@ -124,7 +125,7 @@ limitations under the License.
                   type="text" 
                   id="nickname"
                   name="nickname"
-                  value="<%= usVolunteerNickname %>" 
+                  value="<c:out value="<%= usVolunteerNickname %>"/>" 
                   size="30" id="Nickname" 
                   placeholder="<%= userShortNickname %>" 
                   onkeyup="javascript:validateNickname()"
@@ -142,7 +143,13 @@ limitations under the License.
         <tr id="AttrRowCity" style="&quot;display: table-row&quot;">
           <td nowrap valign="top" id="AttrLabelCellCity"><span class="label">Nearest city:</span></td> 
           <td id="AttrValueCellCity">
-            <input type="text" name="city" value="<%= usVolunteerCity %>" size="30" id="City" placeholder="Cairo">
+            <input 
+              type="text" 
+              name="city" 
+              value="<c:out value="<%= usVolunteerCity %>"/>" 
+              size="30" 
+              id="City" 
+              placeholder="Cairo">
             We will notify you of any events in your city
           </td>
         </tr>
@@ -150,7 +157,13 @@ limitations under the License.
         <tr id="AttrRowCountry" style="&quot;display: table-row&quot;">
           <td nowrap valign="top" id="AttrLabelCellCountry"><span class="label">Country:</span></td>
           <td id="AttrValueCellCountry">
-          	<input type="text" name="country" value="<%= usVolunteerCountry %>" size="30" id="Country" placeholder="Egypt">
+            <input 
+              type="text" 
+              name="country"
+              value="<c:out value="<%= usVolunteerCountry %>"/>"
+              size="30"
+              id="Country"
+              placeholder="Egypt">
           </td>
         </tr>
         

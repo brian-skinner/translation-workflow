@@ -15,6 +15,7 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -66,9 +67,9 @@ limitations under the License.
           %>
           <tr>
             <td style="vertical-align:top;">
-              <a href="project_overview.jsp?project=<%= project.getId() %>"><%= project.getUsName() %></a>
+              <a href="project_overview.jsp?project=<%= project.getId() %>"><c:out value="<%= project.getUsName() %>"/></a>
             </td>
-            <td><%= project.getUsDescription() %></td>
+            <td><c:out value="<%= project.getUsDescription() %>"/></td>
           </tr>
           <%
         }

@@ -15,6 +15,7 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -150,7 +151,7 @@ limitations under the License.
             <td>
               <% if (item.getReviewerId() != null) { %>
                    Waiting for review<br/>
-                   <span class="muted"><%=(reviewerId == null) ? "" : "by " + reviewer.getUsNickname()%> </span>  
+                   <span class="muted"><c:out value='<%=(reviewerId == null) ? "" : "by " + reviewer.getUsNickname()%>'/> </span>  
               <% } else { %>
                 <% if (item.getStage() == Stage.AVAILABLE_TO_REVIEW) { %>
                      Waiting for review<br/>
@@ -254,7 +255,9 @@ limitations under the License.
            boolean translationsAvailable = project.hasTranslationsAvailableForReview(user);
            %>
         <tr>
-          <th rowspan="<%=2 + itemsToReview.size()%>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getUsName()%> (<%=languageName%>)</th>
+          <th rowspan="<%=2 + itemsToReview.size()%>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
+           <c:out value="<%=project.getUsName()%>"/> (<%=languageName%>)
+          </th>
           <th>Original</th>
           <th>Translation</th>
           <th>Translated by</th>
@@ -268,7 +271,7 @@ limitations under the License.
           <tr>
             <td class="term"><a href="<%=item.getOriginalUrl()%>" target="_blank"><%=item.getOriginalTitle()%></a></td>
             <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
-            <td><%=translator.getUsNickname()%></td>
+            <td><c:out value="<%=translator.getUsNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
@@ -354,7 +357,9 @@ limitations under the License.
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>
-          <th rowspan="<%= 1 + Math.max(1, completedItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;"><%=project.getUsName()%> (<%=languageName%>)</th>
+          <th rowspan="<%= 1 + Math.max(1, completedItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
+            <c:out value="<%=project.getUsName()%>"/> (<%=languageName%>)
+          </th>
           <th>Original</th>
           <th>Translation</th>
           <th>Translated by</th>
@@ -374,8 +379,8 @@ limitations under the License.
             <tr>
               <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
               <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
-              <td><%= (translator == null) ? "" : translator.getUsNickname()%></td>
-              <td><%= (reviewer == null) ? "" : reviewer.getUsNickname()%></td>
+              <td><c:out value='<%= (translator == null) ? "" : translator.getUsNickname()%>'/></td>
+              <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getUsNickname()%>'/></td>
             </tr>
           <% } %>
         <% } %>

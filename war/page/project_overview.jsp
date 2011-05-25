@@ -15,6 +15,7 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -72,7 +73,7 @@ limitations under the License.
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
-  <title><%= siteName %> - <%= usProjectName %></title>
+  <title><%= siteName %> - <c:out value="<%= usProjectName %>"/></title>
   <script type="text/javascript" language="javascript">
     lexiconEntryList = {
       // TODO: replace this hard-coded this list with a
@@ -156,11 +157,11 @@ limitations under the License.
         <td nowrap valign="top" id="AttrLabelCellName"><span class="label">Name:</span></td> 
         <td id="AttrValueCellName">
           <input 
-              type="text" 
-              name="name" 
-              value="<%= usProjectName %>" 
+              type="text"
+              name="name"
+              value="<c:out value="<%= usProjectName %>"/>"
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>
-              size="30" 
+              size="30"
               id="Name">
         </td>
       </tr>
@@ -192,7 +193,7 @@ limitations under the License.
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>
               id="Description" name="description"
               placeholder="<%= placeholderDescription %>"
-              rows="6" cols="80"><%= usProjectDescription %></textarea>
+              rows="6" cols="80"><c:out value="<%= usProjectDescription %>"/></textarea>
         </td>
       </tr>
 
@@ -290,8 +291,8 @@ limitations under the License.
             <% } else { %>
               <td style="text-align:center;"><%= translation.getStage().toString().toLowerCase().replaceAll("_", " ") %></td>
             <% } %>
-            <td class="muted"><%=(translator == null) ? "" : translator.getUsNickname()%></td>
-            <td class="muted"><%=(reviewer == null) ? "" : reviewer.getUsNickname()%></td>
+            <td class="muted"><c:out value='<%=(translator == null) ? "" : translator.getUsNickname()%>'/></td>
+            <td class="muted"><c:out value='<%=(reviewer == null) ? "" : reviewer.getUsNickname()%>'/></td>
           </tr>
         <% } %>
       <% } %>

@@ -15,6 +15,7 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -72,8 +73,8 @@ limitations under the License.
   
   <h2>Pick an item to translate</h2>
   <% if (project != null) { %>
-    <p><b><%= project.getUsName() %> (<%= languageCode %>)</b></p>
-    <p><%= project.getUsDescription() %></p>
+    <p><b><c:out value="<%= project.getUsName() %>"/> (<%= languageCode %>)</b></p>
+    <p><c:out value="<%= project.getUsDescription() %>"/></p>
   <% } %>
   
   <table cellspacing="0" cellpadding="4" class="listing">

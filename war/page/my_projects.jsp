@@ -15,6 +15,7 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
@@ -78,8 +79,10 @@ limitations under the License.
             <% } else { %>
               <td>
               <% for (Project project : projects) { %>
-                <div style="font-size:large; padding-bottom:0.5em;"><a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><%= project.getUsName() %></a></div>
-                <div><%= project.getUsDescription() %></div><br />
+                <div style="font-size:large; padding-bottom:0.5em;">
+                  <a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><c:out value="<%= project.getUsName() %>"/></a>
+                </div>
+                <div><c:out value="<%= project.getUsDescription() %>"/></div><br />
               <% } %>
               </td>
             <% } %>
