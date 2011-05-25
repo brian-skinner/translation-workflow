@@ -44,6 +44,10 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
+  if (user == null) {
+    response.sendRedirect("/");
+  }
+  
   String siteName = Website.getInstance().getName();
   
   String projectId = request.getParameter("project");
@@ -223,7 +227,7 @@ limitations under the License.
               <table>
                 <% for (Translation translation : cloud.getSomeTranslationItemsToTranslate(project)) { %>
                   <tr>
-                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
+                    <td><%= translation.getOriginalTitle() %></td>
                     <td>
                       <form action="/claim_item" method="post">
                         <input type="hidden" name="projectId" value="<%= project.getId() %>">
@@ -233,6 +237,7 @@ limitations under the License.
                         <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
                       </form>
                     </td>
+                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank">Preview</a></td>
                   </tr>
                 <% } %>
               </table>

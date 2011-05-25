@@ -39,6 +39,9 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
+  if (user == null) {
+    response.sendRedirect("/");
+  }
   String siteName = Website.getInstance().getName();
 %>
 
