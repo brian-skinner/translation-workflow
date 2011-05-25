@@ -45,6 +45,10 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
+  if (user == null) {
+    response.sendRedirect("/");
+  }
+  
   String siteName = Website.getInstance().getName();
   
   String projectId = request.getParameter("project");
@@ -114,7 +118,7 @@ limitations under the License.
           String languageName = cloud.getLanguageByCode(languageCode).getName();
         %>
         <tr>
-          <th rowspan="<%= 2 + itemsToTranslate.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center; vertical-align:top;"><%= project.getUsName() %> (<%= languageName %>)</th>
+          <th rowspan="<%= 2 + itemsToTranslate.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center; vertical-align:top;"><%= project.getName() %> (<%= languageName %>)</th>
           <th>Original</th>
           <th>Translation</th>
           <th>Status
@@ -151,7 +155,7 @@ limitations under the License.
             <td>
               <% if (item.getReviewerId() != null) { %>
                    Waiting for review<br/>
-                   <span class="muted"><c:out value='<%=(reviewerId == null) ? "" : "by " + reviewer.getUsNickname()%>'/> </span>  
+                   <span class="muted"><c:out value='<%=(reviewerId == null) ? "" : "by " + reviewer.getNickname()%>'/> </span>  
               <% } else { %>
                 <% if (item.getStage() == Stage.AVAILABLE_TO_REVIEW) { %>
                      Waiting for review<br/>
@@ -224,7 +228,7 @@ limitations under the License.
               <table>
                 <% for (Translation translation : cloud.getSomeTranslationItemsToTranslate(project)) { %>
                   <tr>
-                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
+                    <td><%= translation.getOriginalTitle() %></td>
                     <td>
                       <form action="/claim_item" method="post">
                         <input type="hidden" name="projectId" value="<%= project.getId() %>">
@@ -234,6 +238,7 @@ limitations under the License.
                         <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
                       </form>
                     </td>
+                    <td><a href="<%= translation.getOriginalUrl() %>" target="_blank">Preview</a></td>
                   </tr>
                 <% } %>
               </table>
@@ -256,7 +261,7 @@ limitations under the License.
            %>
         <tr>
           <th rowspan="<%=2 + itemsToReview.size()%>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
-           <c:out value="<%=project.getUsName()%>"/> (<%=languageName%>)
+           <c:out value="<%=project.getName()%>"/> (<%=languageName%>)
           </th>
           <th>Original</th>
           <th>Translation</th>
@@ -271,7 +276,7 @@ limitations under the License.
           <tr>
             <td class="term"><a href="<%=item.getOriginalUrl()%>" target="_blank"><%=item.getOriginalTitle()%></a></td>
             <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
-            <td><c:out value="<%=translator.getUsNickname()%>"/></td>
+            <td><c:out value="<%=translator.getNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
@@ -358,7 +363,7 @@ limitations under the License.
       %>
         <tr>
           <th rowspan="<%= 1 + Math.max(1, completedItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
-            <c:out value="<%=project.getUsName()%>"/> (<%=languageName%>)
+            <c:out value="<%=project.getName()%>"/> (<%=languageName%>)
           </th>
           <th>Original</th>
           <th>Translation</th>
@@ -379,8 +384,8 @@ limitations under the License.
             <tr>
               <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
               <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
-              <td><c:out value='<%= (translator == null) ? "" : translator.getUsNickname()%>'/></td>
-              <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getUsNickname()%>'/></td>
+              <td><c:out value='<%= (translator == null) ? "" : translator.getNickname()%>'/></td>
+              <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
             </tr>
           <% } %>
         <% } %>
