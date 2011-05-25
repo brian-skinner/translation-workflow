@@ -168,8 +168,12 @@ public class Translation {
     }
   }
   
+  public boolean existsAtStage(Stage stage) {
+    return (!isDeleted() && isAtStage(stage));
+  }
+  
   public boolean isAtStage(Stage stage) {
-    return ((getStage() == stage) && !isDeleted());
+    return (getStage() == stage);
   }
   
   public String getTranslatorId() {
@@ -194,11 +198,11 @@ public class Translation {
   }
   
   public boolean isAvailableToTranslate() {
-    return isAtStage(Stage.AVAILABLE_TO_TRANSLATE);
+    return existsAtStage(Stage.AVAILABLE_TO_TRANSLATE);
   }
   
   public boolean isAvailableToReview() {
-    return isAtStage(Stage.AVAILABLE_TO_REVIEW);
+    return existsAtStage(Stage.AVAILABLE_TO_REVIEW);
   }
   
   public String getTranslationStageMessage() {
@@ -264,7 +268,7 @@ public class Translation {
   }
   
   public void claimForTranslation(String translatorId) {
-    Preconditions.checkState(isAtStage(Stage.AVAILABLE_TO_TRANSLATE));
+    Preconditions.checkState(existsAtStage(Stage.AVAILABLE_TO_TRANSLATE));
     this.translatorId = translatorId;
   }
   
@@ -279,7 +283,7 @@ public class Translation {
   }
 
   public void claimForReview(String reviewerId) {
-    Preconditions.checkState(isAtStage(Stage.AVAILABLE_TO_REVIEW));
+    Preconditions.checkState(existsAtStage(Stage.AVAILABLE_TO_REVIEW));
     this.reviewerId = reviewerId;
   }
 
