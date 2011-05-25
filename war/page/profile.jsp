@@ -40,6 +40,9 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
+  if (user == null) {
+    response.sendRedirect("/");
+  }
   String userNickname = user.getNickname(); // example: "foo@bar.com"
   String userShortNickname = userNickname.split("@")[0]; // example: "foo"
   String siteName = Website.getInstance().getName();
@@ -49,9 +52,9 @@ limitations under the License.
   
   List<String> volunteerNicknames = cloud.getAllVolunteerNicknames();
 
-  String usVolunteerNickname = (volunteer != null) ? volunteer.getUsNickname() : "";
-  String usVolunteerCity = (volunteer != null) ? volunteer.getUsCity() : "";
-  String usVolunteerCountry = (volunteer != null) ? volunteer.getUsCountry() : "";
+  String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
+  String volunteerCity = (volunteer != null) ? volunteer.getCity() : "";
+  String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
   boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
   List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
 %>
@@ -64,7 +67,7 @@ limitations under the License.
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Profile</title>
   <script type="text/javascript" language="javascript">
-    myNickname = "<c:out value="<%= usVolunteerNickname %>"/>";
+    myNickname = "<c:out value="<%= volunteerNickname %>"/>";
     
     allNicknames = [
       <% for (String nickname : volunteerNicknames) { %>
@@ -125,7 +128,7 @@ limitations under the License.
                   type="text" 
                   id="nickname"
                   name="nickname"
-                  value="<c:out value="<%= usVolunteerNickname %>"/>" 
+                  value="<c:out value="<%= volunteerNickname %>"/>" 
                   size="30" id="Nickname" 
                   placeholder="<%= userShortNickname %>" 
                   onkeyup="javascript:validateNickname()"
@@ -146,7 +149,7 @@ limitations under the License.
             <input 
               type="text" 
               name="city" 
-              value="<c:out value="<%= usVolunteerCity %>"/>" 
+              value="<c:out value="<%= volunteerCity %>"/>" 
               size="30" 
               id="City" 
               placeholder="Cairo">
@@ -160,7 +163,7 @@ limitations under the License.
             <input 
               type="text" 
               name="country"
-              value="<c:out value="<%= usVolunteerCountry %>"/>"
+              value="<c:out value="<%= volunteerCountry %>"/>"
               size="30"
               id="Country"
               placeholder="Egypt">

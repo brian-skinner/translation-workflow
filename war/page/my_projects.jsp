@@ -40,6 +40,9 @@ limitations under the License.
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
+  if (user == null) {
+    response.sendRedirect("/");
+  }
   String siteName = Website.getInstance().getName();
 %>
 
@@ -80,9 +83,9 @@ limitations under the License.
               <td>
               <% for (Project project : projects) { %>
                 <div style="font-size:large; padding-bottom:0.5em;">
-                  <a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><c:out value="<%= project.getUsName() %>"/></a>
+                  <a href="my_translations.jsp?project=<%= project.getId() %>&language=<%= languageCode %>"><c:out value="<%= project.getName() %>"/></a>
                 </div>
-                <div><c:out value="<%= project.getUsDescription() %>"/></div><br />
+                <div><c:out value="<%= project.getDescription() %>"/></div><br />
               <% } %>
               </td>
             <% } %>

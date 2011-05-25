@@ -90,9 +90,9 @@ public class ProjectServlet extends HttpServlet {
       }
       
       if (!name.isEmpty()) {
-        project.setUsName(name);
+        project.setName(name);
       }
-      project.setUsDescription(description);
+      project.setDescription(description);
       project.setLanguageCode(language.getCode());
       
       if (!rawCsvArticleList.isEmpty()) {

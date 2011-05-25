@@ -59,8 +59,8 @@ limitations under the License.
     "to donate $1 for every definition completed by December 31.  The donations will all go " +
     "to the ____ Children's Hospital in ___ to fund _____.";
 
-  String usProjectName = (project != null) ? project.getUsName() : "";
-  String usProjectDescription = (project != null) ? project.getUsDescription() : placeholderDescription;
+  String projectName = (project != null) ? project.getName() : "";
+  String projectDescription = (project != null) ? project.getDescription() : placeholderDescription;
   String projectLanguageCode = (project != null) ? project.getLanguageCode() : ""; 
   List<String> projectLanguages = new ArrayList<String>();
   
@@ -73,7 +73,7 @@ limitations under the License.
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
-  <title><%= siteName %> - <c:out value="<%= usProjectName %>"/></title>
+  <title><%= siteName %> - <c:out value="<%= projectName %>"/></title>
   <script type="text/javascript" language="javascript">
     lexiconEntryList = {
       // TODO: replace this hard-coded this list with a
@@ -159,7 +159,7 @@ limitations under the License.
           <input 
               type="text"
               name="name"
-              value="<c:out value="<%= usProjectName %>"/>"
+              value="<c:out value="<%= projectName %>"/>"
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>
               size="30"
               id="Name">
@@ -193,7 +193,7 @@ limitations under the License.
               <%= (readOnly) ? "disabled=\"disabled\"" : "" %>
               id="Description" name="description"
               placeholder="<%= placeholderDescription %>"
-              rows="6" cols="80"><c:out value="<%= usProjectDescription %>"/></textarea>
+              rows="6" cols="80"><c:out value="<%= projectDescription %>"/></textarea>
         </td>
       </tr>
 
@@ -291,8 +291,8 @@ limitations under the License.
             <% } else { %>
               <td style="text-align:center;"><%= translation.getStage().toString().toLowerCase().replaceAll("_", " ") %></td>
             <% } %>
-            <td class="muted"><c:out value='<%=(translator == null) ? "" : translator.getUsNickname()%>'/></td>
-            <td class="muted"><c:out value='<%=(reviewer == null) ? "" : reviewer.getUsNickname()%>'/></td>
+            <td class="muted"><c:out value='<%=(translator == null) ? "" : translator.getNickname()%>'/></td>
+            <td class="muted"><c:out value='<%=(reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
           </tr>
         <% } %>
       <% } %>
@@ -303,7 +303,7 @@ limitations under the License.
             <td><input type="checkbox" name="delete_translations"></input></td>
             <td colspan="10"><input type="submit" value="Delete selected articles" style="font-size:large;"/></td>
           </tr>
-          <% if (usProjectName.equals("READY_TO_BE_NUKED")) { %>
+          <% if (projectName.equals("READY_TO_BE_NUKED")) { %>
             <tr>
               <td><input type="checkbox" name="nuke_translations"></input></td>
               <td colspan="10"><input type="submit" value="Nuke ALL articles" style="font-size:large;"/></td>

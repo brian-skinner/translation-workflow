@@ -73,8 +73,8 @@ limitations under the License.
   
   <h2>Pick an item to translate</h2>
   <% if (project != null) { %>
-    <p><b><c:out value="<%= project.getUsName() %>"/> (<%= languageCode %>)</b></p>
-    <p><c:out value="<%= project.getUsDescription() %>"/></p>
+    <p><b><c:out value="<%= project.getName() %>"/> (<%= languageCode %>)</b></p>
+    <p><c:out value="<%= project.getDescription() %>"/></p>
   <% } %>
   
   <table cellspacing="0" cellpadding="4" class="listing">

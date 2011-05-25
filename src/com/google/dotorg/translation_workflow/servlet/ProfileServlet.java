@@ -83,10 +83,10 @@ public class ProfileServlet extends HttpServlet {
       volunteer = cloud.createVolunteer(user);
     }
     if (cloud.isNicknameAvailable(nickname)) {
-      volunteer.setUsNickname(nickname);
+      volunteer.setNickname(nickname);
     }
-    volunteer.setUsCity(city);
-    volunteer.setUsCountry(country);
+    volunteer.setCity(city);
+    volunteer.setCountry(country);
     volunteer.setAnonymous(anonymous);
     volunteer.setLanguageCodes(selectedLanguages);
     cloud.close();
