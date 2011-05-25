@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-client-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-client-meta-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-core-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-gtt-2.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-gtt-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-media-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/google-collect-1.0-rc1.jar"/>
+	<classpathentry kind="lib" path="/Users/capps/Documents/workspace/appengine-java-sdk-1.4.3/lib/tools/jsp/repackaged-appengine-jasper-jdt-6.0.29.jar"/>
+	<classpathentry kind="lib" path="/Users/capps/Documents/workspace/appengine-java-sdk-1.4.3/lib/tools/jsp/repackaged-appengine-jakarta-standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/capps/Documents/workspace/appengine-java-sdk-1.4.3/lib/tools/jsp/repackaged-appengine-jakarta-jstl-1.1.2.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
