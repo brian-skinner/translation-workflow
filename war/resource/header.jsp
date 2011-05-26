@@ -88,8 +88,8 @@ limitations under the License.
   text-decoration: none;
 }
 #glass-panel {
-  font-size: 500%;
-  color: #222;
+  font-size: 1200%;
+  color: #fff;
   text-align: center;
   line-height: 4.7em;
   background-color: #999;
@@ -97,7 +97,7 @@ limitations under the License.
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 100%;
+  height: 200%;
   filter: alpha(opacity=50);
   -moz-opacity:0.5;
   -khtml-opacity: 0.5;
@@ -118,7 +118,7 @@ limitations under the License.
   String siteLogo = Website.getInstance().getLogoFilename();
 %>
 
-<div id="glass-panel">saving changes...</div>  
+<div id="glass-panel">working...</div>  
 
 <div class="<%= ((headerUser != null) && headerUserService.isUserAdmin()) ? "header admin-header" : "header" %>">
   <div>
