@@ -44,8 +44,8 @@ limitations under the License.
 
 <div class="footer" align="center"> 
   <%@ include file="/site-config/footer-text.jsp" %>
-  <div class="version">
-    App Engine Version <%= SystemProperty.version.get() %>
-    - App Version <%= SystemProperty.applicationVersion.get() %>
+  <div class="version" 
+       title="{App Engine Version: '<%= SystemProperty.version.get() %>', App Version: '<%= SystemProperty.applicationVersion.get() %>'}">
+    app version: <%= SystemProperty.applicationVersion.get().split("\\.")[0] %>
   </div>
 </div> 
