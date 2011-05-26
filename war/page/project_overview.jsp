@@ -62,6 +62,8 @@ limitations under the License.
   String projectName = (project != null) ? project.getName() : "";
   String projectDescription = (project != null) ? project.getDescription() : placeholderDescription;
   String projectLanguageCode = (project != null) ? project.getLanguageCode() : ""; 
+  List<Translation> projectTranslations = 
+      (project == null) ? new ArrayList<Translation>() : project.getTranslations();
   List<String> projectLanguages = new ArrayList<String>();
   
   String lexiconExampleProjectName = "Lexicon Example Project";
@@ -216,36 +218,96 @@ limitations under the License.
 
   <hr/>
   <h2>Statistics</h2>
+  <%
+    int countOfAllItems = projectTranslations.size();
+    int countOfUploadedItems = 0;
+    int wordCountOfUploadedItems = 0;
+    int cumulativePercentTranslated = 0;
+    int countOfDeletedItems = 0;
+    int countOfDeletedUploadedItems = 0;
+    int countOfItemsAvailableToTranslate = 0;
+    int countOfItemsAvailableToReview = 0;
+    ArrayList<String> contributors = new ArrayList<String>();
+    
+    for (Translation translation : projectTranslations) {
+      if (translation.isAvailableToTranslate()) {
+        countOfItemsAvailableToTranslate++;
+      }
+      if (translation.isAvailableToReview()) {
+        countOfItemsAvailableToReview++;
+      }
+      if (translation.isDeleted()) {
+        countOfDeletedItems++;
+      }
+      
+      if (translation.hasBeenUploadedToTranslatorToolkit()) {
+        if (translation.isDeleted()) {
+          countOfDeletedUploadedItems++;
+        }
+        countOfUploadedItems++;
+        wordCountOfUploadedItems += translation.getNumberOfSourceWords();
+        cumulativePercentTranslated += translation.getPercentComplete();
+      }
+      
+      String userId = translation.getTranslatorId();
+      if (userId != null && !contributors.contains(userId)) {
+        contributors.add(userId);
+      }
+
+      userId = translation.getReviewerId();
+      if (userId != null && !contributors.contains(userId)) {
+        contributors.add(userId);
+      }
+    }
+    
+    int averagePercentTranslatedForAll =
+        (countOfAllItems == 0) ? 0 : cumulativePercentTranslated / countOfAllItems;
+    int averagePercentTranslatedForUploaded = 
+        (countOfAllItems == 0) ? 0 : cumulativePercentTranslated / countOfUploadedItems;
+    int countOfContributors = contributors.size();
+  %>
   
-  <table cellpadding="0" cellspacing="18" border="0">
+  <table class="listing" cellpadding="0" cellspacing="0" border="0">
     <tbody>
-      <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">Original Word Count:</span></td> 
-        <td>5,395<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+      <tr style="background-color: #e5ecf9;">
+        <th></th>
+        <th>All articles</th>
+        <th>Uploaded articles</th>
       </tr>
       <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">Translated Word Count:</span></td> 
-        <td>3,958<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+        <td nowrap valign="top"><span class="label">Number of articles</span></td> 
+        <td><%= countOfAllItems %></td>
+        <td><%= countOfUploadedItems %></td>
       </tr>
       <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">% Translated:</span></td> 
-        <td>60%<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+        <td nowrap valign="top"><span class="label">Number deleted</span></td> 
+        <td><%= countOfDeletedItems %></td>
+        <td><%= countOfDeletedUploadedItems %></td>
       </tr>
       <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">% Reviewed:</span></td> 
-        <td>40%<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+        <td nowrap valign="top"><span class="label">Number available to translate</span></td> 
+        <td><%= countOfItemsAvailableToTranslate %></td>
+        <td><span class="muted">0</span></td>
       </tr>
       <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">% Published:</span></td> 
-        <td>25%<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+        <td nowrap valign="top"><span class="label">Number available to review</span></td> 
+        <td><%= countOfItemsAvailableToReview %></td>
+        <td><%= countOfItemsAvailableToReview %></td>
       </tr>
       <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">Unique contributors:</span></td> 
-        <td>38<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+        <td nowrap valign="top"><span class="label">Unique contributors</span></td> 
+        <td><%= countOfContributors %></td>
+        <td><%= countOfContributors %></td>
       </tr>
       <tr style="&quot;display: table-row&quot;">
-        <td nowrap valign="top"><span class="label">Views of translated pages:</span></td> 
-        <td>82,140<span class="muted">&nbsp;&nbsp;(fake example data)</span></td>
+        <td nowrap valign="top"><span class="label">Total word count in originals</span></td> 
+        <td><span class="muted">(unknown)</span></td>
+        <td><%= wordCountOfUploadedItems %></td>
+      </tr>
+      <tr style="&quot;display: table-row&quot;">
+        <td nowrap valign="top"><span class="label">Average portion of articles translated</span></td> 
+        <td><%= averagePercentTranslatedForAll %>%</td>
+        <td><%= averagePercentTranslatedForUploaded %>%</td>
       </tr>
     </tbody>
   </table>
@@ -266,10 +328,7 @@ limitations under the License.
         <th>Reviewer</th>
       </tr>
       <%
-      List<Translation> translations = (project == null) ? 
-          new ArrayList<Translation>() : 
-          project.getTranslations();
-      for (Translation translation : translations) {
+      for (Translation translation : projectTranslations) {
         if (!translation.isDeleted()) {
             String translatorId = translation.getTranslatorId();
             Volunteer translator = (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
@@ -298,7 +357,7 @@ limitations under the License.
       <% } %>
       
       <% if (!readOnly) { %>
-        <% if (!translations.isEmpty()) { %>
+        <% if (!projectTranslations.isEmpty()) { %>
           <tr>
             <td><input type="checkbox" name="delete_translations"></input></td>
             <td colspan="10"><input type="submit" value="Delete selected articles" style="font-size:large;"/></td>
@@ -318,7 +377,7 @@ limitations under the License.
                 placeholder="&quot;Oral rehydration therapy&quot;,&quot;http://en.wikipedia.org/wiki/Oral_rehydration_therapy&quot;"></textarea>
           </td>
           <td>
-            <% if (projectName.equals(lexiconExampleProjectName) && translations.isEmpty()) { %>
+            <% if (projectName.equals(lexiconExampleProjectName) && projectTranslations.isEmpty()) { %>
               <input type="button" 
                   value="start the '<%= lexiconExampleProjectName %>' articles" 
                   style="background-color:pink;"
