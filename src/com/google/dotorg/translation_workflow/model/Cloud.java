@@ -407,11 +407,20 @@ public class Cloud {
     return returnValues;
   }
   
-  @SuppressWarnings(value = {"unchecked"})
+  public List<Translation> getAllTranslationItemsToTranslate(Project project) {
+    return getTranslationItemsToTranslate(project, -1);
+  }
+
   public List<Translation> getSomeTranslationItemsToTranslate(Project project) {
+    int numberOfItemsToReturn = 5;
+    return getTranslationItemsToTranslate(project, numberOfItemsToReturn);
+  }
+
+  @SuppressWarnings(value = {"unchecked"})
+  private List<Translation> getTranslationItemsToTranslate(
+      Project project, int numberOfItemsToReturn) {
     List<Translation> translations = null;
     List<Translation> returnValues = new ArrayList<Translation>();
-    int numberOfItemsToReturn = 5;
     
     Query query = pm.newQuery(Translation.class);
     query.setFilter("project == projectParam");
@@ -432,10 +441,16 @@ public class Cloud {
       }
 
       if (!availableItems.isEmpty()) {
-        numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
-        int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
-        Random generator = new Random();
-        int startAt = generator.nextInt(lastPossibleStartingPoint);
+        int startAt;
+        if (numberOfItemsToReturn == -1) {
+          startAt = 0;
+          numberOfItemsToReturn = availableItems.size();
+        } else {
+          numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
+          int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
+          Random generator = new Random();
+          startAt = generator.nextInt(lastPossibleStartingPoint);
+        }
         for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
           returnValues.add(availableItems.get(i));
         }

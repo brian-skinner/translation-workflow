@@ -52,6 +52,8 @@ limitations under the License.
   String siteName = Website.getInstance().getName();
   
   String projectId = request.getParameter("project");
+  String showParam = request.getParameter("show");
+  boolean showAll = "all".equals(showParam);
 
   Cloud cloud = Cloud.open();
   
@@ -202,31 +204,19 @@ limitations under the License.
         %>
         
         <tr id=<%= rowId %> class="closed-choices">
-          <td style="vertical-align:top;">
-            <% if (project != null) { %>
-              <input 
-                  type="button" 
-                  value="I want a new item to translate" 
-                  <% if (mayClaimMore) {%> 
-                    onclick="javascript:showHideItemsToTranslate(<%= project.getId() %>);"
-                  <% } else { %>
-                    onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');"
-                  <% } %>
-                  ></input>
-            <% } %>
-          </td>
           <td colspan="3">
-          
           <%
             String divId = "DivForItemsToTranslate";
             if (project != null) {
               divId = divId + project.getId();
             }
+            List<Translation> itemsAvailableToTranslate = showAll
+                ? cloud.getAllTranslationItemsToTranslate(project)
+                : cloud.getSomeTranslationItemsToTranslate(project); 
           %>
-          
-            <div id=<%= divId %> style="display:none;">
+            <div id=<%= divId %> style="display:<%= showAll ? "block" : "none" %>;">
               <table>
-                <% for (Translation translation : cloud.getSomeTranslationItemsToTranslate(project)) { %>
+                <% for (Translation translation : itemsAvailableToTranslate) { %>
                   <tr>
                     <td><%= translation.getOriginalTitle() %></td>
                     <td>
@@ -242,7 +232,23 @@ limitations under the License.
                   </tr>
                 <% } %>
               </table>
+              <% if (!showAll) {%> 
+                <input type="button" value="Show more items to translate" onclick="window.location='/page/my_translations.jsp?show=all'"></input>
+              <% } %>
             </div>
+          </td>
+          <td style="vertical-align:top;">
+            <% if (project != null) { %>
+              <input 
+                  type="button" 
+                  value="Show / hide items to translate" 
+                  <% if (mayClaimMore) {%> 
+                    onclick="javascript:showHideItemsToTranslate(<%= project.getId() %>);"
+                  <% } else { %>
+                    onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');"
+                  <% } %>
+                  ></input>
+            <% } %>
           </td>
         </tr>
       <% } %>
