@@ -237,40 +237,6 @@ public class TranslatorToolkitUtil {
     return true;
   }
   
-  /*
-  private DocumentEntry uploadWikipediaDocument(
-      String sourceLangCode, String targetLangCode, String title, String articleUrl,
-      String htmlContent) 
-      throws IOException, ServiceException {
-    
-    if (service == null) {
-      return null;
-    } else {
-      DocumentEntry entry = new DocumentEntry();
-      entry.setSourceLanguage(new SourceLanguage(sourceLangCode));
-      entry.setTargetLanguage(new TargetLanguage(targetLangCode));
-      entry.setTitle(new PlainTextConstruct(title));
-
-      DocumentSource docSource = new DocumentSource(DocumentSource.Type.WIKI, row.getArticleURL());
-      entry.setDocumentSource(docSource);
-
-      GlossariesElement gl = new GlossariesElement();
-      String glHref = FeedUris.getGlossaryFeedUrl(healthGlossaryID).toString();
-
-      Link glLink = new Link();
-      glLink.setHref(glHref);
-
-      gl.addLink(glLink);
-      entry.setGlossary(gl);      
-      setGlossary(entry, glossaryId);
-      setTranslationMemory(entry, translationMemoryId);
-      
-      URL feedUrl = new URL(DOC_FEED_URL);
-      return service.insert(feedUrl, entry);
-    }
-  }
-  */
-  
   private void setGlossary(DocumentEntry entry, String glossaryId) {
     if (glossaryId != null && !glossaryId.isEmpty()) {
       GlossariesElement glossariesElement = new GlossariesElement();
