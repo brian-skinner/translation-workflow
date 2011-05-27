@@ -97,5 +97,7 @@ hr {
 tr.closed-choices td {
   background-color: #e5ecf9;
 }
-
+tr.open-choices td {
+  background-color: #e5ecf9;
+}
 
