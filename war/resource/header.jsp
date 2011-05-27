@@ -144,7 +144,6 @@ limitations under the License.
 if (headerUser != null) {
   String homePageSelected = request.getRequestURI().equals("/page/home.jsp") ? "selected-navbar-item" : "";
   String myProfilePageSelected = request.getRequestURI().equals("/page/profile.jsp") ? "selected-navbar-item" : "";
-  String myProjectsPageSelected = request.getRequestURI().equals("/page/my_projects.jsp") ? "selected-navbar-item" : "";
   String myTranslationsPageSelected = request.getRequestURI().equals("/page/my_translations.jsp") ? "selected-navbar-item" : "";
   String allProjectsPageSelected = request.getRequestURI().equals("/page/all_projects.jsp") ? "selected-navbar-item" : "";
   %>
@@ -153,7 +152,6 @@ if (headerUser != null) {
         <li class="navbar-item"></li> <!-- hack to create a little whitespace -->
         <li class="navbar-item <%= homePageSelected %> "><a href="/site-config/home.jsp">home</a></li>
         <li class="navbar-item <%= myProfilePageSelected %>"><a href="/page/profile.jsp">my profile</a></li>
-        <li class="navbar-item <%= myProjectsPageSelected %>"><a href="/page/my_projects.jsp">my projects</a></li>
         <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/page/my_translations.jsp">my translations</a></li>
         <li class="navbar-item <%= allProjectsPageSelected %>"><a href="/page/all_projects.jsp">all projects</a></td>
         <li class="navbar-item"><a href="http://goto.ext.google.com/urjfr" target="_blank">help</a></li>
