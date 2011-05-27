@@ -266,8 +266,8 @@ limitations under the License.
     
     int averagePercentTranslatedForAll =
         (countOfAllItems == 0) ? 0 : cumulativePercentTranslated / countOfAllItems;
-    int averagePercentTranslatedForUploaded = 
-        (countOfAllItems == 0) ? 0 : cumulativePercentTranslated / countOfUploadedItems;
+    int averagePercentTranslatedForUploaded =
+        (countOfUploadedItems == 0) ? 0 : cumulativePercentTranslated / countOfUploadedItems;
     int countOfContributors = contributors.size();
   %>
   
@@ -375,7 +375,7 @@ limitations under the License.
         <% } %>
         <tr>
           <td></td>
-          <td colspan="9">
+          <td colspan="6">
             <textarea 
                 rows="24" cols="110" id="Articles" name="articles"
                 placeholder="&quot;Oral rehydration therapy&quot;,&quot;http://en.wikipedia.org/wiki/Oral_rehydration_therapy&quot;"></textarea>
