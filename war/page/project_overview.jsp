@@ -347,7 +347,13 @@ limitations under the License.
             </td>
             <td class="term"><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
             <td style="text-align:right;"><%= translation.getNumberOfSourceWords() %></td>
-            <td><a href="<%= translation.getToolkitArticleUrl() %>" target="_blank">translation</a></td>
+            <td>
+              <% if (translation.getToolkitArticleUrl() == null) { %>
+                <span class="muted">(untranslated)</span>
+              <% } else { %>
+                <a href="<%= translation.getToolkitArticleUrl() %>" target="_blank">translation</a>
+              <% } %>
+            </td>
             <td style="text-align:center;"><%= translation.getPercentComplete() %>% translated</td>
             <% if (translation.isDeleted()) { %>
               <td style="text-align:center;">DELETED</td>
