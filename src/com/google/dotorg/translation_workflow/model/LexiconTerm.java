@@ -32,12 +32,18 @@ package com.google.dotorg.translation_workflow.model;
  * @author Brian Douglas Skinner
  */
 public class LexiconTerm {
-  // TODO: revisit whether these should really be public
-  public String termId;
-  public String term;
-  public String partOfSpeech;
-  public String[] definitions;
+  private String termId;
+  private String term;
+  private String partOfSpeech;
+  private String[] definitions;
   
+  public LexiconTerm(String termId, String term, String partOfSpeech, String[] definitions) {
+    this.termId = termId;
+    this.term = term;
+    this.partOfSpeech = partOfSpeech;
+    this.definitions = definitions;
+  }
+
   public String getTermId() {
     return termId;
   }
