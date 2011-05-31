@@ -48,7 +48,6 @@ public class LexiconTermView {
     if (term == null) {
       out.append("<p class=\"class=notranslate\">Error: term not found</p>");
     } else {
-      out.append("<div style=\"font-size:large; font-family: arial, helvetica, sans-serif;\">");
       out.append("<h1>" + term.getTerm() + "</h1>");
       out.append("<p class=\"class=notranslate\"><i>" + term.getPartOfSpeech() + "</i></p>");
       out.append("<ul>");
