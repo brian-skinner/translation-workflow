@@ -60,19 +60,19 @@ public class LexiconFileReader {
         if (!line.contains(endTag("ar"))) {
           line += getRemainderOfElement("ar");
         }
-        LexiconTerm term = new LexiconTerm();
-        List<String> definitionList = new ArrayList<String>();
-        term.termId = line.substring(8, 16); // TODO: fix the ugly hack
-        term.term = getSnippet(line, "k");
-        term.partOfSpeech = getSnippet(line, "pos");
+        String termId = line.substring(8, 16); // TODO: fix the ugly hack
+        String term = getSnippet(line, "k");
+        String partOfSpeech = getSnippet(line, "pos");
         int fromIndex = 0;
         int nextFromIndex;
+        List<String> definitionList = new ArrayList<String>();
         while ((nextFromIndex = hasNextSnippet(line, "dtrn", fromIndex)) != -1) {
           definitionList.add(getSnippet(line, "dtrn", fromIndex));
           fromIndex = nextFromIndex;
         }
-        term.definitions = definitionList.toArray(new String[definitionList.size()]);
-        terms.put(term.termId, term);
+        String[] definitions = definitionList.toArray(new String[definitionList.size()]);
+        LexiconTerm lexiconTerm = new LexiconTerm(termId, term, partOfSpeech, definitions);
+        terms.put(lexiconTerm.getTermId(), lexiconTerm);
       }
     }
     return terms;
