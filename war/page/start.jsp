@@ -47,7 +47,7 @@ limitations under the License.
     if (volunteer == null) {
       response.sendRedirect("profile.jsp");
     } else {
-      response.sendRedirect("my_projects.jsp");
+      response.sendRedirect("my_translations.jsp");
     }
   } else {
     response.sendRedirect("/site-config/home.jsp");
