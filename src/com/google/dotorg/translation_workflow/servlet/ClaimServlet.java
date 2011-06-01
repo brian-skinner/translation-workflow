@@ -88,7 +88,6 @@ public class ClaimServlet extends HttpServlet {
     String claimerId = user.getUserId();
     Translation translation = cloud.getTranslationByIds(projectId, translationId);
     
-    boolean takeUserToTranslatorToolkit = false;
     switch (action) {
       case CLAIM_FOR_TRANSLATION:
         translation.claimForTranslation(claimerId);
@@ -97,8 +96,7 @@ public class ClaimServlet extends HttpServlet {
                 translation, getLocallyServedConent(translation, cloud)) 
             : attemptToUploadToTranslatorToolkit(translation);
         if (docEntry != null) {
-          boolean documentAvailableForUser = attemptToShareDocumentWithUser(translation, user);
-          takeUserToTranslatorToolkit = documentAvailableForUser;
+          attemptToShareDocumentWithUser(translation, user);
         }
         break;
       case UNCLAIM_FOR_TRANSLATION:
@@ -120,11 +118,8 @@ public class ClaimServlet extends HttpServlet {
     }
     
     cloud.close();
-    
-    String redirectTo = takeUserToTranslatorToolkit 
-        ? translation.getToolkitArticleUrl()
-        : "/page/my_translations.jsp?project=" + projectId + "&language=" + language.getCode();
-    response.sendRedirect(redirectTo);
+    response.sendRedirect(
+        "/page/my_translations.jsp?project=" + projectId + "&language=" + language.getCode());
   }
 
   /*
