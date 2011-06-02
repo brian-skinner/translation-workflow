@@ -281,7 +281,7 @@ limitations under the License.
             %>
           <tr>
             <td class="term"><a href="<%=item.getOriginalUrl()%>" target="_blank"><%=item.getOriginalTitle()%></a></td>
-            <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
+            <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a  target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
             <td><c:out value="<%=translator.getNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">
@@ -389,7 +389,7 @@ limitations under the License.
           %>
             <tr>
               <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
-              <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
+              <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
               <td><c:out value='<%= (translator == null) ? "" : translator.getNickname()%>'/></td>
               <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
             </tr>
