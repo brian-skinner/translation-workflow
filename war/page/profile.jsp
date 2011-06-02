@@ -21,6 +21,7 @@ limitations under the License.
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="com.google.dotorg.translation_workflow.Website" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Cloud" %>
+<%@ page import="com.google.dotorg.translation_workflow.model.Country" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Language" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Volunteer" %>
 <%@ page import="java.util.ArrayList" %>
@@ -143,16 +144,17 @@ limitations under the License.
           </td>
         </tr>
         
-        <tr id="AttrRowCountry" style="&quot;display: table-row&quot;">
-          <td nowrap valign="top" id="AttrLabelCellCountry"><span class="label">Country:</span></td>
-          <td id="AttrValueCellCountry">
-            <input 
-              type="text" 
-              name="country"
-              value="<c:out value="<%= volunteerCountry %>"/>"
-              size="30"
-              id="Country"
-              placeholder="Egypt">
+        <tr>
+          <td nowrap valign="top"><span class="label">Country:</span></td>
+          <td>
+            <select name="country">
+              <%
+                List<Country> countries = cloud.getAllCountries();
+                for (Country country : countries) {
+                  boolean selected = country.getCode().equals(volunteerCountry); %>
+                  <option value="<%= country.getCode() %>"<%= selected ? "selected=\"selected\"" : "" %>><%= country.getName() %></option>
+              <% } %>
+            </select>
           </td>
         </tr>
         
