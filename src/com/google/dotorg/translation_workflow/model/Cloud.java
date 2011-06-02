@@ -61,6 +61,7 @@ public class Cloud {
     JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
   private PersistenceManager pm;
+  private List<Country> allCountries;
   private List<Language> allLanguages;
   private HashMap<String, LexiconTerm> lexiconTerms;
   
@@ -125,6 +126,13 @@ public class Cloud {
     Translation translation = pm.getObjectById(Translation.class, key);
     return translation;
   }
+  
+  public List<Country> getAllCountries() {
+    if (allCountries == null) {
+      allCountries = readCountriesFromConfigFile();
+    }
+    return allCountries;
+  }
 
   public List<Language> getAllLanguages() {
     if (allLanguages == null) {
@@ -140,6 +148,39 @@ public class Cloud {
     return lexiconTerms;
   }
   
+  // TODO: refactor to make a base method that can be used by both 
+  // readCountriesFromConfigFile and readLanguagesFromConfigFile
+  private List<Country> readCountriesFromConfigFile() {
+    List<Country> countries = new ArrayList<Country>();
+
+    String countriesFile = "WEB-INF/content-config/countries.csv";
+    ResourceFileReader countriesFileReader;
+    try {
+      countriesFileReader = new ResourceFileReader(countriesFile);
+    } catch (FileNotFoundException e) {
+      logger.log(Level.SEVERE, "Error: FileNotFoundException reading " + countriesFile, e);
+      return countries;
+    }
+    
+    try {
+      countriesFileReader.skipCsvHeader();
+      String[] fields;
+      while ((fields = countriesFileReader.readCsvLine()) != null) {
+        Country country = new Country();
+        country.setCode(fields[0]);
+        country.setName(fields[1]);
+        countries.add(country);
+      }
+    } catch (IOException e) {
+      logger.severe("Error: IOException reading " + countriesFile);
+      return countries;
+    }
+
+    return countries;
+  }
+  
+  // TODO: refactor to make a base method that can be used by both 
+  // readCountriesFromConfigFile and readLanguagesFromConfigFile
   private List<Language> readLanguagesFromConfigFile() {
     List<Language> languages = new ArrayList<Language>();
     
