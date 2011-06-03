@@ -14,10 +14,6 @@
 
 package com.google.dotorg.translation_workflow.model;
 
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
   // -------------------------------------------------------------------
   // Congratulations, if you're reading this comment, you're probably 
   // one of first in the world to look at this code!  
@@ -33,25 +29,20 @@ import javax.jdo.annotations.PrimaryKey;
  * A model object that represents one of the hundreds of written languages 
  * in the world, like English or Arabic.  
  * 
- * Persistent via JDO.
- * 
  * @author Brian Douglas Skinner
  */
-@PersistenceCapable
 public class Language {
   /**
    * An ISO 639-1 Code, such as EN, SW, HI or AR
    */
-  @PrimaryKey
-  @Persistent private String code = null;
-  
-  @Persistent private String name = null;
+  private String code = null;
+  private String name = null;
   
   /**
    * The URL of the Google Group that volunteers use to discuss translations
    * in this language.
    */
-  @Persistent private String discussionLink = null;
+  private String discussionLink = null;
     
   public String getCode() {
     return code;
@@ -69,20 +60,17 @@ public class Language {
     return discussionLink + "/subscribe?note=1";
   }
 
-  public Language setCode(String code) {
+  public void setCode(String code) {
     this.code = code;
-    return this;
   }
 
-  public Language setName(String name) {
+  public void setName(String name) {
     this.name = name;
-    return this;
   }
 
   public Language setDiscussionLink(String discussionLink) {
     this.discussionLink = discussionLink;
     return this;
   }
-
   
 }

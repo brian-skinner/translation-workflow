@@ -35,6 +35,8 @@ limitations under the License.
    your review comments.
 -------------------------------------------------------------- --%>
 
+  <%@ include file="/resource/stopwatch.jsp" %>
+
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
