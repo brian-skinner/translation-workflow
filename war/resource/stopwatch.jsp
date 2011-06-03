@@ -16,4 +16,7 @@ limitations under the License.
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<% long stopwatch = System.currentTimeMillis(); %>
+<% 
+  long stopwatch = System.currentTimeMillis();
+  pageContext.setAttribute("stopwatch", Long.toString(stopwatch));
+%>

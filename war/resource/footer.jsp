@@ -48,7 +48,12 @@ limitations under the License.
 
 <div class="footer" align="center"> 
   <%@ include file="/site-config/footer-text.jsp" %>
-    <div class="loadtime">page load: <%= System.currentTimeMillis() - stopwatch %> milliseconds</div>
+    <% 
+      long started = Long.parseLong((String)pageContext.getAttribute("stopwatch"));
+      long finished = System.currentTimeMillis();
+      long elapsed = finished - started;
+    %>
+    <div class="loadtime">page load: <%= elapsed %> milliseconds</div>
     <div class="version" 
        title="{App Engine Version: '<%= SystemProperty.version.get() %>', App Version: '<%= SystemProperty.applicationVersion.get() %>'}">
     app version: <%= SystemProperty.applicationVersion.get().split("\\.")[0] %>
