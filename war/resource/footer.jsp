@@ -36,6 +36,10 @@ limitations under the License.
   padding: 0.4em;
   text-align: center;
 }
+.loadtime {
+  padding-top: 0.4em;
+  color: gray;
+}
 .version {
   padding-top: 0.3em;
   color: gray;
@@ -44,8 +48,9 @@ limitations under the License.
 
 <div class="footer" align="center"> 
   <%@ include file="/site-config/footer-text.jsp" %>
-  <div class="version" 
+    <div class="loadtime">page load: <%= System.currentTimeMillis() - stopwatch %> milliseconds</div>
+    <div class="version" 
        title="{App Engine Version: '<%= SystemProperty.version.get() %>', App Version: '<%= SystemProperty.applicationVersion.get() %>'}">
     app version: <%= SystemProperty.applicationVersion.get().split("\\.")[0] %>
-  </div>
+    </div>
 </div> 

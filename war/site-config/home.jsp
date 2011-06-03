@@ -28,6 +28,8 @@ limitations under the License.
    your review comments.
 -------------------------------------------------------------- --%>
 
+  <%@ include file="/resource/stopwatch.jsp" %>
+
 <%
   String siteName = Website.getInstance().getName();
 %>
