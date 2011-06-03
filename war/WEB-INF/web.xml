@@ -82,10 +82,55 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/refresh_progress</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>allProjectsJSP</servlet-name>
+    <jsp-file>/page/all_projects.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>allProjectsJSP</servlet-name>
+    <url-pattern>/all_projects</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>myTranslationsJSP</servlet-name>
+    <jsp-file>/page/my_translations.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>myTranslationsJSP</servlet-name>
+    <url-pattern>/my_translations</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>myProfileJSP</servlet-name>
+    <jsp-file>/page/profile.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>myProfileJSP</servlet-name>
+    <url-pattern>/my_profile</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>projectOverviewJSP</servlet-name>
+    <jsp-file>/page/project_overview.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>projectOverviewJSP</servlet-name>
+    <url-pattern>/project_overview</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>startJSP</servlet-name>
+    <jsp-file>/page/start.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>startJSP</servlet-name>
+    <url-pattern>/start</url-pattern>
+  </servlet-mapping>
+
 
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>page/start.jsp</welcome-file>
+    <welcome-file>start</welcome-file>
   </welcome-file-list>  
   
   <!-- Enable Appstats performance profiling -->
