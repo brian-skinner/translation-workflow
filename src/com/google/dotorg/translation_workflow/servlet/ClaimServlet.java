@@ -119,7 +119,7 @@ public class ClaimServlet extends HttpServlet {
     
     cloud.close();
     response.sendRedirect(
-        "/page/my_translations.jsp?project=" + projectId + "&language=" + language.getCode());
+        "/my_translations?project=" + projectId + "&language=" + language.getCode());
   }
 
   /*

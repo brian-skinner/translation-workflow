@@ -115,12 +115,12 @@ public class ProjectServlet extends HttpServlet {
       cloud.close();
   
       if (rawCsvArticleList.isEmpty()) {
-        response.sendRedirect("/page/all_projects.jsp");
+        response.sendRedirect("/all_projects");
       } else {
-        response.sendRedirect("/page/project_overview.jsp?project=" + projectId);
+        response.sendRedirect("/project_overview?project=" + projectId);
       }
     } else {
-      response.sendRedirect("/page/all_projects.jsp");
+      response.sendRedirect("/all_projects");
     }
   }
   

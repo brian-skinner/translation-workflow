@@ -112,7 +112,7 @@ limitations under the License.
     <input 
         type="button"
         value="Add more languages that I speak"
-        onclick="window.location='profile.jsp'" />
+        onclick="window.location='my_profile'" />
   <% } else { %>
     <table cellspacing="0" cellpadding="4" class="listing">
       <% for (Project project : projects) { 
@@ -235,7 +235,7 @@ limitations under the License.
                 <% } %>
               </table>
               <% if (!showAll) {%> 
-                <input type="button" value="Show more items to translate" onclick="window.location='/page/my_translations.jsp?show=all'"></input>
+                <input type="button" value="Show more items to translate" onclick="window.location='/my_translations?show=all'"></input>
               <% } %>
             </div>
           </td>

@@ -45,9 +45,9 @@ limitations under the License.
   if (user != null) {
     Volunteer volunteer = cloud.getVolunteerByUser(user);
     if (volunteer == null) {
-      response.sendRedirect("profile.jsp");
+      response.sendRedirect("my_profile");
     } else {
-      response.sendRedirect("my_translations.jsp");
+      response.sendRedirect("my_translations");
     }
   } else {
     response.sendRedirect("/site-config/home.jsp");
