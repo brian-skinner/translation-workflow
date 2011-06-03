@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Copyright 2011 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+<!--
+   Congratulations, if you're reading this comment, you're probably 
+   one of first in the world to look at this code!  
+  
+   We checked in this first draft once we had the initial features 
+   working and the basic structure in place, and now the next step 
+   is to get a proper code review and start improving the quality 
+   of the code.  All the code below this line is eagerly awaiting 
+   your review comments.
+-->
+
+  <servlet>
+    <servlet-name>profileServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.ProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>profileServlet</servlet-name>
+    <url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>projectServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.ProjectServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>projectServlet</servlet-name>
+    <url-pattern>/project</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>lexiconServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.LexiconServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>lexiconServlet</servlet-name>
+    <url-pattern>/term/*</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>claimServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.ClaimServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>claimServlet</servlet-name>
+    <url-pattern>/claim_item</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>refreshProgressServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.RefreshProgressServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>refreshProgressServlet</servlet-name>
+    <url-pattern>/refresh_progress</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>allProjectsJSP</servlet-name>
+    <jsp-file>/page/all_projects.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>allProjectsJSP</servlet-name>
+    <url-pattern>/all_projects</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>myTranslationsJSP</servlet-name>
+    <jsp-file>/page/my_translations.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>myTranslationsJSP</servlet-name>
+    <url-pattern>/my_translations</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>myProfileJSP</servlet-name>
+    <jsp-file>/page/profile.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>myProfileJSP</servlet-name>
+    <url-pattern>/my_profile</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>projectOverviewJSP</servlet-name>
+    <jsp-file>/page/project_overview.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>projectOverviewJSP</servlet-name>
+    <url-pattern>/project_overview</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>startJSP</servlet-name>
+    <jsp-file>/page/start.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>startJSP</servlet-name>
+    <url-pattern>/start</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>start</welcome-file>
+  </welcome-file-list>  
+  
+  <!-- Enable Appstats performance profiling -->
+  
+  <filter>
+    <filter-name>appstats</filter-name>
+    <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+    <init-param>
+      <param-name>logMessage</param-name>
+      <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>appstats</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <servlet>
+    <servlet-name>appstats</servlet-name>
+    <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appstats</servlet-name>
+    <url-pattern>/appstats/*</url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>/appstats/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  
+</web-app>
