@@ -38,6 +38,8 @@ limitations under the License.
    your review comments.
 -------------------------------------------------------------- --%>
 
+  <%@ include file="/resource/stopwatch.jsp" %>
+
 <%
   UserService userService = UserServiceFactory.getUserService();
   User user = userService.getCurrentUser();
@@ -171,11 +173,11 @@ limitations under the License.
                     <td>
                       <input 
                           type="checkbox" 
-                          name="language_<%= language.getCode() %>" 
-                          value="<%= language.getCode() %>" 
+                          name="language_<%= language.getCode() %>"
+                          value="<%= language.getCode() %>"
                           onclick="document.getElementById('discussion_<%= language.getCode() %>').style.display = (this.checked ? 'inline' : 'none')"
-                          id="Language_<%= language.getCode() %>" 
-                          <%= selected ? "checked" : "" %>/> 
+                          id="Language_<%= language.getCode() %>"
+                          <%= selected ? "checked" : "" %>/>
                     </td>
                     <td><%= language.getName() %></td>
                     <td><span id="discussion_<%= language.getCode() %>" style="display:<%= selected ? "inline" : "none" %>;">
