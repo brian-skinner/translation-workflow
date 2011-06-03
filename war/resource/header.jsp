@@ -142,7 +142,7 @@ limitations under the License.
 </div>
 <%
 if (headerUser != null) {
-  String homePageSelected = request.getRequestURI().equals("/page/home.jsp") ? "selected-navbar-item" : "";
+  String homePageSelected = request.getRequestURI().equals("/home") ? "selected-navbar-item" : "";
   String myProfilePageSelected = request.getRequestURI().equals("/my_profile") ? "selected-navbar-item" : "";
   String myTranslationsPageSelected = request.getRequestURI().equals("/my_translations") ? "selected-navbar-item" : "";
   String allProjectsPageSelected = request.getRequestURI().equals("/all_projects") ? "selected-navbar-item" : "";
@@ -150,7 +150,7 @@ if (headerUser != null) {
   <div>
     <ul class="navbar">
         <li class="navbar-item"></li> <!-- hack to create a little whitespace -->
-        <li class="navbar-item <%= homePageSelected %> "><a href="/site-config/home.jsp">home</a></li>
+        <li class="navbar-item <%= homePageSelected %> "><a href="/home">home</a></li>
         <li class="navbar-item <%= myProfilePageSelected %>"><a href="/my_profile">my profile</a></li>
         <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/my_translations">my translations</a></li>
         <li class="navbar-item <%= allProjectsPageSelected %>"><a href="/all_projects">all projects</a></td>

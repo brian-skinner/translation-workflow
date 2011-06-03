@@ -50,7 +50,7 @@ limitations under the License.
       response.sendRedirect("my_translations");
     }
   } else {
-    response.sendRedirect("/site-config/home.jsp");
+    response.sendRedirect("home");
   }
 
   cloud.close();
