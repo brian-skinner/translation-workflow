@@ -35,7 +35,7 @@ public class RefreshProgressServlet extends HttpServlet {
       logger.info("Update translation status for user:" + user.getNickname() + " and project: " + project.getName());
       
       response.sendRedirect(
-          "/page/my_translations.jsp?project=" + projectId);
+          "/my_translations?project=" + projectId);
     }
 
 }

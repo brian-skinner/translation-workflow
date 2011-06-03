@@ -72,7 +72,7 @@ limitations under the License.
           %>
           <tr>
             <td style="vertical-align:top;">
-              <a href="project_overview.jsp?project=<%= project.getId() %>"><c:out value="<%= project.getName() %>"/></a>
+              <a href="project_overview?project=<%= project.getId() %>"><c:out value="<%= project.getName() %>"/></a>
             </td>
             <td><c:out value="<%= project.getDescription() %>"/></td>
           </tr>
@@ -82,7 +82,7 @@ limitations under the License.
       %>
       <% if (userService.isUserAdmin()) { %>  
         <tr>
-          <td><input type="button" value="Create a new project" onclick="window.location='project_overview.jsp?project=0'"></td>
+          <td><input type="button" value="Create a new project" onclick="window.location='project_overview?project=0'"></td>
           <td></td>
         </tr>
       <% } %>

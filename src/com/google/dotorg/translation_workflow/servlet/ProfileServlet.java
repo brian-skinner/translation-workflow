@@ -87,7 +87,7 @@ public class ProfileServlet extends HttpServlet {
     volunteer.setLanguageCodes(selectedLanguages);
     cloud.close();
 
-    response.sendRedirect("/page/my_translations.jsp");
+    response.sendRedirect("/my_translations");
   }
 
 }
