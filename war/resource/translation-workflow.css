@@ -84,7 +84,7 @@ hr {
   height: 1px;
 }
 .language-list {
-  height: 20em;
+  height: 12em;
   border: solid thin #888;
   overflow: auto;
 }
