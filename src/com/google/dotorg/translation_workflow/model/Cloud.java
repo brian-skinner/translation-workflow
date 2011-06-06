@@ -490,7 +490,9 @@ public class Cloud {
           numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
           int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
           Random generator = new Random();
-          startAt = generator.nextInt(lastPossibleStartingPoint);
+          startAt = (lastPossibleStartingPoint == 0)
+              ? 0
+              : generator.nextInt(lastPossibleStartingPoint);
         }
         for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
           returnValues.add(availableItems.get(i));
