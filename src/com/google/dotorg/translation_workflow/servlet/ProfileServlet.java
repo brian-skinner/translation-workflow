@@ -25,6 +25,7 @@ import com.google.dotorg.translation_workflow.model.Volunteer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Brian Douglas Skinner
  */
 public class ProfileServlet extends HttpServlet {
+  private static final Logger logger = Logger.getLogger(ProfileServlet.class.getName());
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -63,6 +65,8 @@ public class ProfileServlet extends HttpServlet {
     
     String recognition = request.getParameter("recognition");
     boolean anonymous = !"public".equals(recognition);
+    
+    logger.info("Saving profile for User: " + user.getUserId());
     
     Cloud cloud = Cloud.open();
     
