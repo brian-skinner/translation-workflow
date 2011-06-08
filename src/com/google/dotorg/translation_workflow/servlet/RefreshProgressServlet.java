@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class RefreshProgressServlet extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(ClaimServlet.class.getName());
+    private static final Logger logger = Logger.getLogger(RefreshProgressServlet.class.getName());
     
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
