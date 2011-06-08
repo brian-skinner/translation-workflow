@@ -84,9 +84,10 @@ public class ClaimServlet extends HttpServlet {
     
     String requestUrl = request.getRequestURL().toString();
 
-    logger.info("Item claimed by user " + user.getNickname() + ": " + translationId);
     String claimerId = user.getUserId();
     Translation translation = cloud.getTranslationByIds(projectId, translationId);
+
+    logger.info("User: " + claimerId + " Translation: " + translationId + " Action: " + action);
     
     switch (action) {
       case CLAIM_FOR_TRANSLATION:

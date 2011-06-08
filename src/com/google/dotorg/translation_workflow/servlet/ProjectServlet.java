@@ -14,6 +14,7 @@
 
 package com.google.dotorg.translation_workflow.servlet;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.dotorg.translation_workflow.model.Cloud;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
@@ -47,9 +49,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Brian Douglas Skinner
  */
 public class ProjectServlet extends HttpServlet {
+  private static final Logger logger = Logger.getLogger(ProjectServlet.class.getName());
+
+    
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    User user = userService.getCurrentUser();
+    
     boolean userCanEdit = userService.isUserAdmin();
     if (userCanEdit) {
       Cloud cloud = Cloud.open();
@@ -75,6 +82,7 @@ public class ProjectServlet extends HttpServlet {
       
       String nukeRequested = request.getParameter("nuke_translations");
       if (nukeRequested != null) {
+        logger.info("Nuking Translations, User: " + user.getUserId());
         cloud.getPersistenceManager().deletePersistentAll(project.getTranslations());
       }
       
@@ -84,6 +92,7 @@ public class ProjectServlet extends HttpServlet {
           String parameterName = "translation_" + translation.getId();
           String value = request.getParameter(parameterName);
           if (value != null) {
+            logger.info("Deleting translation: " + translation.getId() + " User: " + user.getUserId());
             translation.setDeleted(true);
           }
         }
