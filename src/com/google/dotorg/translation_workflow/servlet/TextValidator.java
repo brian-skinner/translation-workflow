@@ -19,29 +19,36 @@ package com.google.dotorg.translation_workflow.servlet;
  * 
  * @author Brian Douglas Skinner
  */
-public class Validator {
+public class TextValidator {
+  /* Accept A-Z a-z 0-9 - _ . and the space character. 
+   * Accept Unicode points for individual diacritical marks.
+   * Accept Unicode points for Latin characters that include diacritical marks.
+   */
   private static final String LATIN_HTML_SAFE_CHARACTERS = "\u0041-\u0240";  // unicode block
   private static final String COMBINING_DIACRITICAL_MARKS = "\u0300-\u036F"; // unicode block
   private static final String WHITELISTED_CHARACTERS = "-._ \\d"; // regex
   private static final String ACCEPTED_CHARACTERS =
       LATIN_HTML_SAFE_CHARACTERS + COMBINING_DIACRITICAL_MARKS + WHITELISTED_CHARACTERS;
   
-  /* Accept A-Z a-z 0-9 - _ . and the space character. 
-   * Accept Unicode points for individual diacritical marks.
-   * Accept Unicode points for Latin characters that include diacritical marks.
-   */
-  public static final Validator ALPHA_NUMERIC = new Validator("[^" + ACCEPTED_CHARACTERS + "]");
+  public static final TextValidator BRIEF_STRING = new TextValidator(100);
+  public static final TextValidator TEXT_BLURB = new TextValidator(3000);
   
-  private String filterOutRegex;
+  private int maxLength;
   
-  private Validator(String filterOutRegex) {
-    this.filterOutRegex = filterOutRegex;
+  private TextValidator(int maxLength) {
+    this.maxLength = maxLength;
   }
-  
+
   public String filter(String input) {
     if (input == null) {
       return "";
     }
-    return input.replaceAll(filterOutRegex,"");
+    String filterOutRegex = "[^" + ACCEPTED_CHARACTERS + "]";
+    String filtered = input.replaceAll(filterOutRegex,"");
+    String trimmed = filtered.trim();
+    if (trimmed.length() > maxLength) {
+      trimmed = trimmed.substring(0, maxLength);
+    }
+    return trimmed;
   }
 }
