@@ -58,79 +58,105 @@ public class ProjectServlet extends HttpServlet {
     User user = userService.getCurrentUser();
     
     boolean userCanEdit = userService.isUserAdmin();
-    if (userCanEdit) {
-      Cloud cloud = Cloud.open();
-      
-      // read the input parameters from the client and validate them all before using the values
-      Validator textValidator = Validator.ALPHA_NUMERIC; 
-      
-      String rawProjectId = request.getParameter("projectId");
-      int projectId = Integer.parseInt(rawProjectId);
-      
-      String rawName = request.getParameter("name");
-      String name = textValidator.filter(rawName);
-      
-      String rawLanguageCode = request.getParameter("languageCode");
-      Language language = cloud.getLanguageByCode(rawLanguageCode);
-      
-      String rawDescription = request.getParameter("description");
-      String description = textValidator.filter(rawDescription);
-      
-      String rawCsvArticleList = request.getParameter("articles");
-      
-      Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
-      
-      String nukeRequested = request.getParameter("nuke_translations");
-      if (nukeRequested != null) {
-        logger.info("Nuking Translations, User: " + user.getUserId());
-        cloud.getPersistenceManager().deletePersistentAll(project.getTranslations());
-      }
-      
-      String deleteRequested = request.getParameter("delete_translations");
-      if (deleteRequested != null) {
-        for (Translation translation : project.getTranslations()) {
-          String parameterName = "translation_" + translation.getId();
-          String value = request.getParameter(parameterName);
-          if (value != null) {
-            logger.info("Deleting translation: " + translation.getId() + " User: " + user.getUserId());
-            translation.setDeleted(true);
-          }
-        }
-      }
-      
-      if (!name.isEmpty()) {
-        project.setName(name);
-      }
-      project.setDescription(description);
-      project.setLanguageCode(language.getCode());
-      
-      if (!rawCsvArticleList.isEmpty()) {
-        PersistenceManager pm = cloud.getPersistenceManager();
-        Transaction tx = pm.currentTransaction();
-        tx.begin();
-        String[] lines = rawCsvArticleList.split("\n");
-        List<Translation> newTranslations = new ArrayList<Translation>();
-        for (String line : lines) {
-          line = line.replaceAll("\"", "");
-          String[] fields = line.split(",");
-          String articleName = textValidator.filter(fields[0]);
-          URL url = new URL(fields[1]);
-          Translation translation = project.createTranslation(articleName, url.toString());
-          newTranslations.add(translation);
-        }
-        pm.makePersistentAll(newTranslations);
-        tx.commit();
-      }
-      cloud.close();
-  
-      if (rawCsvArticleList.isEmpty()) {
-        response.sendRedirect("/all_projects");
-      } else {
-        response.sendRedirect("/project_overview?project=" + projectId);
-      }
-    } else {
+    if (!userCanEdit) {
       response.sendRedirect("/all_projects");
+      return;
     }
+    
+    String rawProjectId = request.getParameter("projectId");
+    int projectId = -1;
+    try {
+      projectId = Integer.parseInt(rawProjectId);
+    } catch (NumberFormatException e) {
+      logger.warning("Parameter validation failure for projectId: " + rawProjectId);
+    }
+    if (projectId < 0) {
+      // TODO: ideally we should go to an error page here
+      response.sendRedirect("/all_projects");
+      return;
+    }
+    
+    // read the input parameters from the client and validate them all before using the values
+    TextValidator nameValidator = TextValidator.BRIEF_STRING;
+    String rawName = request.getParameter("name");
+    String name = nameValidator.filter(rawName);
+    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+    if (!name.equals(rawName)) {
+      logger.warning("Input validation failure for Name, " +
+          "Raw: " + rawName + ", Filtered: " + name);
+    }
+    if (name.isEmpty()) {
+      name = "New Project";
+    }
+    
+    TextValidator descriptionValidator = TextValidator.TEXT_BLURB;
+    String rawDescription = request.getParameter("description");
+    String description = descriptionValidator.filter(rawDescription);
+    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+    if (!description.equals(rawDescription)) {
+      logger.warning("Input validation failure for Description, " +
+          "Raw: " + rawDescription + ", Filtered: " + description);
+    }
+    
+    Cloud cloud = Cloud.open();
+    String rawLanguageCode = request.getParameter("languageCode");
+    Language language = cloud.getLanguageByCode(rawLanguageCode);
+    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+    if (language == null && !(rawLanguageCode == null || rawLanguageCode.isEmpty())) {
+      logger.warning("Input validation failure for Langauge code: " + rawLanguageCode);
+    }
+    
+    Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
+    if (project == null) {
+      logger.warning("Project not found for projectId: " + projectId);
+      // TODO: ideally we should go to an error page here
+      response.sendRedirect("/all_projects");
+      return;
+    } 
+
+    String nukeRequested = request.getParameter("nuke_translations");
+    if (nukeRequested != null) {
+      logger.info("Nuking Translations, User: " + user.getUserId());
+      cloud.getPersistenceManager().deletePersistentAll(project.getTranslations());
+    }
+    
+    String deleteRequested = request.getParameter("delete_translations");
+    if (deleteRequested != null) {
+      for (Translation translation : project.getTranslations()) {
+        String parameterName = "translation_" + translation.getId();
+        String value = request.getParameter(parameterName);
+        if (value != null) {
+          logger.info("Deleting translation: " + translation.getId() + ", User: " + user.getUserId());
+          translation.setDeleted(true);
+        }
+      }
+    }
+    
+    project.setDescription(description);
+    String languageCode = (language == null) ? null : language.getCode();
+    project.setLanguageCode(languageCode);
+    
+    String rawCsvArticleList = request.getParameter("articles");
+    if (!rawCsvArticleList.isEmpty()) {
+      PersistenceManager pm = cloud.getPersistenceManager();
+      Transaction tx = pm.currentTransaction();
+      tx.begin();
+      String[] lines = rawCsvArticleList.split("\n");
+      List<Translation> newTranslations = new ArrayList<Translation>();
+      for (String line : lines) {
+        line = line.replaceAll("\"", "");
+        String[] fields = line.split(",");
+        String articleName = nameValidator.filter(fields[0]);
+        URL url = new URL(fields[1]);
+        Translation translation = project.createTranslation(articleName, url.toString());
+        newTranslations.add(translation);
+      }
+      pm.makePersistentAll(newTranslations);
+      tx.commit();
+    }
+    cloud.close();
+
+    response.sendRedirect("/project_overview?project=" + project.getId());
   }
   
 }

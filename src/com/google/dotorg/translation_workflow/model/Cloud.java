@@ -329,6 +329,16 @@ public class Cloud {
     return null;
   }
   
+  public Country getCountryByCode(String countryCode) {
+    // TODO: this could be done in O(1) if speed were important
+    for (Country country : getAllCountries()) {
+      if (country.getCode().equals(countryCode)) {
+        return country;
+      }
+    }
+    return null;
+  }
+  
   public List<Project> getProjectsForLanguage(String languageCode) {
     List<Project> selectedProjects = new ArrayList<Project>();
     for (Project project : getAllProjects()) {

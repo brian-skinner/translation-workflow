@@ -19,6 +19,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import com.google.dotorg.translation_workflow.model.Cloud;
+import com.google.dotorg.translation_workflow.model.Country;
 import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.Volunteer;
 
@@ -52,23 +53,31 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
-    
 
+    Cloud cloud = Cloud.open();
+    
     // read the input parameters from the client and validate them all before using the values
-    Validator textValidator = Validator.ALPHA_NUMERIC; 
+    TextValidator nicknameValidator = TextValidator.BRIEF_STRING;
 
     String rawNickname = request.getParameter("nickname");
-    String nickname = textValidator.filter(rawNickname);
+    String nickname = nicknameValidator.filter(rawNickname);
+    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+    if (!nickname.equals(rawNickname)) {
+      logger.warning("Input validation failure for Nickname, " +
+          "Raw: " + rawNickname + ", Filtered: " + nickname);
+    }
     
-    String rawCountry = request.getParameter("country");
-    String country = textValidator.filter(rawCountry);
+    String rawCountryCode = request.getParameter("country");
+    Country country = cloud.getCountryByCode(rawCountryCode);
+    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+    if (country == null && !(rawCountryCode == null || rawCountryCode.isEmpty())) {
+      logger.warning("Input validation failure for Country code: " + rawCountryCode);
+    }
     
     String recognition = request.getParameter("recognition");
     boolean anonymous = !"public".equals(recognition);
     
     logger.info("Saving profile for User: " + user.getUserId());
-    
-    Cloud cloud = Cloud.open();
     
     List<String> selectedLanguages = new ArrayList<String>();
     for (Language language : cloud.getAllLanguages()) {
@@ -86,7 +95,8 @@ public class ProfileServlet extends HttpServlet {
     if (cloud.isNicknameAvailable(nickname)) {
       volunteer.setNickname(nickname);
     }
-    volunteer.setCountry(country);
+    String countryCode = (country == null) ? null : country.getCode();
+    volunteer.setCountry(countryCode);
     volunteer.setAnonymous(anonymous);
     volunteer.setLanguageCodes(selectedLanguages);
     cloud.close();
