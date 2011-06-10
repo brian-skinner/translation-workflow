@@ -15,6 +15,7 @@
 package com.google.dotorg.translation_workflow.model;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.dotorg.translation_workflow.model.Translation.Stage;
 
@@ -55,7 +56,7 @@ public class Project {
   @PrimaryKey private Key key;
 
   @Persistent private String name;
-  @Persistent private String description;
+  @Persistent private Text description;
   @Persistent private String languageCode;
   @Persistent private boolean hasBeenDeleted;
 
@@ -94,7 +95,7 @@ public class Project {
    * @return the description
    */
   public String getDescription() {
-    return description;
+    return description.getValue();
   }
   
   public boolean isDeleted() {
@@ -249,7 +250,7 @@ public class Project {
    * @param description the description to set
    */
   public void setDescription(String description) {
-    this.description = description;
+    this.description = new Text(description);
   }
 
   public void setLanguageCode(String languageCode) {
