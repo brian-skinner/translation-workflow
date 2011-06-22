@@ -154,7 +154,6 @@ if (headerUser != null) {
         <li class="navbar-item <%= myProfilePageSelected %>"><a href="/my_profile">my profile</a></li>
         <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/my_translations">my translations</a></li>
         <li class="navbar-item <%= allProjectsPageSelected %>"><a href="/all_projects">all projects</a></td>
-        <li class="navbar-item"><a href="http://goto.ext.google.com/urjfr" target="_blank">help</a></li>
         <% if (headerUserService.isUserAdmin()) { %>
           <li class="navbar-item admin"><a href="https://code.google.com/p/translation-workflow/wiki/AdminHelp" target="_blank">admin help</a></li>
         <% } %>
