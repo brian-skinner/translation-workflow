@@ -69,8 +69,6 @@ public class TranslatorToolkitUtil {
   public static final String ARTICLE_URL = TOOLKIT_URL + "workbench?did=";
   public static final String MEMORY_URL = TOOLKIT_URL + "feeds/tm/";
   public static final String GLOSSARY_URL = TOOLKIT_URL + "feeds/glossary/";
-  public static final String NO_GLOSSARY_KEYWORD = "NONE";
-  public static final String PRODUCTION_TRANSLATION_MEMORY_KEYWORD = "PRODUCTION";
 
   private static final Logger logger = Logger.getLogger(TranslatorToolkitUtil.class.getName());
 
@@ -249,7 +247,7 @@ public class TranslatorToolkitUtil {
     }
   }
 
-  // Its fine for the empty string to fail here, insetad of using the global TM
+  // Its fine for the empty string to fail here, instead of using the global TM
   private void setTranslationMemory(DocumentEntry entry, String tmId) {
     if (tmId != null) {
       TmsElement tm = new TmsElement();
@@ -291,42 +289,13 @@ public class TranslatorToolkitUtil {
   }
   
   private GttService signIntoGttService() {
-    String configFile = "WEB-INF/content-config/translator-toolkit-account.csv";
-    ResourceFileReader reader;
-    try {
-      reader = new ResourceFileReader(configFile);
-    } catch (FileNotFoundException e) {
-      logger.log(Level.SEVERE, "Error: FileNotFoundException reading " + configFile, e);
-      return null;
-    }
-    String[] fields;
-    try {
-      reader.skipCsvHeader();
-      fields = reader.readCsvLine();
-    } catch (IOException e) {
-      logger.log(Level.SEVERE, "Error: IOException reading " + configFile, e);
-      return null;
-    }
-    String gttAppName= fields[0];
-    String userName= fields[1];
-    String password = fields[2];
-    
-    // Always read in both a glossaryId and translationMemoryId field.
-    // TTUtil constructor will fail if the config file does not contain these fields.
-    glossaryId = fields[3];
-    translationMemoryId = fields[4];
-    
-    // KEYWORD or empty string will invoke toolkit without glossary.
-    if (NO_GLOSSARY_KEYWORD.equals(glossaryId)) {
-        glossaryId = null;
-    }
-    
-    // KEYWORD will cause toolkit to use global translation memory
-    // (which is what happens when no TM is loaded). We want the empty string to fail,
-    // so we don't accidentally use the global TM during development.
-    if (PRODUCTION_TRANSLATION_MEMORY_KEYWORD.equals(translationMemoryId)) {
-        translationMemoryId = null;
-    }
+    TranslatorToolkitSettings settings = new TranslatorToolkitSettings();
+    settings.readConfigFile();
+    String gttAppName = settings.getGttAppName();
+    String userName = settings.getUserName();
+    String password = settings.getPassword();
+    glossaryId = settings.getGlossaryId();
+    translationMemoryId = settings.getTranslationMemoryId();
     
     GttService service = new GttService(gttAppName);
     try {

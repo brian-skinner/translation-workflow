@@ -15,7 +15,10 @@ limitations under the License.
 --%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.google.appengine.api.utils.SystemProperty" %>
+<%@ page import="com.google.dotorg.translation_workflow.SimpleDigest" %>
+<%@ page import="com.google.dotorg.translation_workflow.io.TranslatorToolkitSettings" %>
+<%@ page import="java.io.FileNotFoundException" %>
+<%@ page import="java.io.IOException" %>
 
 <%-- ---------------------------------------------------------------
    Congratulations, if you're reading this comment, you're probably 
@@ -28,39 +31,15 @@ limitations under the License.
    your review comments.
 -------------------------------------------------------------- --%>
 
-</div>
+<% 
+  String xsrfToken = null;
 
-<style>
-.footer {
-  background-color: #e5ecf9;
-  padding: 0.4em;
-  text-align: center;
-}
-.loadtime {
-  padding-top: 0.4em;
-  color: gray;
-}
-.version {
-  padding-top: 0.3em;
-  color: gray;
-}
-</style>
-
-<div class="footer" align="center"> 
-  <%@ include file="/site-config/footer-text.jsp" %>
-    <% 
-      long started = Long.parseLong((String)pageContext.getAttribute("stopwatch"));
-      long finished = System.currentTimeMillis();
-      long elapsed = finished - started;
-    %>
-    <div class="loadtime">page load: <%= elapsed %> milliseconds</div>
-    <div class="version" 
-       title="{App Engine Version: '<%= SystemProperty.version.get() %>', App Version: '<%= SystemProperty.applicationVersion.get() %>'}">
-    app version: <%= SystemProperty.applicationVersion.get().split("\\.")[0] %>
-    </div>
-    <% if (pageContext.getAttribute("xsrfToken") != null) { %>
-      <div class="loadtime">session id: <%= session.getId() %></div>
-      <div class="loadtime">xsrf token: <%= pageContext.getAttribute("xsrfToken") %></div>
-    <% } %>
-
-</div> 
+  TranslatorToolkitSettings settings = new TranslatorToolkitSettings();
+  settings.readConfigFile();
+  String password = settings.getPassword();
+  if (password != null) {
+    SimpleDigest digest = new SimpleDigest(password);
+    xsrfToken = digest.digest(session.getId(), null);
+  }
+  pageContext.setAttribute("xsrfToken", xsrfToken);
+%>

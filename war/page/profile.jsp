@@ -39,6 +39,7 @@ limitations under the License.
 -------------------------------------------------------------- --%>
 
   <%@ include file="/resource/stopwatch.jsp" %>
+  <%@ include file="/resource/xsrf-token.jsp" %>
 
 <%
   UserService userService = UserServiceFactory.getUserService();
@@ -120,6 +121,7 @@ limitations under the License.
   <h2>My Profile - <%= userNickname %></h2>
     
   <form action="/profile" method="post">
+    <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
     <table cellpadding="0" cellspacing="18" border="0">
       <tbody>
         <tr id="AttrRowNickname" style="&quot;display: table-row&quot;">
