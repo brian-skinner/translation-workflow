@@ -264,6 +264,8 @@ limitations under the License.
   
     <h2>My Items to Review</h2>
   
+    <%@ include file="/site-config/my-items-to-review-text.jsp" %>
+
     <table cellspacing="0" cellpadding="4" class="listing">
       <%
         for (Project project : projects) {
