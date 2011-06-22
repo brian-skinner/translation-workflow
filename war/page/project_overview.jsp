@@ -56,15 +56,15 @@ limitations under the License.
   Cloud cloud = Cloud.open();
   String projectId = request.getParameter("project");
   Project project = cloud.getProjectById(projectId);
+  
   List<Project> projects = cloud.getAllProjects();
-  String foo = null;
   
   String placeholderDescription = 
     "The _____ project includes hundreds articles from ____ with information about ____. " +
     "A few dozen committed volunteers are working hard to get all the articles translated " +
     "by the end of the year. The ____ Foundation is sponsoring the effort, and has pledged " +
-    "to donate $1 for every definition completed by December 31.  The donations will all go " +
-    "to the ____ Children's Hospital in ___ to fund _____.";
+    "to donate one dollar for every definition completed by December 31.  The donations will " +
+    "all go to the ____ Children's Hospital in ___ to fund _____.";
 
   String projectName = (project != null) ? project.getName() : "";
   String projectDescription = (project != null) ? project.getDescription() : placeholderDescription;

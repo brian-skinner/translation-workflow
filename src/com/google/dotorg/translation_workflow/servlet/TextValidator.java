@@ -31,13 +31,13 @@ package com.google.dotorg.translation_workflow.servlet;
  * @author Brian Douglas Skinner
  */
 public class TextValidator {
-  /* Accept A-Z a-z 0-9 - _ . and the space character. 
+  /* Accept A-Z a-z 0-9 - _ , . and the space character. 
    * Accept Unicode points for individual diacritical marks.
    * Accept Unicode points for Latin characters that include diacritical marks.
    */
   private static final String LATIN_HTML_SAFE_CHARACTERS = "\u0041-\u0240";  // unicode block
   private static final String COMBINING_DIACRITICAL_MARKS = "\u0300-\u036F"; // unicode block
-  private static final String WHITELISTED_CHARACTERS = "-._ \\d"; // regex
+  private static final String WHITELISTED_CHARACTERS = "-.,_ \\d"; // regex
   private static final String ACCEPTED_CHARACTERS =
       LATIN_HTML_SAFE_CHARACTERS + COMBINING_DIACRITICAL_MARKS + WHITELISTED_CHARACTERS;
   
