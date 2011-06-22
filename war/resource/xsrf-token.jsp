@@ -17,6 +17,7 @@ limitations under the License.
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.google.dotorg.translation_workflow.SimpleDigest" %>
 <%@ page import="com.google.dotorg.translation_workflow.io.TranslatorToolkitSettings" %>
+<%@ page import="com.google.dotorg.translation_workflow.servlet.XsrfValidator" %>
 <%@ page import="java.io.FileNotFoundException" %>
 <%@ page import="java.io.IOException" %>
 
@@ -32,14 +33,7 @@ limitations under the License.
 -------------------------------------------------------------- --%>
 
 <% 
-  String xsrfToken = null;
-
-  TranslatorToolkitSettings settings = new TranslatorToolkitSettings();
-  settings.readConfigFile();
-  String password = settings.getPassword();
-  if (password != null) {
-    SimpleDigest digest = new SimpleDigest(password);
-    xsrfToken = digest.digest(session.getId(), null);
-  }
+  XsrfValidator validator = new XsrfValidator(session.getId());
+  String xsrfToken = validator.calculateExpectedXsrfToken();
   pageContext.setAttribute("xsrfToken", xsrfToken);
 %>

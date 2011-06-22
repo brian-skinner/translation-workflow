@@ -55,14 +55,14 @@ public class XsrfValidator {
     return valid;
   }
 
-  private String getExpectedXsrfToken() {
+  public String getExpectedXsrfToken() {
     if (expectedXsrfToken == null) {
       expectedXsrfToken = calculateExpectedXsrfToken();
     }
     return expectedXsrfToken;
   }
   
-  private String calculateExpectedXsrfToken() {
+  public String calculateExpectedXsrfToken() {
     String expected = null;
     TranslatorToolkitSettings settings = new TranslatorToolkitSettings();
     settings.readConfigFile();
