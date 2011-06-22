@@ -140,6 +140,7 @@ public class ProjectServlet extends HttpServlet {
       }
     }
     
+    project.setName(name);
     project.setDescription(description);
     String languageCode = (language == null) ? null : language.getCode();
     project.setLanguageCode(languageCode);
