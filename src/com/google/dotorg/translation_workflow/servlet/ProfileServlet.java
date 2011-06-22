@@ -51,6 +51,14 @@ public class ProfileServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    XsrfValidator xsrfValidator = new XsrfValidator(request.getSession().getId());
+    String xsrfTokenReceived = request.getParameter("xsrfToken");
+    
+    if (!xsrfValidator.isValid(xsrfTokenReceived)) {
+      response.sendRedirect("/my_translations");
+      return;
+    }
+    
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 
@@ -100,7 +108,7 @@ public class ProfileServlet extends HttpServlet {
     volunteer.setAnonymous(anonymous);
     volunteer.setLanguageCodes(selectedLanguages);
     cloud.close();
-
+    
     response.sendRedirect("/my_translations");
   }
 

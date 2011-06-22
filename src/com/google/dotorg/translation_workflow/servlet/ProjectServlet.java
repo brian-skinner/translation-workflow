@@ -54,6 +54,14 @@ public class ProjectServlet extends HttpServlet {
     
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    XsrfValidator xsrfValidator = new XsrfValidator(request.getSession().getId());
+    String xsrfTokenReceived = request.getParameter("xsrfToken");
+    
+    if (!xsrfValidator.isValid(xsrfTokenReceived)) {
+      response.sendRedirect("/all_projects");
+      return;
+    }
+
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     

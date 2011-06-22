@@ -84,38 +84,44 @@ public class ClaimServlet extends HttpServlet {
     
     String requestUrl = request.getRequestURL().toString();
 
-    String claimerId = user.getUserId();
-    Translation translation = cloud.getTranslationByIds(projectId, translationId);
+    String claimerId = user.getUserId();    
 
-    logger.info("User: " + claimerId + " Translation: " + translationId + " Action: " + action);
+    XsrfValidator xsrfValidator = new XsrfValidator(request.getSession().getId());
+    String xsrfTokenReceived = request.getParameter("xsrfToken");
     
-    switch (action) {
-      case CLAIM_FOR_TRANSLATION:
-        translation.claimForTranslation(claimerId);
-        DocumentEntry docEntry = isLocallyServedContent(translation, requestUrl)
-            ? attemptToUploadToTranslatorToolkit(
-                translation, getLocallyServedConent(translation, cloud)) 
-            : attemptToUploadToTranslatorToolkit(translation);
-        if (docEntry != null) {
+    if (xsrfValidator.isValid(xsrfTokenReceived)) {
+      Translation translation = cloud.getTranslationByIds(projectId, translationId);
+  
+      logger.info("User: " + claimerId + ", Translation: " + translationId + ", Action: " + action);
+      
+      switch (action) {
+        case CLAIM_FOR_TRANSLATION:
+          translation.claimForTranslation(claimerId);
+          DocumentEntry docEntry = isLocallyServedContent(translation, requestUrl)
+              ? attemptToUploadToTranslatorToolkit(
+                  translation, getLocallyServedConent(translation, cloud)) 
+              : attemptToUploadToTranslatorToolkit(translation);
+          if (docEntry != null) {
+            attemptToShareDocumentWithUser(translation, user);
+          }
+          break;
+        case UNCLAIM_FOR_TRANSLATION:
+          translation.releaseClaimForTranslation();
+          break;
+        case MARK_TRANSLATION_COMPLETE:
+          translation.markTranslationComplete();
+          break;
+        case CLAIM_FOR_REVIEW:
+          translation.claimForReview(claimerId);
           attemptToShareDocumentWithUser(translation, user);
-        }
-        break;
-      case UNCLAIM_FOR_TRANSLATION:
-        translation.releaseClaimForTranslation();
-        break;
-      case MARK_TRANSLATION_COMPLETE:
-        translation.markTranslationComplete();
-        break;
-      case CLAIM_FOR_REVIEW:
-        translation.claimForReview(claimerId);
-        attemptToShareDocumentWithUser(translation, user);
-        break;
-      case UNCLAIM_FOR_REVIEW:
-        translation.releaseClaimForReview();
-        break;
-      case MARK_REVIEW_COMPLETE:
-        translation.markReviewComplete();
-        break;
+          break;
+        case UNCLAIM_FOR_REVIEW:
+          translation.releaseClaimForReview();
+          break;
+        case MARK_REVIEW_COMPLETE:
+          translation.markReviewComplete();
+          break;
+      }
     }
     
     cloud.close();

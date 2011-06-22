@@ -43,6 +43,7 @@ limitations under the License.
 -------------------------------------------------------------- --%>
 
   <%@ include file="/resource/stopwatch.jsp" %>
+  <%@ include file="/resource/xsrf-token.jsp" %>
 
 <%
   UserService userService = UserServiceFactory.getUserService();
@@ -127,6 +128,7 @@ limitations under the License.
           <th>Translation</th>
           <th>Status
             <form action="/refresh_progress" method="post">
+              <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
               <input type="hidden" name="projectId" value="<%=project.getId()%>">
               <input type="submit" value="Refresh progress" onclick="javascript:lockPage()" />
             </form>
@@ -177,6 +179,7 @@ limitations under the License.
                 <% if (item.getPercentComplete() > 75) { %>
                   <div>
                   <form action="/claim_item" method="post">
+                    <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
                     <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -186,6 +189,7 @@ limitations under the License.
                   </div>
                 <% } else { %>
                   <form action="/claim_item" method="post">
+                    <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
                     <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -223,6 +227,7 @@ limitations under the License.
                     <td><%= translation.getOriginalTitle() %></td>
                     <td>
                       <form action="/claim_item" method="post">
+                        <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                         <input type="hidden" name="projectId" value="<%= project.getId() %>">
                         <input type="hidden" name="languageCode" value="<%= languageCode %>">
                         <input type="hidden" name="translationId" value="<%= translation.getId() %>">
@@ -287,6 +292,7 @@ limitations under the License.
             <td><c:out value="<%=translator.getNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">
+                <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
                 <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -294,6 +300,7 @@ limitations under the License.
                 <input type="submit" value="Let someone else review this item" onclick="javascript:lockPage()" />
               </form>
               <form action="/claim_item" method="post">
+                <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
                 <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
@@ -342,6 +349,7 @@ limitations under the License.
                       <td><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
                       <td>
                         <form action="/claim_item" method="post">
+                          <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                           <input type="hidden" name="projectId" value="<%= project.getId() %>">
                           <input type="hidden" name="languageCode" value="<%= languageCode %>">
                           <input type="hidden" name="translationId" value="<%= translation.getId() %>">

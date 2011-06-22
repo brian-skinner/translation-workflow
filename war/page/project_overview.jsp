@@ -40,6 +40,7 @@ limitations under the License.
 -------------------------------------------------------------- --%>
 
   <%@ include file="/resource/stopwatch.jsp" %>
+  <%@ include file="/resource/xsrf-token.jsp" %>
 
 <%
   UserService userService = UserServiceFactory.getUserService();
@@ -160,6 +161,7 @@ limitations under the License.
 
   <table cellpadding="0" cellspacing="18" border="0">
     <tbody>
+      <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
       <input type="hidden" name="projectId" value="<%= projectId %>"></input>
       <tr id="AttrRowNickname" style="&quot;display: table-row&quot;">
         <td nowrap valign="top" id="AttrLabelCellName"><span class="label">Name:</span></td> 
