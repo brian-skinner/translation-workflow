@@ -64,9 +64,9 @@ public class Translation {
   @Persistent private String languageCode;
   @Persistent private boolean hasBeenDeleted;
   
-  private String toolkitDocIdTail;
-  private int numberOfSourceWords;
-  private int percentComplete;
+  @Persistent private String toolkitDocIdTail;
+  @Persistent private int numberOfSourceWords;
+  @Persistent private int percentComplete;
   
   @Persistent private String translatorId;
   @Persistent private String reviewerId;
@@ -114,7 +114,7 @@ public class Translation {
   public String getTranslatedTitle() {
     // TODO: this is just a stub for now, to be replaced with
     // an implementation that returns the non-English titles
-    return "edit translation";
+    return isNewlyAuthoredNotTranslated() ? null : "edit translation";
   }
 
   public String getToolkitDocIdTail() {
@@ -175,6 +175,10 @@ public class Translation {
   
   public boolean isAtStage(Stage stage) {
     return (getStage() == stage);
+  }
+  
+  public boolean isNewlyAuthoredNotTranslated() {
+    return (getToolkitDocIdTail() == null);
   }
   
   public String getTranslatorId() {

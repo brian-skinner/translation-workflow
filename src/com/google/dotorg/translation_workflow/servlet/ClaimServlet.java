@@ -21,6 +21,7 @@ import com.google.dotorg.translation_workflow.io.TranslatorToolkitUtil;
 import com.google.dotorg.translation_workflow.model.Cloud;
 import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.LexiconTerm;
+import com.google.dotorg.translation_workflow.model.Project;
 import com.google.dotorg.translation_workflow.model.Translation;
 import com.google.dotorg.translation_workflow.view.LexiconUrl;
 import com.google.dotorg.translation_workflow.view.HtmlPageView;
@@ -29,6 +30,7 @@ import com.google.gdata.data.gtt.DocumentEntry;
 import com.google.gdata.util.ServiceException;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +57,7 @@ public class ClaimServlet extends HttpServlet {
   private TranslatorToolkitUtil toolkitUtil;
   
   public static enum Action {
+    ADD_NEWLY_AUTHORED_ITEM,
     CLAIM_FOR_TRANSLATION,
     UNCLAIM_FOR_TRANSLATION,
     MARK_TRANSLATION_COMPLETE,
@@ -90,11 +93,25 @@ public class ClaimServlet extends HttpServlet {
     String xsrfTokenReceived = request.getParameter("xsrfToken");
     
     if (xsrfValidator.isValid(xsrfTokenReceived)) {
-      Translation translation = cloud.getTranslationByIds(projectId, translationId);
-  
+      Translation translation = null;
+      if (translationId != 0) {
+        translation = cloud.getTranslationByIds(projectId, translationId);
+      }
+      
       logger.info("User: " + claimerId + ", Translation: " + translationId + ", Action: " + action);
       
       switch (action) {
+        case ADD_NEWLY_AUTHORED_ITEM:
+          String rawNewArticleUrl = request.getParameter("newArticle");
+          URL newArticleUrl = new URL(rawNewArticleUrl);
+
+          Project project = cloud.getProjectById(projectId);
+          String[] parts = newArticleUrl.toString().split("/");
+          String articleName = parts[parts.length - 1];
+          translation = project.createTranslation(articleName, newArticleUrl.toString());
+          translation.claimForTranslation(claimerId);
+          translation.markTranslationComplete();
+          break;
         case CLAIM_FOR_TRANSLATION:
           translation.claimForTranslation(claimerId);
           DocumentEntry docEntry = isLocallyServedContent(translation, requestUrl)
@@ -212,6 +229,10 @@ public class ClaimServlet extends HttpServlet {
   }
   
   private boolean attemptToShareDocumentWithUser(Translation translation, User user) {
+    if (translation.isNewlyAuthoredNotTranslated()) {
+      return false;
+    }
+    
     TranslatorToolkitUtil toolkitUtil = getTranslatorToolkitUtil();
     if (toolkitUtil == null) {
       return false;
