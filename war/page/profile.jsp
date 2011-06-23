@@ -163,7 +163,7 @@ limitations under the License.
         </tr>
         
         <tr>
-          <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Languages:</span></td> 
+          <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Languages I speak:</span></td> 
           <td>
             <div class="language-list">
             <table>
