@@ -262,7 +262,61 @@ limitations under the License.
     </table>
     <p>&nbsp;</p>
   
-    <h2>My Items to Review</h2>
+    <h2>My Newly Authored Articles</h2>
+    <table cellspacing="0" cellpadding="4" class="listing">
+      <%
+        for (Project project : projects) {  
+          List<Translation> authoredItems = cloud.getTranslationItemsAuthoredByUser(user, project);
+          String languageCode = project.getLanguageCode();
+          String languageName = cloud.getLanguageByCode(languageCode).getName();
+      %>
+        <tr>
+          <th rowspan="<%= 2 + Math.max(1, authoredItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
+            <c:out value="<%=project.getName()%>"/> (<%=languageName%>)
+          </th>
+          <th>Article</th>
+          <th>Action</th>
+        </tr>
+        <% for (Translation item : authoredItems) { 
+            String translatorId = item.getTranslatorId();
+            Volunteer translator = (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
+            String reviewerId = item.getReviewerId();
+            Volunteer reviewer = (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
+        %>
+          <tr>
+            <td class="term" colspan="2"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
+          </tr>
+        <% } %>
+        <tr>
+          <form action="/claim_item" method="post">
+            <%
+            String lowercaseCode = languageCode.toLowerCase();
+            String exampleArticle = "http://" + lowercaseCode + ".wikipedia.org/wiki/Jimmy_Wales";
+            %>
+            <td colspan="1">
+              <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+              <input type="hidden" name="projectId" value="<%=project.getId()%>">
+              <input type="hidden" name="languageCode" value="<%= languageCode %>">
+              <input type="hidden" name="translationId" value="0">
+              <input type="hidden" name="action" value="<%=ClaimServlet.Action.ADD_NEWLY_AUTHORED_ITEM.toString()%>">
+              <input 
+                  type="text"
+                  id="newArticle"
+                  name="newArticle"
+                  size="80"
+                  placeholder="<%=exampleArticle%>"></input>
+              <input type="hidden" name="projectId" value="<%=project.getId()%>">
+            </td>
+            <td>
+              <input type="submit" value="Add" onclick="javascript:lockPage()" />
+            </td>
+          </form>           
+        </tr>
+      <% } %>
+    </table>    
+    <p>&nbsp;</p>
+    
+    <h2>My Articles to Review</h2>
   
     <%@ include file="/site-config/my-items-to-review-text.jsp" %>
 
@@ -291,7 +345,7 @@ limitations under the License.
             %>
           <tr>
             <td class="term"><a href="<%=item.getOriginalUrl()%>" target="_blank"><%=item.getOriginalTitle()%></a></td>
-            <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a  target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
+            <td class="term"><%=(item.getTranslatedTitle() == null) ? "" : "<a target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>"%></td>
             <td><c:out value="<%=translator.getNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">

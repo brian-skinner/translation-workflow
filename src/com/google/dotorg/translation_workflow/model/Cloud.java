@@ -411,9 +411,10 @@ public class Cloud {
 
     for (Translation translation : translations) {
       Stage stage = translation.getStage();
-      if ((stage == Stage.CLAIMED_FOR_TRANSLATION) || 
+      if (((stage == Stage.CLAIMED_FOR_TRANSLATION) || 
            (stage == Stage.AVAILABLE_TO_REVIEW) || 
-           (stage == Stage.CLAIMED_FOR_REVIEW)) {
+           (stage == Stage.CLAIMED_FOR_REVIEW)) &&
+           !translation.isNewlyAuthoredNotTranslated()) {
         returnValues.add(translation);
       }
     }    
@@ -457,6 +458,20 @@ public class Cloud {
     
     return returnValues;
   }
+  
+  public List<Translation> getTranslationItemsAuthoredByUser(User user, Project project) {
+    List<Translation> returnValues = new ArrayList<Translation>();
+
+    for (Translation translation : getTranslationItemsForUser(user, project)) {
+      if ((translation.getStage() == Stage.AVAILABLE_TO_REVIEW) &&
+          translation.isNewlyAuthoredNotTranslated()) {
+        returnValues.add(translation);
+      }
+    }
+    
+    return returnValues;
+  }
+
   
   public List<Translation> getAllTranslationItemsToTranslate(Project project) {
     return getTranslationItemsToTranslate(project, -1);
