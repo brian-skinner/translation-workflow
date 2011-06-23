@@ -73,6 +73,7 @@ public class Translation {
   @Persistent boolean translationComplete = false;
   @Persistent boolean reviewComplete = false;
   @Persistent private String sharedWithUserIds;
+  @Persistent private int reviewScore = 0;
   
   @NotPersistent private String htmlContent;
 
@@ -304,4 +305,10 @@ public class Translation {
     }
   }
   
+  public int getReviewScore() {
+    return reviewScore;
+  }
+  public void setReviewScore(int reviewScore) {
+    this.reviewScore = reviewScore;
+  }
 }
