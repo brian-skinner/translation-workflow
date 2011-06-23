@@ -281,6 +281,7 @@ limitations under the License.
           <th>Original</th>
           <th>Translation</th>
           <th>Translated by</th>
+          <th>Review Score</th>
           <th>Action</th>
         </tr>
         <%
@@ -294,20 +295,28 @@ limitations under the License.
             <td><c:out value="<%=translator.getNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">
-                <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
-                <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
-                <input type="hidden" name="translationId" value="<%=item.getId()%>">
-                <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_REVIEW.toString()%>">
-                <input type="submit" value="Let someone else review this item" onclick="javascript:lockPage()" />
-              </form>
-              <form action="/claim_item" method="post">
+                <select name="reviewScore">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+            </td>
+            <td>
                 <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
                 <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.MARK_REVIEW_COMPLETE.toString()%>">
                 <input type="submit" value="Mark this as successfully reviewed!" onclick="javascript:lockPage()" />
+              </form>
+              <form action="/claim_item" method="post">
+                <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+                <input type="hidden" name="projectId" value="<%=project.getId()%>">
+                <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
+                <input type="hidden" name="translationId" value="<%=item.getId()%>">
+                <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_REVIEW.toString()%>">
+                <input type="submit" value="Let someone else review this item" onclick="javascript:lockPage()" />
               </form>
             </td>
           </tr>
@@ -333,7 +342,7 @@ limitations under the License.
                 No translations are available to review. 
             <% } %>
           </td>
-          <td colspan="3">
+          <td colspan="4">
           
           <%
             String divId = "DivForItemsToReview";

@@ -293,9 +293,10 @@ public class Translation {
     this.reviewerId = null;
   }
   
-  public void markReviewComplete() {
+  public void markReviewComplete(int reviewScore) {
     Preconditions.checkState(isAtStage(Stage.CLAIMED_FOR_REVIEW));
     reviewComplete = true;
+    this.reviewScore = reviewScore;
   }
 
   public void addSharedWithUser(User user) {
