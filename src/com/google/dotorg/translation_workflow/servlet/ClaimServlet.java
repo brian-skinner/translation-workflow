@@ -119,7 +119,9 @@ public class ClaimServlet extends HttpServlet {
           translation.releaseClaimForReview();
           break;
         case MARK_REVIEW_COMPLETE:
-          translation.markReviewComplete();
+          String rawReviewScore = request.getParameter("reviewScore");
+          int reviewScore = Integer.parseInt(rawReviewScore);
+          translation.markReviewComplete(reviewScore);
           break;
       }
     }
