@@ -58,9 +58,5 @@ limitations under the License.
        title="{App Engine Version: '<%= SystemProperty.version.get() %>', App Version: '<%= SystemProperty.applicationVersion.get() %>'}">
     app version: <%= SystemProperty.applicationVersion.get().split("\\.")[0] %>
     </div>
-    <% if (pageContext.getAttribute("xsrfToken") != null) { %>
-      <div class="loadtime">session id: <%= session.getId() %></div>
-      <div class="loadtime">xsrf token: <%= pageContext.getAttribute("xsrfToken") %></div>
-    <% } %>
 
 </div> 

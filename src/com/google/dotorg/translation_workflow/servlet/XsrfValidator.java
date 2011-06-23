@@ -49,7 +49,7 @@ public class XsrfValidator {
   public boolean isValid(String xsrfToken) {
     boolean valid = ((xsrfToken != null) && xsrfToken.equals(getExpectedXsrfToken()));
     if (!valid) {
-      logger.warning("XSRF token failure, " +
+      logger.severe("XSRF token failure, " +
           "Expected: " + getExpectedXsrfToken() + ", Received: " + xsrfToken);
     }
     return valid;
