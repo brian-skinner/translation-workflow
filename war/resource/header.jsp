@@ -133,7 +133,7 @@ limitations under the License.
     <% } else { %>
       <span id="upper-right">
         <span>
-          <a href="<%= headerUserService.createLoginURL(request.getRequestURI()) %>">sign in</a>
+          <a href="<%= headerUserService.createLoginURL("/") %>">sign in</a>
         </span>
       </span>
     <% } %>
