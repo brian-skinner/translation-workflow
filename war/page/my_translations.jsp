@@ -396,6 +396,7 @@ limitations under the License.
           <th>Translation</th>
           <th>Translated by</th>
           <th>Reviewed by</th>
+          <th>Review Score</th>
         </tr>
         <% if (completedItems.isEmpty()) { %>
           <tr>
@@ -413,6 +414,7 @@ limitations under the License.
               <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
               <td><c:out value='<%= (translator == null) ? "" : translator.getNickname()%>'/></td>
               <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
+              <td><%= item.getReviewScore()%></td>
             </tr>
           <% } %>
         <% } %>
