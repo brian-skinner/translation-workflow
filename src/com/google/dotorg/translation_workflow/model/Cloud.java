@@ -483,10 +483,9 @@ public class Cloud {
   }
 
   @SuppressWarnings(value = {"unchecked"})
-  private List<Translation> getTranslationItemsToTranslate(
-      Project project, int numberOfItemsToReturn) {
+  private List<Translation> getAvailableTranslationItems(Project project) {
     List<Translation> translations = null;
-    List<Translation> returnValues = new ArrayList<Translation>();
+    List<Translation> availableItems = new ArrayList<Translation>();
     
     Query query = pm.newQuery(Translation.class);
     query.setFilter("project == projectParam");
@@ -499,29 +498,35 @@ public class Cloud {
     }
     
     if (translations != null) {
-      List<Translation> availableItems = new ArrayList<Translation>();
       for (Translation translation : translations) {
         if (!translation.isDeleted() && translation.isAvailableToTranslate()) {
           availableItems.add(translation);
         }
       }
+    }
+    
+    return availableItems;
+  }
+  
+  private List<Translation> getTranslationItemsToTranslate(Project project, int numberOfItemsToReturn) {
+    List<Translation> returnValues = new ArrayList<Translation>();
+    List<Translation> availableItems = getAvailableTranslationItems(project);
 
-      if (!availableItems.isEmpty()) {
-        int startAt;
-        if (numberOfItemsToReturn == -1) {
-          startAt = 0;
-          numberOfItemsToReturn = availableItems.size();
-        } else {
-          numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
-          int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
-          Random generator = new Random();
-          startAt = (lastPossibleStartingPoint == 0)
+    if (!availableItems.isEmpty()) {
+      int startAt;
+      if (numberOfItemsToReturn == -1) {
+        startAt = 0;
+        numberOfItemsToReturn = availableItems.size();
+      } else {
+        numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
+        int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
+        Random generator = new Random();
+        startAt = (lastPossibleStartingPoint == 0)
               ? 0
               : generator.nextInt(lastPossibleStartingPoint);
-        }
-        for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
-          returnValues.add(availableItems.get(i));
-        }
+      }
+      for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
+        returnValues.add(availableItems.get(i));
       }
     }
     
