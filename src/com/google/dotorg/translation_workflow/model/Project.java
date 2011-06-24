@@ -173,10 +173,10 @@ public class Project {
   public String getTranslationListInCsvFormat() {
     StringBuilder results = new StringBuilder();
     for (Translation translation : getTranslations()) {
-      results.append(translation.getOriginalTitle());
-      results.append(",");
-      results.append(translation.getOriginalUrl());
-      results.append("\n");
+      results.append(translation.getOriginalTitle() + ",");
+      results.append(translation.getOriginalUrl() + ",");
+      results.append(translation.getCategory() + ",");
+      results.append(translation.getDifficulty() + "\n");
     }
     return results.toString();
   }
@@ -189,6 +189,8 @@ public class Project {
     results.append("Translator,");
     results.append("Reviewer,");
     results.append("Review Score,");
+    results.append("Category,");
+    results.append("Difficulty,");
     results.append("Original Url,");
     results.append("Translation Url");
     results.append("\n");
@@ -207,6 +209,8 @@ public class Project {
             (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
         String reviewerName = (reviewer == null) ? "" : reviewer.getNickname();
         int reviewScore = translation.getReviewScore();
+        String category = translation.getCategory();
+        String difficulty = translation.getDifficulty();
         // if (translation.isNewlyAuthoredNotTranslated()) {
         // }
         results.append(originalTitle + ",");
@@ -214,6 +218,8 @@ public class Project {
         results.append(translatorName + ",");
         results.append(reviewerName + ",");
         results.append(reviewScore + ",");
+        results.append(category + ",");
+        results.append(difficulty + ",");
         results.append(originalUrl + ",");
         results.append(toolkitArticleUrl);
         results.append("\n");
@@ -228,8 +234,8 @@ public class Project {
     StringBuilder results = new StringBuilder();
     results.append("Volunteer,");
     results.append("Articles completed,");
-    results.append("Total score");
-    results.append("Average score,");
+    results.append("Total score,");
+    results.append("Average score");
     results.append("\n");
     for (Translation translation : getTranslations()) {
       if (translation.existsAtStage(Stage.COMPLETED)) {
@@ -304,6 +310,11 @@ public class Project {
   }
   
   public Translation createTranslation(String title, String url) {
+    return createTranslation(title, url, null, null);
+  }
+  
+  public Translation createTranslation(
+        String title, String url, String category, String difficulty) {
     if (hasTranslationWithTitle(title)) {
       return null;
     } else {
@@ -311,12 +322,14 @@ public class Project {
       translation.setDeleted(false);
       translation.setOriginalTitle(title);
       translation.setOriginalUrl(url);
+      translation.setCategory(category);
+      translation.setDifficulty(difficulty);
       translation.setLanguageCode(getLanguageCode());
       getTranslations().add(translation);
       return translation;
     }
   }
-  
+
   /**
    * @param name the name to set
    */

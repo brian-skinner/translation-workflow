@@ -108,7 +108,7 @@ public class ClaimServlet extends HttpServlet {
           Project project = cloud.getProjectById(projectId);
           String[] parts = newArticleUrl.toString().split("/");
           String articleName = parts[parts.length - 1];
-          translation = project.createTranslation(articleName, newArticleUrl.toString());
+          translation = project.createTranslation(articleName, newArticleUrl.toString(), "-", "-");
           translation.claimForTranslation(claimerId);
           translation.markTranslationComplete();
           break;

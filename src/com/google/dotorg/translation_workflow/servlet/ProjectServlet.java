@@ -157,7 +157,10 @@ public class ProjectServlet extends HttpServlet {
         String[] fields = line.split(",");
         String articleName = nameValidator.filter(fields[0]);
         URL url = new URL(fields[1]);
-        Translation translation = project.createTranslation(articleName, url.toString());
+        String category = nameValidator.filter(fields[2]);
+        String difficulty = nameValidator.filter(fields[3]);
+        Translation translation =
+            project.createTranslation(articleName, url.toString(), category, difficulty);
         newTranslations.add(translation);
       }
       pm.makePersistentAll(newTranslations);

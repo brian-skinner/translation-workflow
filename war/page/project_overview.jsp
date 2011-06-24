@@ -329,6 +329,8 @@ limitations under the License.
         <th></th>
         <th>Original</th>
         <th>Word count</th>
+        <th>Category</th>
+        <th>Difficulty</th>
         <th>Translation</th>
         <th style="text-align:center;">% Translated</th>
         <th style="text-align:center;">Status</th>
@@ -351,6 +353,8 @@ limitations under the License.
             </td>
             <td class="term"><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
             <td style="text-align:right;"><%= translation.getNumberOfSourceWords() %></td>
+            <td><%= translation.getCategory() %></td>
+            <td><%= translation.getDifficulty() %></td>
             <td>
               <% if (translation.getToolkitArticleUrl() == null) { %>
                 <span class="muted">(untranslated)</span>
@@ -385,10 +389,11 @@ limitations under the License.
         <% } %>
         <tr>
           <td></td>
-          <td colspan="6">
-            <textarea 
+          <td colspan="8">
+            <div><textarea rows="1" cols="110"  disabled="disabled">"Title","Url","Category","Difficulty"</textarea></div>
+            <div><textarea 
                 rows="24" cols="110" id="Articles" name="articles"
-                placeholder="&quot;Oral rehydration therapy&quot;,&quot;http://en.wikipedia.org/wiki/Oral_rehydration_therapy&quot;"></textarea>
+                placeholder="&quot;Water&quot;,&quot;http://en.wikipedia.org/wiki/Water&quot;,&quot;Science&quot;,&quot;Difficult&quot;"></textarea></div>
           </td>
           <td>
             <% if (projectName.equals(lexiconExampleProjectName) && projectTranslations.isEmpty()) { %>
@@ -414,7 +419,8 @@ limitations under the License.
     <div style="margin-left:5%;">
       <p>You can copy and paste from this list if you are creating a new project for 
       a different language and want to use some or all of the same articles.</p>
-      <textarea rows="24" cols="80" disabled="disabled"><%= project.getTranslationListInCsvFormat() %></textarea>
+      <div><textarea rows="1" cols="80"  disabled="disabled">Title,Url,Category,Difficulty</textarea></div>
+      <div><textarea rows="24" cols="80" disabled="disabled"><%= project.getTranslationListInCsvFormat() %></textarea></div>
     </div>
   <% } %>
 
@@ -424,7 +430,7 @@ limitations under the License.
     <h2>Export: Completed article details in <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV format</a></h2>
     <div style="margin-left:5%;">
       <p>You can copy and paste from this list into a spreadsheet.</p>
-      <textarea rows="24" cols="100" disabled="disabled"><%= project.getCompletedArticleDetailsInCsvFormat(cloud) %></textarea>
+      <textarea rows="24" cols="110" disabled="disabled"><%= project.getCompletedArticleDetailsInCsvFormat(cloud) %></textarea>
     </div>
   <% } %>
 
