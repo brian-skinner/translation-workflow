@@ -61,6 +61,8 @@ public class Translation {
   @Persistent private Project project; // bi-directional with Project.translations
   @Persistent private String originalTitle;
   @Persistent private String originalUrl;
+  @Persistent private String category;
+  @Persistent private String difficulty;
   @Persistent private String languageCode;
   @Persistent private boolean hasBeenDeleted;
   
@@ -101,6 +103,14 @@ public class Translation {
 
   public String getOriginalUrl() {
     return originalUrl;
+  }
+  
+  public String getCategory() {
+    return category;
+  }
+  
+  public String getDifficulty() {
+    return difficulty;
   }
 
   public String getLanguageCode() {
@@ -252,6 +262,14 @@ public class Translation {
     this.originalUrl = originalUrl;
   }
 
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+  public void setDifficulty(String difficulty) {
+    this.difficulty = difficulty;
+  }
+  
   public void setLanguageCode(String languageCode) {
     this.languageCode = languageCode;
   }
