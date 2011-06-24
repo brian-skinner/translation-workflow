@@ -73,7 +73,7 @@ limitations under the License.
       (project == null) ? new ArrayList<Translation>() : project.getTranslations();
   List<String> projectLanguages = new ArrayList<String>();
   
-  String lexiconExampleProjectName = "Lexicon Example Project";
+  String lexiconExampleProjectName = "Simple Example Project";
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -84,6 +84,8 @@ limitations under the License.
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - <c:out value="<%= projectName %>"/></title>
   <script type="text/javascript" language="javascript">
+    wikipediaArticleList = ["Ocean","Lake","River","Stream","Lemon","Pear","Peach"];
+    
     lexiconEntryList = {
       // TODO: replace this hard-coded this list with a
       // list derived on the fly from lexicon.xml
@@ -131,6 +133,16 @@ limitations under the License.
       return string;
     };
     
+    getArticleStringFromWikipediaArticleList = function() {
+      var string = "";
+      for (var i = 0; i < wikipediaArticleList.length; i++) {
+        var title = wikipediaArticleList[i];
+        string += "\"" + title + "\",\"http://en.wikipedia.org/wiki/" + title + "\",\"" + "Examples" + "\",\"" + "Easy" + "\"\n";
+      }
+      return string;
+
+    };
+    
     populateProjectForm = function() {
       document.getElementById('Name').value = "<%= lexiconExampleProjectName %>";
       document.getElementById('Description').value = "<%= placeholderDescription %>";
@@ -147,7 +159,7 @@ limitations under the License.
       var url = "<%= request.getRequestURL() %>";
       var uri = "<%= request.getRequestURI() %>";
       var partWeWant = url.replace(uri, '');
-      document.getElementById('Articles').value = getArticleStringFromArticleList();
+      document.getElementById('Articles').value = getArticleStringFromWikipediaArticleList();
     };
   </script>
   
