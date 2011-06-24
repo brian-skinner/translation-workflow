@@ -485,13 +485,27 @@ public class Cloud {
 
   
   public List<Translation> getAllTranslationItemsToTranslate(Project project) {
-    return getTranslationItemsToTranslate(project, -1);
+    return getAvailableTranslationItems(project);
   }
 
   public List<Translation> getSomeTranslationItemsToTranslate(Project project) {
     int numberOfItemsToReturn = 5;
     return getTranslationItemsToTranslate(project, numberOfItemsToReturn);
   }
+  
+  public List<Translation> searchTranslationItemsToTranslate(Project project, String searchTerm) {
+    List<Translation> returnValues = new ArrayList<Translation>();
+    List<Translation> availableItems = getAvailableTranslationItems(project);
+    
+    for (Translation translation : availableItems) {
+      String originalTitle = translation.getOriginalTitle().replace(" ", "_");
+      if (originalTitle.contains(searchTerm.replace(" ", "_"))) {
+        returnValues.add(translation);
+      }
+    }
+    
+    return returnValues;
+}
 
   @SuppressWarnings(value = {"unchecked"})
   private List<Translation> getAvailableTranslationItems(Project project) {
@@ -525,17 +539,12 @@ public class Cloud {
 
     if (!availableItems.isEmpty()) {
       int startAt;
-      if (numberOfItemsToReturn == -1) {
-        startAt = 0;
-        numberOfItemsToReturn = availableItems.size();
-      } else {
-        numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
-        int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
-        Random generator = new Random();
-        startAt = (lastPossibleStartingPoint == 0)
-              ? 0
-              : generator.nextInt(lastPossibleStartingPoint);
-      }
+      numberOfItemsToReturn = Math.min(numberOfItemsToReturn, availableItems.size());
+      int lastPossibleStartingPoint = availableItems.size() - numberOfItemsToReturn;
+      Random generator = new Random();
+      startAt = (lastPossibleStartingPoint == 0)
+          ? 0
+          : generator.nextInt(lastPossibleStartingPoint);
       for (int i = startAt; i < (startAt + numberOfItemsToReturn); i++) {
         returnValues.add(availableItems.get(i));
       }
