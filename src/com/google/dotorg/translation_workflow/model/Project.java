@@ -19,7 +19,9 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.dotorg.translation_workflow.model.Translation.Stage;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jdo.annotations.Element;
@@ -174,6 +176,86 @@ public class Project {
       results.append(translation.getOriginalTitle());
       results.append(",");
       results.append(translation.getOriginalUrl());
+      results.append("\n");
+    }
+    return results.toString();
+  }
+  
+  // TODO: clean this up so that it doesn't require "cloud" as a parameter
+  public String getCompletedArticleDetailsInCsvFormat(Cloud cloud) {
+    StringBuilder results = new StringBuilder();
+    results.append("Title,");
+    results.append("Source Word Count,");
+    results.append("Translator,");
+    results.append("Reviewer,");
+    results.append("Review Score,");
+    results.append("Original Url,");
+    results.append("Translation Url");
+    results.append("\n");
+    for (Translation translation : getTranslations()) {
+      if (translation.existsAtStage(Stage.COMPLETED)) {
+        String originalTitle = translation.getOriginalTitle();
+        String originalUrl = translation.getOriginalUrl();
+        int sourceWordCount = translation.getNumberOfSourceWords();
+        String toolkitArticleUrl = translation.getToolkitArticleUrl();
+        String translatorId = translation.getTranslatorId();
+        Volunteer translator =
+            (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
+        String translatorName = (translator == null) ? "" : translator.getNickname();
+        String reviewerId = translation.getReviewerId();
+        Volunteer reviewer =
+            (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
+        String reviewerName = (reviewer == null) ? "" : reviewer.getNickname();
+        int reviewScore = translation.getReviewScore();
+        // if (translation.isNewlyAuthoredNotTranslated()) {
+        // }
+        results.append(originalTitle + ",");
+        results.append(sourceWordCount + ",");
+        results.append(translatorName + ",");
+        results.append(reviewerName + ",");
+        results.append(reviewScore + ",");
+        results.append(originalUrl + ",");
+        results.append(toolkitArticleUrl);
+        results.append("\n");
+      }
+    }
+    return results.toString();
+  }
+  
+  // TODO: clean this up so that it doesn't require "cloud" as a parameter
+  public String getLeaderboardInfoInCsvFormat(Cloud cloud) {
+    HashMap<String, List<Translation>> map = new HashMap<String, List<Translation>>();
+    StringBuilder results = new StringBuilder();
+    results.append("Volunteer,");
+    results.append("Articles completed,");
+    results.append("Total score");
+    results.append("Average score,");
+    results.append("\n");
+    for (Translation translation : getTranslations()) {
+      if (translation.existsAtStage(Stage.COMPLETED)) {
+        String translatorId = translation.getTranslatorId();
+        Volunteer translator =
+            (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
+        String translatorName = (translator == null) ? "" : translator.getNickname();
+        if (!map.containsKey(translatorName)) {
+          map.put(translatorName, new ArrayList<Translation>());
+        }
+        List<Translation> translations = map.get(translatorName);
+        translations.add(translation);
+      }
+    }
+    DecimalFormat formatter = new DecimalFormat("#.#");
+    for (String translatorName : map.keySet()) {
+      List<Translation> translations = map.get(translatorName);
+      int totalScore = 0;
+      for (Translation translation : translations) {
+        totalScore += translation.getReviewScore();
+      }
+      float averageScore = totalScore / translations.size();
+      results.append(translatorName + ",");
+      results.append(translations.size() + ",");
+      results.append(totalScore + ",");
+      results.append(formatter.format(averageScore));
       results.append("\n");
     }
     return results.toString();

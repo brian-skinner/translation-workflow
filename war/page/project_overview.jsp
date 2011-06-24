@@ -217,7 +217,7 @@ limitations under the License.
                   style="background-color:pink;"
                   onclick="javascript:populateProjectForm();"/>
             <% } %>      
-            <input type="submit" value="Save" style="font-size:large;"/>
+            <input type="submit" value="Save" style="font-size:large;" onclick="javascript:lockPage();"/>
           <% } %>      
         </td>
       </tr>
@@ -397,7 +397,7 @@ limitations under the License.
                   style="background-color:pink;"
                   onclick="javascript:populateArticleForm();"/>
             <% } %>
-            <input type="submit" value="Add articles" style="font-size:large;"/>
+            <input type="submit" value="Add articles" style="font-size:large;" onclick="javascript:lockPage();"/>
           </td>
         </tr>
       <% } %>
@@ -410,11 +410,31 @@ limitations under the License.
   <% if ((project != null) && userService.isUserAdmin()) { %>
     <p></p>
     <hr/>
-    <h2>Article list in <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV format</a></h2>
+    <h2>Export: Article list in <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV format</a></h2>
     <div style="margin-left:5%;">
       <p>You can copy and paste from this list if you are creating a new project for 
       a different language and want to use some or all of the same articles.</p>
       <textarea rows="24" cols="80" disabled="disabled"><%= project.getTranslationListInCsvFormat() %></textarea>
+    </div>
+  <% } %>
+
+  <% if ((project != null) && userService.isUserAdmin()) { %>
+    <p></p>
+    <hr/>
+    <h2>Export: Completed article details in <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV format</a></h2>
+    <div style="margin-left:5%;">
+      <p>You can copy and paste from this list into a spreadsheet.</p>
+      <textarea rows="24" cols="100" disabled="disabled"><%= project.getCompletedArticleDetailsInCsvFormat(cloud) %></textarea>
+    </div>
+  <% } %>
+
+  <% if ((project != null) && userService.isUserAdmin()) { %>
+    <p></p>
+    <hr/>
+    <h2>Export: Leaderboard in <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV format</a></h2>
+    <div style="margin-left:5%;">
+      <p>You can copy and paste from this list into a spreadsheet.</p>
+      <textarea rows="18" cols="80" disabled="disabled"><%= project.getLeaderboardInfoInCsvFormat(cloud) %></textarea>
     </div>
   <% } %>
 
