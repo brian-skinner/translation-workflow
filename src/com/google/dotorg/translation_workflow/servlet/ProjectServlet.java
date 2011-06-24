@@ -64,6 +64,7 @@ public class ProjectServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
+    Cloud cloud = Cloud.open();
     
     boolean userCanEdit = userService.isUserAdmin();
     if (!userCanEdit) {
@@ -83,6 +84,30 @@ public class ProjectServlet extends HttpServlet {
       response.sendRedirect("/all_projects");
       return;
     }
+    
+    Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
+    if (project == null) {
+      logger.warning("Project not found for projectId: " + projectId);
+      // TODO: ideally we should go to an error page here
+      response.sendRedirect("/all_projects");
+      return;
+    } 
+
+    String delete = request.getParameter("deleteProject");
+    if (delete != null) {
+      // slight sanity check, to reduce risk of some bug accidentally causing a delete
+      if ("yes, really delete this project".equals(delete)) {
+        project.setDeleted(true);
+        response.sendRedirect("/all_projects");
+        cloud.close();
+        return;
+      } else {
+        logger.severe("DELETE project request with bad arg: " + rawProjectId);
+        response.sendRedirect("/all_projects");
+        return;
+      }
+    }
+
     
     // read the input parameters from the client and validate them all before using the values
     TextValidator nameValidator = TextValidator.BRIEF_STRING;
@@ -106,7 +131,6 @@ public class ProjectServlet extends HttpServlet {
           "Raw: " + rawDescription + ", Filtered: " + description);
     }
     
-    Cloud cloud = Cloud.open();
     String rawLanguageCode = request.getParameter("languageCode");
     Language language = cloud.getLanguageByCode(rawLanguageCode);
     // TODO: refactor common error logging between ProfileServlet and ProjectServlet
@@ -114,14 +138,6 @@ public class ProjectServlet extends HttpServlet {
       logger.warning("Input validation failure for Langauge code: " + rawLanguageCode);
     }
     
-    Project project = (projectId == 0) ? cloud.createProject() : cloud.getProjectById(projectId);
-    if (project == null) {
-      logger.warning("Project not found for projectId: " + projectId);
-      // TODO: ideally we should go to an error page here
-      response.sendRedirect("/all_projects");
-      return;
-    } 
-
     String nukeRequested = request.getParameter("nuke_translations");
     if (nukeRequested != null) {
       logger.info("Nuking Translations, User: " + user.getUserId());

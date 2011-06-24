@@ -444,6 +444,21 @@ limitations under the License.
     </div>
   <% } %>
 
+  <% if ((project != null) && userService.isUserAdmin()) { %>
+    <p></p>
+    <hr/>
+    <h2>DANGER</h2>
+    <div style="margin-left:5%;">
+      <p>DO NOT PRESS THIS BUTTON.</p>
+      <form action="/project" method="post">
+        <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+        <input type="hidden" name="projectId" value="<%= projectId %>"></input>
+        <input type="hidden" name="deleteProject" value="yes, really delete this project"></input>
+        <input type="submit" value="DELETE PROJECT" style="font-size:large;" onclick="javascript:lockPage();"/>
+      </form>
+    </div>
+  <% } %>
+
   <% cloud.close(); %>
   
   <%@ include file="/resource/footer.jsp" %>
