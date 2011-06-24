@@ -261,7 +261,14 @@ public class Cloud {
   }
 
   public List<Project> getAllProjects() {
-    return getAllInstances(Project.class);
+    List<Project> allProjects = getAllInstances(Project.class);
+    List<Project> existingProjects = new ArrayList<Project>();
+    for (Project project : allProjects) {
+      if (!project.isDeleted()) {
+        existingProjects.add(project);
+      }
+    }
+    return existingProjects;
   }
   
   public List<Volunteer> getAllVolunteers() {
@@ -273,7 +280,11 @@ public class Cloud {
   }
   
   public Project getProjectById(int projectId) {
-    return getRecordById(Project.class, projectId);
+    Project project = getRecordById(Project.class, projectId);
+    if (project != null && project.isDeleted()) {
+      return null;
+    }
+    return project;
   }
 
   public Volunteer getVolunteerByUser(User user) {
