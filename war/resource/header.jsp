@@ -44,14 +44,14 @@ limitations under the License.
   color: gray;
   position: absolute; 
   top: 6px; 
-  right: 30px;
+  right: 10px;
 }
 #upper-right a {
   color: #06C;
   text-decoration: none;
 }
 #logo {
-  margin-top: 28px;
+  margin-top: 0.4em;
   margin-left: 0.4em;
   margin-bottom: 0.4em;
 }
