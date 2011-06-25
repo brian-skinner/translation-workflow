@@ -482,7 +482,6 @@ public class Cloud {
     
     return returnValues;
   }
-
   
   public List<Translation> getAllTranslationItemsToTranslate(Project project) {
     return getAvailableTranslationItems(project);
@@ -497,15 +496,19 @@ public class Cloud {
     List<Translation> returnValues = new ArrayList<Translation>();
     List<Translation> availableItems = getAvailableTranslationItems(project);
     
-    for (Translation translation : availableItems) {
-      String originalTitle = translation.getOriginalTitle().replace(" ", "_");
-      if (originalTitle.contains(searchTerm.replace(" ", "_"))) {
-        returnValues.add(translation);
+    if ((searchTerm != null) && !searchTerm.isEmpty()) {
+      String normalizedSearchTerm = searchTerm.replace(" ", "_").toLowerCase();
+      for (Translation translation : availableItems) {
+        String originalTitle = translation.getOriginalTitle();
+        String normalizedTitle = originalTitle.replace(" ", "_").toLowerCase();
+        if (normalizedTitle.contains(normalizedSearchTerm)) {
+          returnValues.add(translation);
+        }
       }
     }
     
     return returnValues;
-}
+  }
 
   @SuppressWarnings(value = {"unchecked"})
   private List<Translation> getAvailableTranslationItems(Project project) {

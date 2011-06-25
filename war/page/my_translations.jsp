@@ -56,6 +56,7 @@ limitations under the License.
   
   String projectId = request.getParameter("project");
   String showParam = request.getParameter("show");
+  String searchParam = request.getParameter("search");
   boolean showAll = "all".equals(showParam);
 
   Cloud cloud = Cloud.open();
@@ -101,7 +102,7 @@ limitations under the License.
       }
     };
   </script>
-  
+    
 </head>
   
 <body>
@@ -127,11 +128,13 @@ limitations under the License.
           <th>Original</th>
           <th>Translation</th>
           <th>Status
-            <form action="/refresh_progress" method="post">
-              <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
-              <input type="hidden" name="projectId" value="<%=project.getId()%>">
-              <input type="submit" value="Refresh progress" onclick="javascript:lockPage()" />
-            </form>
+            <% if (!itemsToTranslate.isEmpty()) { %>
+              <form action="/refresh_progress" method="post">
+                <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+                <input type="hidden" name="projectId" value="<%=project.getId()%>">
+                <input type="submit" value="Refresh progress" onclick="javascript:lockPage()" />
+              </form>
+            <% } %>
           </th>
           <th>Action</th>
         </tr>
@@ -205,22 +208,26 @@ limitations under the License.
         <% 
         String rowId = "RowForItemsToTranslate";
         if (project != null) {
-            rowId = rowId + project.getId();
+          rowId = rowId + project.getId();
         }
+        List<Translation> itemsAvailableToTranslate;
+        if (showAll) {
+          itemsAvailableToTranslate = cloud.getAllTranslationItemsToTranslate(project);
+        } else {
+          itemsAvailableToTranslate= cloud.searchTranslationItemsToTranslate(project, searchParam);
+        }
+        boolean needItems = itemsToTranslate.isEmpty();
         %>
         
-        <tr id=<%= rowId %> class="closed-choices">
+        <tr id=<%= rowId %> class=<%= needItems ? "open-choices" : "closed-choices" %>"">
           <td colspan="3">
           <%
             String divId = "DivForItemsToTranslate";
             if (project != null) {
               divId = divId + project.getId();
             }
-            List<Translation> itemsAvailableToTranslate = showAll
-                ? cloud.getAllTranslationItemsToTranslate(project)
-                : cloud.getSomeTranslationItemsToTranslate(project); 
           %>
-            <div id=<%= divId %> style="display:<%= showAll ? "block" : "none" %>;">
+            <div id=<%= divId %> style="display:<%= (showAll || needItems || true) ? "block" : "none" %>;">
               <table>
                 <% for (Translation translation : itemsAvailableToTranslate) { %>
                   <tr>
@@ -232,7 +239,15 @@ limitations under the License.
                         <input type="hidden" name="languageCode" value="<%= languageCode %>">
                         <input type="hidden" name="translationId" value="<%= translation.getId() %>">
                         <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_TRANSLATION.toString() %>">
-                        <input type="submit" value="I will translate this" onclick="javascript:lockPage()" />
+                        <input 
+                            type="submit" 
+                            value="I will translate this" 
+                            onclick="javascript:lockPage()" 
+                            <% if (!mayClaimMore) {%> 
+                              disabled="disabled"
+                              title="Please finish the items you have already volunteered before signing up for more!"
+                            <% } %>
+                            ></input>
                       </form>
                     </td>
                     <td><a href="<%= translation.getOriginalUrl() %>" target="_blank">Preview</a></td>
@@ -240,20 +255,39 @@ limitations under the License.
                 <% } %>
               </table>
               <% if (!showAll) {%> 
-                <input type="button" value="Show more items to translate" onclick="window.location='/my_translations?show=all'"></input>
+                <!-- disable this feature for now
+                  <input type="button" value="Show more items to translate" onclick="window.location='/my_translations?show=all'"></input>
+                -->
               <% } %>
             </div>
           </td>
           <td style="vertical-align:top;">
             <% if (project != null) { %>
+              <% if (false) {%> 
+                <input 
+                    type="button" 
+                    value="Show / hide items to translate" 
+                      onclick="javascript:showHideItemsToTranslate(<%= project.getId() %>);"
+                    ></input>
+              <% } %>
+              <input 
+                  type="text"
+                  id="searchTerm"
+                  name="searchTerm"
+                  onkeydown="if (event.keyCode == 13) document.getElementById('searchButton').click()"
+                  size="20"
+                  placeholder="Wedding"></input>
               <input 
                   type="button" 
-                  value="Show / hide items to translate" 
-                  <% if (mayClaimMore) {%> 
-                    onclick="javascript:showHideItemsToTranslate(<%= project.getId() %>);"
-                  <% } else { %>
-                    onclick="window.alert('Please finish the items you have already volunteered for and then check back here for more!');"
-                  <% } %>
+                  id="searchButton"
+                  value="Search" 
+                  onclick="window.location='/my_translations?search='+document.getElementById('searchTerm').value;"
+                  ></input>
+              <input 
+                  type="button" 
+                  id="clearButton"
+                  value="Clear" 
+                  onclick="window.location='/my_translations';"
                   ></input>
             <% } %>
           </td>
@@ -303,7 +337,7 @@ limitations under the License.
                   type="text"
                   id="newArticle"
                   name="newArticle"
-                  size="80"
+                  size="60"
                   placeholder="<%=exampleArticle%>"></input>
               <input type="hidden" name="projectId" value="<%=project.getId()%>">
             </td>
@@ -477,7 +511,12 @@ limitations under the License.
 
   <% } %>
   <% cloud.close(); %>
+  
+  <script type="text/javascript" language="javascript">
+    document.getElementById('searchTerm').focus();
+  </script>
     
   <%@ include file="/resource/footer.jsp" %>
 </body>
+
 </html>
