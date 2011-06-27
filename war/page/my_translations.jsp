@@ -145,7 +145,20 @@ limitations under the License.
               <td>Error: This item has not yet been successfully uploaded to Translator Toolkit.</td>
             <% } else { %>
               <% if (!item.isSharedWithUser(user)) { %>
-                <td>Error: This item has not yet been successfully shared with you in Translator Toolkit.</td>
+                <td>Sorry, we haven't yet been able to give you access to this in Translator Toolkit.
+                  <form action="/claim_item" method="post">
+                    <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+                    <input type="hidden" name="projectId" value="<%= project.getId() %>">
+                    <input type="hidden" name="languageCode" value="<%= languageCode %>">
+                    <input type="hidden" name="translationId" value="<%= item.getId() %>">
+                    <input type="hidden" name="action" value="<%= ClaimServlet.Action.ATTEMPT_TO_SHARE_AGAIN.toString() %>">
+                    <input 
+                        type="submit" 
+                        value="Try again" 
+                        onclick="javascript:lockPage()" 
+                        ></input>
+                  </form>
+                </td>
               <% } else { 
                 String messageToUser = "When you have finished your translation, mark translation as complete and save and close Google Translator Toolkit";
                 %>
