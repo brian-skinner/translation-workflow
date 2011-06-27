@@ -138,12 +138,8 @@ limitations under the License.
                   onkeyup="javascript:validateNickname()"
                   onchange="javascript:validateNickname()">
               <span class="error-message" id="nickname-error" style="display:none">That name is already taken.</span>
-              <span id="nickname-tip" >Your nickname will be visible to other registered Health Speaks volunteers</span>
+              <span id="nickname-tip" >Your nickname will be visible to other project participants</span>
             </div>
-            <div class="errorbox-good">
-              <input type="radio" name="recognition" value="public" <%= volunteerAnonymous ? "" : "checked" %>/>Tell people how great I am<br />
-              <input type="radio" name="recognition" value="private"<%= volunteerAnonymous ? "checked" : "" %> />Do not use my nickname in public <span class="comment"> (for example, in a list of contributors)</span>
-            </div> 
             
           </td>
         </tr>
@@ -163,7 +159,7 @@ limitations under the License.
         </tr>
         
         <tr>
-          <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Languages I speak:</span></td> 
+          <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">My languages:</span></td> 
           <td>
             <div class="language-list">
             <table>
