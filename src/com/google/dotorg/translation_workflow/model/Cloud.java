@@ -493,22 +493,29 @@ public class Cloud {
   }
   
   public List<Translation> searchTranslationItemsToTranslate(Project project, String searchTerm) {
-    List<Translation> returnValues = new ArrayList<Translation>();
-    List<Translation> availableItems = getAvailableTranslationItems(project);
-    
-    if ((searchTerm != null) && !searchTerm.isEmpty()) {
-      String normalizedSearchTerm = normalizeString(searchTerm);
-      for (Translation translation : availableItems) {
-        String originalTitle = translation.getOriginalTitle();
-        String category = translation.getCategory();
-        if (normalizeString(originalTitle).contains(normalizedSearchTerm) ||
-            normalizeString(category).contains(normalizedSearchTerm)) {
-          returnValues.add(translation);
+    if ("_random_".equals(searchTerm)) {
+      return getSomeTranslationItemsToTranslate(project);
+    } else {
+      int numberOfSearchResultsToReturn = 10;
+      List<Translation> returnValues = new ArrayList<Translation>();
+      List<Translation> availableItems = getAvailableTranslationItems(project);
+      
+      if ((searchTerm != null) && !searchTerm.isEmpty()) {
+        String normalizedSearchTerm = normalizeString(searchTerm);
+        for (Translation translation : availableItems) {
+          String originalTitle = translation.getOriginalTitle();
+          String category = translation.getCategory();
+          if (normalizeString(originalTitle).contains(normalizedSearchTerm) ||
+              normalizeString(category).contains(normalizedSearchTerm)) {
+            returnValues.add(translation);
+          }
+          if (returnValues.size() >= numberOfSearchResultsToReturn) {
+            break;
+          }
         }
       }
+      return returnValues;
     }
-    
-    return returnValues;
   }
   
   private String normalizeString(String originalString) {

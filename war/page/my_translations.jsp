@@ -77,17 +77,12 @@ limitations under the License.
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Translations</title>
-  <script type="text/javascript" language="javascript">
-    showHideItemsToTranslate = function(projectId) {
-      var rowForItemsToTranslate = document.getElementById('RowForItemsToTranslate'+projectId);
-      var divForItemsToTranslate = document.getElementById('DivForItemsToTranslate'+projectId);
-      if (rowForItemsToTranslate.className == "open-choices") {
-        rowForItemsToTranslate.className = "closed-choices";
-        divForItemsToTranslate.style.display = "none";
-      } else {
-        rowForItemsToTranslate.className = "open-choices";
-        divForItemsToTranslate.style.display = "block";
-      }
+  <script type="text/javascript" language="javascript">    
+    showChooseArticlesForm = function(projectId) {
+      var rowForChooseMoreButton = document.getElementById('RowForChooseMoreButton'+projectId);
+      rowForChooseMoreButton.style.display = "none";
+      var rowForChooseMoreForm = document.getElementById('RowForChooseMoreForm'+projectId);
+      rowForChooseMoreForm.style.display = "table-row";
     };
     
     showHideItemsToReview = function(projectId) {
@@ -125,18 +120,20 @@ limitations under the License.
         %>
         <tr>
           <th rowspan="<%= 2 + itemsToTranslate.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center; vertical-align:top;"><%= project.getName() %> (<%= languageName %>)</th>
-          <th>Original</th>
-          <th>Translation</th>
-          <th>Status
-            <% if (!itemsToTranslate.isEmpty()) { %>
-              <form action="/refresh_progress" method="post">
-                <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
-                <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                <input type="submit" value="Refresh progress" onclick="javascript:lockPage()" />
-              </form>
-            <% } %>
-          </th>
-          <th>Action</th>
+          <% if (itemsToTranslate.isEmpty()) { %>
+            <th colspan=4"></th>
+          <% } else { %>
+            <th>Original</th>
+            <th>Translation</th>
+            <form action="/refresh_progress" method="post">
+              <th>Status
+                  <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+                  <input type="hidden" name="projectId" value="<%=project.getId()%>">
+                  <input type="submit" value="Refresh progress" onclick="javascript:lockPage()" />
+              </th>
+            </form>
+            <th>Action</th>
+          <% } %>
         </tr>
         <% for (Translation item : itemsToTranslate) { 
              String reviewerId = item.getReviewerId();
@@ -206,7 +203,7 @@ limitations under the License.
         <% } %>
         
         <% 
-        String rowId = "RowForItemsToTranslate";
+        String rowId = "";
         if (project != null) {
           rowId = rowId + project.getId();
         }
@@ -217,9 +214,23 @@ limitations under the License.
           itemsAvailableToTranslate= cloud.searchTranslationItemsToTranslate(project, searchParam);
         }
         boolean needItems = itemsToTranslate.isEmpty();
+        boolean chooseMoreIsOpen = needItems || (searchParam != null);
         %>
         
-        <tr id=<%= rowId %> class=<%= needItems ? "open-choices" : "closed-choices" %>"">
+        <% if (!chooseMoreIsOpen) { %>
+          <tr id="RowForChooseMoreButton<%= rowId %>" class="add-articles <%= needItems ? "open-choices" : "closed-choices" %>"">
+            <th style="vertical-align:top;" colspan="4">
+              <input 
+                  type="button" 
+                  id="chooseArticlesButton"
+                  value="Choose more" 
+                  onclick="javascript:showChooseArticlesForm(<%= project.getId() %>);"
+                  ></input>
+            </th>
+          </tr>
+        <% } %>
+        <tr id="RowForChooseMoreForm<%= rowId %>" style="display:<%= chooseMoreIsOpen ? "table-row" : "none" %>;" class="add-articles <%= needItems ? "open-choices" : "closed-choices" %>"">
+          <th style="vertical-align:top;"><span>Choose articles</span></th>
           <td colspan="3">
           <%
             String divId = "DivForItemsToTranslate";
@@ -228,8 +239,34 @@ limitations under the License.
             }
           %>
             <div id=<%= divId %> style="display:<%= (showAll || needItems || true) ? "block" : "none" %>;">
-              <table>
-                <% for (Translation translation : itemsAvailableToTranslate) { %>
+              <% if (project != null) { %>
+                <div style="margin-bottom:0.8em;">
+                  <input 
+                      type="text"
+                      id="searchTerm"
+                      name="searchTerm"
+                      onkeydown="if (event.keyCode == 13) document.getElementById('searchButton').click()"
+                      size="20"
+                      placeholder="Wedding"></input>
+                  <input 
+                      type="button" 
+                      id="searchButton"
+                      value="Search" 
+                      onclick="window.location='/my_translations?search='+document.getElementById('searchTerm').value;"
+                      ></input>
+                  &nbsp; or &nbsp;
+                  <input 
+                      type="button" 
+                      id="searchButton"
+                      value="Try your luck" 
+                      onclick="window.location='/my_translations?search=_random_';"
+                      ></input>
+                 </div>
+              <% } %>
+
+              <table class="search-results">
+                <% boolean firstRow = true; 
+                   for (Translation translation : itemsAvailableToTranslate) { %>
                   <tr>
                     <td><%= translation.getOriginalTitle() %></td>
                     <td>
@@ -251,6 +288,18 @@ limitations under the License.
                       </form>
                     </td>
                     <td><a href="<%= translation.getOriginalUrl() %>" target="_blank">Preview</a></td>
+                    <% if (firstRow) { %> 
+                      <td rowspan="<%= itemsAvailableToTranslate.size() %>">
+                        <input 
+                            type="button" 
+                            id="clearButton"
+                            value="Clear" 
+                            style="height:100%"
+                            onclick="window.location='/my_translations';"
+                            ></input>
+                      </td>
+                    <% firstRow = false; %> 
+                    <% } %> 
                   </tr>
                 <% } %>
               </table>
@@ -260,36 +309,6 @@ limitations under the License.
                 -->
               <% } %>
             </div>
-          </td>
-          <td style="vertical-align:top;">
-            <% if (project != null) { %>
-              <% if (false) {%> 
-                <input 
-                    type="button" 
-                    value="Show / hide items to translate" 
-                      onclick="javascript:showHideItemsToTranslate(<%= project.getId() %>);"
-                    ></input>
-              <% } %>
-              <input 
-                  type="text"
-                  id="searchTerm"
-                  name="searchTerm"
-                  onkeydown="if (event.keyCode == 13) document.getElementById('searchButton').click()"
-                  size="20"
-                  placeholder="Wedding"></input>
-              <input 
-                  type="button" 
-                  id="searchButton"
-                  value="Search" 
-                  onclick="window.location='/my_translations?search='+document.getElementById('searchTerm').value;"
-                  ></input>
-              <input 
-                  type="button" 
-                  id="clearButton"
-                  value="Clear" 
-                  onclick="window.location='/my_translations';"
-                  ></input>
-            <% } %>
           </td>
         </tr>
       <% } %>
@@ -309,7 +328,6 @@ limitations under the License.
             <c:out value="<%=project.getName()%>"/> (<%=languageName%>)
           </th>
           <th>Article</th>
-          <th>Action</th>
         </tr>
         <% for (Translation item : authoredItems) { 
             String translatorId = item.getTranslatorId();
@@ -321,7 +339,7 @@ limitations under the License.
             <td class="term" colspan="2"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
           </tr>
         <% } %>
-        <tr>
+        <tr class="add-articles">
           <form action="/claim_item" method="post">
             <%
             String lowercaseCode = languageCode.toLowerCase();
@@ -340,8 +358,6 @@ limitations under the License.
                   size="60"
                   placeholder="<%=exampleArticle%>"></input>
               <input type="hidden" name="projectId" value="<%=project.getId()%>">
-            </td>
-            <td>
               <input type="submit" value="Add" onclick="javascript:lockPage()" />
             </td>
           </form>           

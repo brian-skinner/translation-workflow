@@ -109,8 +109,10 @@ public class ClaimServlet extends HttpServlet {
           String[] parts = newArticleUrl.toString().split("/");
           String articleName = parts[parts.length - 1];
           translation = project.createTranslation(articleName, newArticleUrl.toString(), "-", "-");
-          translation.claimForTranslation(claimerId);
-          translation.markTranslationComplete();
+          if (translation != null) {
+            translation.claimForTranslation(claimerId);
+            translation.markTranslationComplete();
+          }
           break;
         case CLAIM_FOR_TRANSLATION:
           translation.claimForTranslation(claimerId);
