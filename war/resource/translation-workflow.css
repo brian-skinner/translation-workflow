@@ -74,6 +74,10 @@ table.listing td {
   padding: 0.8em;
   border-bottom: solid thin #bcd;
 }
+table.search-results td {
+  padding: 0.4em;
+  border: none;
+}
 .admin {
   background-color: #bcd;
 }
@@ -94,9 +98,18 @@ hr {
 .error-message {
   color: red;
 }
+tr.add-articles th {
+  background-color: #ffc;
+  border-top: none;
+}
+tr.add-articles td {
+  background-color: #ffc;
+}
+/*
 tr.closed-choices td {
   background-color: #e5ecf9;
 }
 tr.open-choices td {
   background-color: #e5ecf9;
 }
+*/
