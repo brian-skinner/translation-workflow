@@ -497,17 +497,22 @@ public class Cloud {
     List<Translation> availableItems = getAvailableTranslationItems(project);
     
     if ((searchTerm != null) && !searchTerm.isEmpty()) {
-      String normalizedSearchTerm = searchTerm.replace(" ", "_").toLowerCase();
+      String normalizedSearchTerm = normalizeString(searchTerm);
       for (Translation translation : availableItems) {
         String originalTitle = translation.getOriginalTitle();
-        String normalizedTitle = originalTitle.replace(" ", "_").toLowerCase();
-        if (normalizedTitle.contains(normalizedSearchTerm)) {
+        String category = translation.getCategory();
+        if (normalizeString(originalTitle).contains(normalizedSearchTerm) ||
+            normalizeString(category).contains(normalizedSearchTerm)) {
           returnValues.add(translation);
         }
       }
     }
     
     return returnValues;
+  }
+  
+  private String normalizeString(String originalString) {
+    return originalString.replace(" ", "_").toLowerCase();
   }
 
   @SuppressWarnings(value = {"unchecked"})
