@@ -59,6 +59,7 @@ public class ClaimServlet extends HttpServlet {
   public static enum Action {
     ADD_NEWLY_AUTHORED_ITEM,
     CLAIM_FOR_TRANSLATION,
+    ATTEMPT_TO_SHARE_AGAIN,
     UNCLAIM_FOR_TRANSLATION,
     MARK_TRANSLATION_COMPLETE,
     CLAIM_FOR_REVIEW,
@@ -123,6 +124,9 @@ public class ClaimServlet extends HttpServlet {
           if (docEntry != null) {
             attemptToShareDocumentWithUser(translation, user);
           }
+          break;
+        case ATTEMPT_TO_SHARE_AGAIN:
+          attemptToShareDocumentWithUser(translation, user);
           break;
         case UNCLAIM_FOR_TRANSLATION:
           translation.releaseClaimForTranslation();
