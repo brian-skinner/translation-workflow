@@ -58,7 +58,6 @@ limitations under the License.
 
   String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
   String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
-  boolean volunteerAnonymous = (volunteer != null) ? volunteer.isAnonymous() : true;
   List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
 %>
 
@@ -74,6 +73,10 @@ limitations under the License.
     
     allNicknames = [
       <% for (String nickname : volunteerNicknames) { %>
+        /* We are embedding the user-entered nickname strings within the
+           JavaScript on this page, which is safe so long as we are sure
+           we restrict what characters can be in the nickname, which
+           we do in the ProfileServlet, using the TextValidator. */
         "<%= nickname %>",
       <% } %>
       "nickname"
