@@ -86,6 +86,15 @@ limitations under the License.
   <script type="text/javascript" language="javascript">
     wikipediaArticleList = ["Ocean","Lake","River","Stream","Lemon","Pear","Peach"];
     
+    wikipediaArticleMap = {
+      "geography": 
+          ["Ocean", "Lake", "River", "Stream", "Pond", "Mountain", "Valley"],
+      "fruits": 
+          ["Lemon", "Lime", "Pear", "Peach", "Plum", "Apple", "Banana"],
+      "vegitables": 
+          ["Spinach", "Cucumber", "Celery", "Broccoli", "Cauliflower", "Artichoke", "Turnip", "Cabbage", "Corn"]
+    };
+      
     lexiconEntryList = {
       // TODO: replace this hard-coded this list with a
       // list derived on the fly from lexicon.xml
@@ -140,9 +149,20 @@ limitations under the License.
         string += "\"" + title + "\",\"http://en.wikipedia.org/wiki/" + title + "\",\"" + "Examples" + "\",\"" + "Easy" + "\"\n";
       }
       return string;
-
     };
-    
+
+    getArticleStringFromWikipediaArticleMap = function() {
+      var string = "";
+      for (var category in wikipediaArticleMap) {
+        var listOfTitles = wikipediaArticleMap[category];
+        for (var i = 0; i < listOfTitles.length; i++) {
+          var title = listOfTitles[i];
+          string += "\"" + title + "\",\"http://en.wikipedia.org/wiki/" + title + "\",\"" + category + "\",\"" + "Easy" + "\"\n";
+        }
+      }
+      return string;
+    };
+   
     populateProjectForm = function() {
       document.getElementById('Name').value = "<%= lexiconExampleProjectName %>";
       document.getElementById('Description').value = "<%= placeholderDescription %>";
@@ -159,7 +179,7 @@ limitations under the License.
       var url = "<%= request.getRequestURL() %>";
       var uri = "<%= request.getRequestURI() %>";
       var partWeWant = url.replace(uri, '');
-      document.getElementById('Articles').value = getArticleStringFromWikipediaArticleList();
+      document.getElementById('Articles').value = getArticleStringFromWikipediaArticleMap();
     };
   </script>
   
