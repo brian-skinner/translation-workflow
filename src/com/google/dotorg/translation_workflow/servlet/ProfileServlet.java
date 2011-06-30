@@ -67,8 +67,7 @@ public class ProfileServlet extends HttpServlet {
       // slight sanity check, to reduce risk of some bug accidentally causing a delete
       if ("yes, really delete this profile".equals(delete)) {
         Cloud cloud = Cloud.open();
-        Volunteer volunteer = cloud.getVolunteerByUser(user);
-        cloud.deleteVolunteer(volunteer);
+        cloud.deleteProfileForUser(user);
         response.sendRedirect("/home");
         cloud.close();
         return;

@@ -517,7 +517,7 @@ limitations under the License.
         </tr>
         <% if (completedItems.isEmpty()) { %>
           <tr>
-            <td colspan="4">your finished articles will show up here</td>
+            <td colspan="5">Your finished articles will show up here.</td>
           </tr>
         <% } else { %>
           <% for (Translation item : completedItems) { 
