@@ -52,7 +52,6 @@ public class Volunteer {
 
   @Persistent private String nickname;
   @Persistent private String country;
-  @Persistent private boolean anonymous;
   @Persistent private String languageCodes;
 
   public String getNickname() {
@@ -61,10 +60,6 @@ public class Volunteer {
   
   public String getCountry() {
 	  return country;
-  }
-  
-  public boolean isAnonymous() {
-    return anonymous;
   }
   
   public List<String> getLanguageCodes() {
@@ -82,10 +77,6 @@ public class Volunteer {
   
   public void setCountry(String country) {
 	  this.country = country;
-  }
-
-  public void setAnonymous(boolean anonymous) {
-    this.anonymous = anonymous;
   }
 
   public void setLanguageCodes(List<String> languageCodes) {
