@@ -302,9 +302,21 @@ public class Cloud {
     return volunteer;
   }
   
-  public void deleteVolunteer(Volunteer volunteer) {
-    // TODO: find all the items that were claimed for translation, and unclaim them
-    // TODO: find all the items that were claimed for review and unclaim them
+  public void deleteProfileForUser(User user) {
+    Volunteer volunteer = getVolunteerByUser(user);
+
+    for (Project project : getAllProjects()) {
+      List<Translation> claimedForTranslation = getClaimedItemsForTranslator(user, project);
+      for (Translation translation : claimedForTranslation) {
+        translation.releaseClaimForTranslation();
+      }
+
+      List<Translation> claimedForReview = getTranslationItemsForReviewer(user, project);
+      for (Translation translation : claimedForReview) {
+        translation.releaseClaimForReview();
+      }
+    }
+
     pm.deletePersistent(volunteer);
   }
   
@@ -432,6 +444,19 @@ public class Cloud {
            (stage == Stage.AVAILABLE_TO_REVIEW) || 
            (stage == Stage.CLAIMED_FOR_REVIEW)) &&
            !translation.isNewlyAuthoredNotTranslated()) {
+        returnValues.add(translation);
+      }
+    }    
+    return returnValues;
+  }
+  
+  private List<Translation> getClaimedItemsForTranslator(User user, Project project) {
+    List<Translation> translations = getTranslatorTranslationsForUser(user, project);
+    List<Translation> returnValues = new ArrayList<Translation>();
+
+    for (Translation translation : translations) {
+      Stage stage = translation.getStage();
+      if (stage == Stage.CLAIMED_FOR_TRANSLATION) {
         returnValues.add(translation);
       }
     }    
