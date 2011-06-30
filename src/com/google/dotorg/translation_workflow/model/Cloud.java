@@ -302,6 +302,12 @@ public class Cloud {
     return volunteer;
   }
   
+  public void deleteVolunteer(Volunteer volunteer) {
+    // TODO: find all the items that were claimed for translation, and unclaim them
+    // TODO: find all the items that were claimed for review and unclaim them
+    pm.deletePersistent(volunteer);
+  }
+  
   public List<String> getAllVolunteerNicknames() {
     List<String> returnValues = new ArrayList<String>();
     for (Volunteer volunteer : getAllVolunteers()) {

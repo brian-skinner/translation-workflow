@@ -113,6 +113,10 @@ limitations under the License.
       return false;
     };
     
+    confirmDelete = function() {
+      return confirm("Are you sure you want to completely delete your profile forever?");
+    };
+    
   </script>
   
   
@@ -122,88 +126,119 @@ limitations under the License.
   <%@ include file="/resource/header.jsp" %>
 
   <h2>My Profile - <%= userNickname %></h2>
-    
-  <form action="/profile" method="post">
-    <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
-    <table cellpadding="0" cellspacing="18" border="0">
-      <tbody>
-        <tr id="AttrRowNickname" style="&quot;display: table-row&quot;">
-          <td nowrap valign="top" id="AttrLabelCellNickname"><span class="label">Nickname:</span></td> 
-          <td id="AttrValueCellNickname">
-            <div class="errorbox-good">
-              <input 
-                  type="text" 
-                  id="nickname"
-                  name="nickname"
-                  value="<c:out value="<%= volunteerNickname %>"/>" 
-                  size="30" id="Nickname" 
-                  placeholder="<%= userShortNickname %>" 
-                  onkeyup="javascript:validateNickname()"
-                  onchange="javascript:validateNickname()">
-              <span class="error-message" id="nickname-error" style="display:none">That name is already taken.</span>
-              <span id="nickname-tip" >Your nickname will be visible to other project participants</span>
-            </div>
-            
-          </td>
-        </tr>
-        
-        <tr>
-          <td nowrap valign="top"><span class="label">Country:</span></td>
-          <td>
-            <select name="country">
-              <%
-                List<Country> countries = cloud.getAllCountries();
-                for (Country country : countries) {
-                  boolean selected = country.getCode().equals(volunteerCountry); %>
-                  <option value="<%= country.getCode() %>"<%= selected ? "selected=\"selected\"" : "" %>><%= country.getName() %></option>
-              <% } %>
-            </select>
-          </td>
-        </tr>
-        
-        <tr>
-          <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">My languages:</span></td> 
-          <td>
-            <div class="language-list">
-            <table>
-              <%
-                List<Language> languages = cloud.getAllLanguages();
-                for (Language language : languages) {
-                  boolean selected = volunteerLanguageCodes.contains(language.getCode()); %>
-                  <tr>
-                    <td>
-                      <input 
-                          type="checkbox" 
-                          name="language_<%= language.getCode() %>"
-                          value="<%= language.getCode() %>"
-                          onclick="document.getElementById('discussion_<%= language.getCode() %>').style.display = (this.checked ? 'inline' : 'none')"
-                          id="Language_<%= language.getCode() %>"
-                          <%= selected ? "checked" : "" %>/>
-                    </td>
-                    <td><%= language.getName() %></td>
-                    <td><span id="discussion_<%= language.getCode() %>" style="display:<%= selected ? "inline" : "none" %>;">
-                      <% String link = language.getDiscussionLink();
-                           if (link != null) { %>
-                             - <a target= "_blank" href="<%= link %>">discussion group</a> on Google Groups - 
-                             <a target="_blank" href="<%= language.getJoinDiscussionLink() %>">Join</a> 
-                      <% } %>
-                    </span></td>
-                  </tr>
-              <% } %>
-            </table>
-            </div>
-          </td>
-        </tr>
+  
+  <table>
+    <tr>
+      <td width="80%">
 
-        <tr>
-          <td></td>
-          <td><input id="save-button" type="submit" value="Save" style="font-size:large;"/></td>
-        </tr>
-        
-      </tbody>
-    </table>
-  </form>  
-  <p style="height:6em;"></p>
+        <form action="/profile" method="post">
+          <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+          <table cellpadding="0" cellspacing="18" border="0">
+            <tbody>
+              <tr id="AttrRowNickname" style="&quot;display: table-row&quot;">
+                <td nowrap valign="top" id="AttrLabelCellNickname"><span class="label">Nickname:</span></td> 
+                <td id="AttrValueCellNickname">
+                  <div class="errorbox-good">
+                    <input 
+                        type="text" 
+                        id="nickname"
+                        name="nickname"
+                        value="<c:out value="<%= volunteerNickname %>"/>" 
+                        size="30" id="Nickname" 
+                        placeholder="<%= userShortNickname %>" 
+                        onkeyup="javascript:validateNickname()"
+                        onchange="javascript:validateNickname()">
+                    <span class="error-message" id="nickname-error" style="display:none">That name is already taken.</span>
+                    <span id="nickname-tip" >Your nickname will be visible to other people using this website</span>
+                  </div>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td nowrap valign="top"><span class="label">Country:</span></td>
+                <td>
+                  <select name="country">
+                    <%
+                      List<Country> countries = cloud.getAllCountries();
+                      for (Country country : countries) {
+                        boolean selected = country.getCode().equals(volunteerCountry); %>
+                        <option value="<%= country.getCode() %>"<%= selected ? "selected=\"selected\"" : "" %>><%= country.getName() %></option>
+                    <% } %>
+                  </select>
+                </td>
+              </tr>
+              
+              <tr>
+                <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">My languages:</span></td> 
+                <td>
+                  <div class="language-list">
+                  <table>
+                    <%
+                      List<Language> languages = cloud.getAllLanguages();
+                      for (Language language : languages) {
+                        boolean selected = volunteerLanguageCodes.contains(language.getCode()); %>
+                        <tr>
+                          <td>
+                            <input 
+                                type="checkbox" 
+                                name="language_<%= language.getCode() %>"
+                                value="<%= language.getCode() %>"
+                                onclick="document.getElementById('discussion_<%= language.getCode() %>').style.display = (this.checked ? 'inline' : 'none')"
+                                id="Language_<%= language.getCode() %>"
+                                <%= selected ? "checked" : "" %>/>
+                          </td>
+                          <td><%= language.getName() %></td>
+                          <td><span id="discussion_<%= language.getCode() %>" style="display:<%= selected ? "inline" : "none" %>;">
+                            <% String link = language.getDiscussionLink();
+                                 if (link != null) { %>
+                                   - <a target= "_blank" href="<%= link %>">discussion group</a> on Google Groups - 
+                                   <a target="_blank" href="<%= language.getJoinDiscussionLink() %>">Join</a> 
+                            <% } %>
+                          </span></td>
+                        </tr>
+                    <% } %>
+                  </table>
+                  </div>
+                </td>
+              </tr>
+      
+              <tr>
+                <td></td>
+                <td><input id="save-button" type="submit" value="Save" style="font-size:large;"/></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </form>  
+
+      </td>
+      
+      <% if (volunteer != null) { %>
+        <td width="20%" style="border-left:solid thin #bcd; vertical-align:top; padding-left:2em; color:gray;">
+          <h3>Delete profile</h3>
+          <form action="/profile" method="post">
+            <div>You can delete your profile from Google Translator Community at any time.  If you delete your profile, you: 
+              <ul>
+                <li>will not be able to use this website, unless you sign up again</li>
+                <li>will not be able to participate in Google Translator Community projects</li>
+                <li>will permanently lose your lists of articles</li>
+              </ul>
+            </div>
+            <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+            <input type="hidden" name="deleteProfile" value="yes, really delete this profile"></input>
+            <input 
+                id="delete-button"
+                type="submit"
+                value="Delete my profile permanently"
+                style="font-size:normal;"
+                onclick="return confirmDelete();"/>
+          </form>
+        </td>
+      <% } %>
+    </tr>
+  </table>
+  
 
   <% cloud.close(); %>
 
