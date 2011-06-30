@@ -136,12 +136,24 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/home</url-pattern>
   </servlet-mapping>
   
-
-
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>start</welcome-file>
   </welcome-file-list>  
+  
+  
+  <!-- Error pages -->
+  <error-page>
+    <error-code>500</error-code>
+    <location>/page/server_error.jsp</location>
+  </error-page>
+  
+  <error-page>
+    <error-code>404</error-code>
+    <location>/page/not_found_error.jsp</location>
+  </error-page>
+  
   
   <!-- Enable Appstats performance profiling -->
   
