@@ -62,54 +62,72 @@ public class ProfileServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 
-    Cloud cloud = Cloud.open();
-    
-    // read the input parameters from the client and validate them all before using the values
-    TextValidator nicknameValidator = TextValidator.BRIEF_STRING;
-
-    String rawNickname = request.getParameter("nickname");
-    String nickname = nicknameValidator.filter(rawNickname);
-    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
-    if (!nickname.equals(rawNickname)) {
-      logger.warning("Input validation failure for Nickname, " +
-          "Raw: " + rawNickname + ", Filtered: " + nickname);
-    }
-    
-    String rawCountryCode = request.getParameter("country");
-    Country country = cloud.getCountryByCode(rawCountryCode);
-    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
-    if (country == null && !(rawCountryCode == null || rawCountryCode.isEmpty())) {
-      logger.warning("Input validation failure for Country code: " + rawCountryCode);
-    }
-    
-    String recognition = request.getParameter("recognition");
-    boolean anonymous = !"public".equals(recognition);
-    
-    logger.info("Saving profile for User: " + user.getUserId());
-    
-    List<String> selectedLanguages = new ArrayList<String>();
-    for (Language language : cloud.getAllLanguages()) {
-      String parameterName = "language_" + language.getCode();
-      String value = request.getParameter(parameterName);
-      if (value != null) {
-        selectedLanguages.add(language.getCode());
+    String delete = request.getParameter("deleteProfile");
+    if (delete != null) {
+      // slight sanity check, to reduce risk of some bug accidentally causing a delete
+      if ("yes, really delete this profile".equals(delete)) {
+        Cloud cloud = Cloud.open();
+        Volunteer volunteer = cloud.getVolunteerByUser(user);
+        cloud.deleteVolunteer(volunteer);
+        response.sendRedirect("/home");
+        cloud.close();
+        return;
+      } else {
+        logger.severe("DELETE profile request failed for user: " + user.getUserId());
+        response.sendRedirect("/home");
+        return;
       }
+    } else {
+      Cloud cloud = Cloud.open();
+      
+      // read the input parameters from the client and validate them all before using the values
+      TextValidator nicknameValidator = TextValidator.BRIEF_STRING;
+  
+      String rawNickname = request.getParameter("nickname");
+      String nickname = nicknameValidator.filter(rawNickname);
+      // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+      if (!nickname.equals(rawNickname)) {
+        logger.warning("Input validation failure for Nickname, " +
+            "Raw: " + rawNickname + ", Filtered: " + nickname);
+      }
+      
+      String rawCountryCode = request.getParameter("country");
+      Country country = cloud.getCountryByCode(rawCountryCode);
+      // TODO: refactor common error logging between ProfileServlet and ProjectServlet
+      if (country == null && !(rawCountryCode == null || rawCountryCode.isEmpty())) {
+        logger.warning("Input validation failure for Country code: " + rawCountryCode);
+      }
+      
+      // String recognition = request.getParameter("recognition");
+      // boolean anonymous = !"public".equals(recognition);
+      
+      logger.info("Saving profile for User: " + user.getUserId());
+      
+      List<String> selectedLanguages = new ArrayList<String>();
+      for (Language language : cloud.getAllLanguages()) {
+        String parameterName = "language_" + language.getCode();
+        String value = request.getParameter(parameterName);
+        if (value != null) {
+          selectedLanguages.add(language.getCode());
+        }
+      }
+  
+      Volunteer volunteer = cloud.getVolunteerByUser(user);
+      if (volunteer == null) {
+        volunteer = cloud.createVolunteer(user);
+      }
+      if (cloud.isNicknameAvailable(nickname)) {
+        volunteer.setNickname(nickname);
+      }
+      String countryCode = (country == null) ? null : country.getCode();
+      volunteer.setCountry(countryCode);
+      // volunteer.setAnonymous(anonymous);
+      volunteer.setLanguageCodes(selectedLanguages);
+      cloud.close();
+      
+      response.sendRedirect("/my_translations");
+      return;
     }
-
-    Volunteer volunteer = cloud.getVolunteerByUser(user);
-    if (volunteer == null) {
-      volunteer = cloud.createVolunteer(user);
-    }
-    if (cloud.isNicknameAvailable(nickname)) {
-      volunteer.setNickname(nickname);
-    }
-    String countryCode = (country == null) ? null : country.getCode();
-    volunteer.setCountry(countryCode);
-    volunteer.setAnonymous(anonymous);
-    volunteer.setLanguageCodes(selectedLanguages);
-    cloud.close();
-    
-    response.sendRedirect("/my_translations");
   }
 
 }
