@@ -221,7 +221,7 @@ limitations under the License.
               %>
               <option 
                   value="<%= language.getCode() %>" 
-                  <%= (projectLanguageCode.equals(language.getCode()) ? "selected" : "") %>><%= language.getName() %></option> 
+                  <%= (language.getCode().equals(projectLanguageCode) ? "selected" : "") %>><%= language.getName() %></option> 
             <% } %>
           </select>
         </td>
