@@ -435,6 +435,11 @@ limitations under the License.
                   onclick="javascript:populateArticleForm();"/>
             <% } %>
             <input type="submit" value="Add articles" style="font-size:large;" onclick="javascript:lockPage();"/>
+            <div>Caution: If you plan to put thousands of articles in your project, 
+            do not add them all as a single batch because that will overload the server
+            and some or all of the articles will not get added.  Instead of adding all 
+            of your list at once, break your file into a set of lists that each have 
+            only about 1,000 rows, and then add the lists one at a time.</div>
           </td>
         </tr>
       <% } %>
