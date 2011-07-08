@@ -386,7 +386,7 @@ limitations under the License.
             <td class="term"><a href="<%= translation.getOriginalUrl() %>" target="_blank"><%= translation.getOriginalTitle() %></a></td>
             <td style="text-align:right;">
             <% if (translation.getToolkitArticleUrl() == null) { %>
-              <span class="muted">(untranslated)</span>
+              <span class="muted">(not yet available)</span>
             <% } else { %>
               <%= translation.getNumberOfSourceWords() %>
             <% } %>
