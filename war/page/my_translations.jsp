@@ -337,7 +337,7 @@ limitations under the License.
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>
-          <th rowspan="<%= 2 + Math.max(1, authoredItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
+          <th rowspan="<%= 1 + Math.max(2, authoredItems.size()) %>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
             <c:out value="<%=project.getName()%>"/> (<%=languageName%>)
           </th>
           <th>Article</th>
