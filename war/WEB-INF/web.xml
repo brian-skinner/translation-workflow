@@ -100,7 +100,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/my_translations</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
     <servlet-name>myProfileJSP</servlet-name>
     <jsp-file>/page/profile.jsp</jsp-file>
   </servlet>
@@ -109,7 +109,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/my_profile</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
     <servlet-name>projectOverviewJSP</servlet-name>
     <jsp-file>/page/project_overview.jsp</jsp-file>
   </servlet>
@@ -118,7 +118,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/project_overview</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
+    <servlet-name>helpJSP</servlet-name>
+    <jsp-file>/page/help.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>helpJSP</servlet-name>
+    <url-pattern>/help</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>startJSP</servlet-name>
     <jsp-file>/page/start.jsp</jsp-file>
   </servlet>

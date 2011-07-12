@@ -133,10 +133,6 @@ public class ProjectServlet extends HttpServlet {
     
     String rawLanguageCode = request.getParameter("languageCode");
     Language language = cloud.getLanguageByCode(rawLanguageCode);
-    // TODO: refactor common error logging between ProfileServlet and ProjectServlet
-    if (language == null && !(rawLanguageCode == null || rawLanguageCode.isEmpty())) {
-      logger.warning("Input validation failure for Langauge code: " + rawLanguageCode);
-    }
     
     String nukeRequested = request.getParameter("nuke_translations");
     if (nukeRequested != null) {
@@ -158,8 +154,9 @@ public class ProjectServlet extends HttpServlet {
     
     project.setName(name);
     project.setDescription(description);
-    String languageCode = (language == null) ? null : language.getCode();
-    project.setLanguageCode(languageCode);
+    if (language != null) {
+      project.setLanguageCode(language.getCode());
+    }
     
     String rawCsvArticleList = request.getParameter("articles");
     if (!rawCsvArticleList.isEmpty()) {

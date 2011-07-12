@@ -97,7 +97,7 @@ public class Project {
    * @return the description
    */
   public String getDescription() {
-    return description.getValue();
+    return (description == null) ? null : description.getValue();
   }
   
   public boolean isDeleted() {
