@@ -51,13 +51,16 @@ limitations under the License.
 
   String siteName = Website.getInstance().getName();
 
-  boolean readOnly = !userService.isUserAdmin();
-  
   Cloud cloud = Cloud.open();
+  
+  List<Project> projects = cloud.getAllProjects();
   String projectId = request.getParameter("project");
   Project project = cloud.getProjectById(projectId);
   
-  List<Project> projects = cloud.getAllProjects();
+  boolean readOnly = !userService.isUserAdmin();
+  boolean projectAlreadyHasItems =
+      ((project != null) && !cloud.getAvailableTranslationItems(project).isEmpty());
+  boolean languageIsReadOnly = (readOnly || projectAlreadyHasItems);
   
   String placeholderDescription = 
     "The _____ project includes hundreds articles from ____ with information about ____. " +
@@ -181,6 +184,13 @@ limitations under the License.
       var partWeWant = url.replace(uri, '');
       document.getElementById('Articles').value = getArticleStringFromWikipediaArticleMap();
     };
+    
+    languageChanged = function() {
+      var languageCode = document.getElementById('Language').value;
+      var noLanguageSelected = (languageCode == "");
+      document.getElementById('SaveButton').disabled = noLanguageSelected;
+      document.getElementById('AddButton').disabled = noLanguageSelected;
+    };
   </script>
   
 </head>
@@ -213,8 +223,11 @@ limitations under the License.
           <select 
               name="languageCode"
               id="Language"
-              <%= (readOnly) ? "disabled=\"disabled\"" : "" %>>
-            <option></option>
+              <%= (languageIsReadOnly) ? "disabled=\"disabled\"" : "" %>
+              onchange="javascript:languageChanged();">
+            <% if (projectLanguageCode.isEmpty()) { %>
+              <option></option>
+            <% } %>      
             <%
             List<Language> allLanguages = cloud.getAllLanguages();
             for (Language language : allLanguages) {
@@ -249,7 +262,12 @@ limitations under the License.
                   style="background-color:pink;"
                   onclick="javascript:populateProjectForm();"/>
             <% } %>      
-            <input type="submit" value="Save" style="font-size:large;" onclick="javascript:lockPage();"/>
+            <input id="SaveButton" 
+                type="submit" 
+                value="Save" 
+                style="font-size:large;" 
+                <%= (projectLanguageCode.isEmpty()) ? "disabled=\"disabled\"" : "" %>
+                onclick="javascript:lockPage();"/>
           <% } %>      
         </td>
       </tr>
@@ -440,7 +458,13 @@ limitations under the License.
                   style="background-color:pink;"
                   onclick="javascript:populateArticleForm();"/>
             <% } %>
-            <input type="submit" value="Add articles" style="font-size:large;" onclick="javascript:lockPage();"/>
+            <input 
+                id="AddButton"
+                type="submit"
+                value="Add articles" 
+                style="font-size:large;"
+                <%= (projectLanguageCode.isEmpty()) ? "disabled=\"disabled\"" : "" %>
+                onclick="javascript:lockPage();"/>
             <div>Caution: If you plan to put thousands of articles in your project, 
             do not add them all as a single batch because that will overload the server
             and some or all of the articles will not get added.  Instead of adding all 
