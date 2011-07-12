@@ -446,7 +446,8 @@ public class Cloud {
            !translation.isNewlyAuthoredNotTranslated()) {
         returnValues.add(translation);
       }
-    }    
+    }
+
     return returnValues;
   }
   
@@ -554,7 +555,7 @@ public class Cloud {
   }
 
   @SuppressWarnings(value = {"unchecked"})
-  private List<Translation> getAvailableTranslationItems(Project project) {
+  public List<Translation> getAvailableTranslationItems(Project project) {
     List<Translation> translations = null;
     List<Translation> availableItems = new ArrayList<Translation>();
     
