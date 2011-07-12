@@ -30,7 +30,21 @@ limitations under the License.
 
   <%@ include file="/resource/stopwatch.jsp" %>
 
+<style>
+dt {
+  font-weight: bold;
+  font-size: medium;
+  padding-top: 1.5em;
+  padding-bottom: 0.5em;
+}
+dd {
+  font-size: medium;
+  padding-bottom: 0.5em;
+}
+</style>
+
 <%
+  UserService userService = UserServiceFactory.getUserService();
   String siteName = Website.getInstance().getName();
 %>
 
@@ -40,7 +54,7 @@ limitations under the License.
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
-  <title>Home <%= siteName %></title>
+  <title><%= siteName %></title>
 </head>
 
 <body>
@@ -49,27 +63,38 @@ limitations under the License.
   <table>
     <tr>
       <td>
-        <h2>Lorem ipsum!</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-        Aenean bibendum justo sed tellus tincidunt bibendum. 
-        Phasellus ut leo ligula, id auctor mi. 
-        Curabitur facilisis consectetur lorem pulvinar suscipit. 
-        Vivamus eu sem sit amet lacus sodales laoreet vel in leo. 
-        Aenean sit amet elit quam</p>
-        <p>Fusce id leo id purus interdum adipiscing. 
-        Donec commodo cursus leo, sed interdum enim aliquet vel. 
-        Aliquam vitae odio velit. 
-        Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; 
-        In porta cursus mi nec lobortis</p>
-  
-        <h3>Phasellus ornare enim eu lectus?</h3>
-        <p>Phasellus ornare enim eu lectus tincidunt non dictum lectus varius. 
-        Aenean diam erat, convallis at adipiscing at, pharetra at magna. 
-        Aenean sed orci ac metus fermentum suscipit.</p>
+        <h2>Find articles to translate or review</h2>
+        
+        <p style="font-size:medium;"><%= siteName %> allows translators to quickly find documents to translate 
+        or review, and to monitor progress as individuals or as part of a group.</p>
+        
+        <dl>
+          <dt>Register as a translator and/or reviewer</dt>
+          <dd>Create a profile with a nickname the languages you speak</dd>
+          
+          <dt>Find and join discussion groups</dt>
+          <dd>Meet other translators working in your language and share questions and tips</dd>
+          
+          <dt>Browse current projects</dt>
+          <dd>Learn more about existing translation projects or competitions in your language(s)</dd>
+          
+          <dt>Select and claim articles to translate</dt>
+          <dd>Search available articles and claim those you’d like to work on in Google Translator Toolkit</dd>
+          
+          <dt>Monitor your progress</dt>
+          <dd>Keep track of your completed articles and see how others are doing</dd>
+        </dl>
+
       </td>
-      
-      <td>
-        <img src="/site-config/home-page-image.png"></img>
+      <td style="vertical-align:top;">
+        <% if (userService.getCurrentUser() == null) { %>  
+          <input 
+              id="delete-button"
+              type="submit"
+              value="Sign up"
+              style="font-size:xx-large; width:10em; height:3.5em; padding:1em; margin:3em 1em; color:blue;"
+              onclick="window.location='<%= userService.createLoginURL("/")%>';"/>
+        <% } %>
       </td>
     </tr>
   </table>

@@ -37,7 +37,7 @@ limitations under the License.
   padding-bottom: 10px;
 }
 .admin-header {
-  background: -webkit-gradient(linear, left top, right top, from(#e5ecf9), to(pink));
+  background: -webkit-gradient(linear, center bottom, center top, from(#e5ecf9), to(pink));
 }
 #upper-right {
   font-weight: bold;
@@ -146,6 +146,7 @@ if (headerUser != null) {
   String myProfilePageSelected = request.getRequestURI().equals("/my_profile") ? "selected-navbar-item" : "";
   String myTranslationsPageSelected = request.getRequestURI().equals("/my_translations") ? "selected-navbar-item" : "";
   String allProjectsPageSelected = request.getRequestURI().equals("/all_projects") ? "selected-navbar-item" : "";
+  String helpPageSelected = request.getRequestURI().equals("/help") ? "selected-navbar-item" : "";
   %>
   <div>
     <ul class="navbar">
@@ -154,8 +155,9 @@ if (headerUser != null) {
         <li class="navbar-item <%= myProfilePageSelected %>"><a href="/my_profile">my profile</a></li>
         <li class="navbar-item <%= myTranslationsPageSelected %>"><a href="/my_translations">my translations</a></li>
         <li class="navbar-item <%= allProjectsPageSelected %>"><a href="/all_projects">all projects</a></td>
+        <li class="navbar-item <%= helpPageSelected %>"><a href="/help">help</a></td>
         <% if (headerUserService.isUserAdmin()) { %>
-          <li class="navbar-item admin"><a href="https://code.google.com/p/translation-workflow/wiki/AdminHelp" target="_blank">admin help</a></li>
+          <li class="navbar-item"><a href="https://code.google.com/p/translation-workflow/wiki/AdminHelp" target="_blank">admin help</a></li>
         <% } %>
     </ul>
   </div>

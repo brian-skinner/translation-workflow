@@ -271,7 +271,7 @@ limitations under the License.
                   <input 
                       type="button" 
                       id="searchButton"
-                      value="Try your luck" 
+                      value="Try my luck" 
                       onclick="window.location='/my_translations?search=_random_';"
                       ></input>
                  </div>
