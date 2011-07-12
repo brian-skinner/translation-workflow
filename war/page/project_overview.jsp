@@ -177,7 +177,17 @@ limitations under the License.
         }
       }
     };
-    
+    maxArticlesAllowed = function(articles){
+       var articlesList = articles.value;
+       var maxLines = 1000;
+       var lines=articlesList.split('\n');
+       if(lines.length>maxLines){
+         lines=lines.slice(0,maxLines);
+         articles.value=lines.join('\n');
+         alert('Currently we are limiting only 1000 articles per batch.');
+         return false;
+       }
+    };
     populateArticleForm = function() {
       var url = "<%= request.getRequestURL() %>";
       var uri = "<%= request.getRequestURI() %>";
@@ -449,7 +459,7 @@ limitations under the License.
             <div><textarea rows="1" cols="110"  disabled="disabled">"Title","Url","Category","Difficulty"</textarea></div>
             <div><textarea 
                 rows="24" cols="110" id="Articles" name="articles"
-                placeholder="&quot;Water&quot;,&quot;http://en.wikipedia.org/wiki/Water&quot;,&quot;Science&quot;,&quot;Difficult&quot;"></textarea></div>
+                placeholder="&quot;Water&quot;,&quot;http://en.wikipedia.org/wiki/Water&quot;,&quot;Science&quot;,&quot;Difficult&quot;" onkeyup="return maxArticlesAllowed(this)"></textarea></div>
           </td>
           <td>
             <% if (projectName.equals(lexiconExampleProjectName) && projectTranslations.isEmpty()) { %>
