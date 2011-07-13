@@ -177,16 +177,16 @@ limitations under the License.
         }
       }
     };
-    maxArticlesAllowed = function(articles){
-       var articlesList = articles.value;
-       var maxLines = 1000;
-       var lines=articlesList.split('\n');
-       if(lines.length>maxLines){
-         lines=lines.slice(0,maxLines);
-         articles.value=lines.join('\n');
-         alert('Currently we are limiting only 1000 articles per batch.');
-         return false;
-       }
+    maxArticlesAllowed = function(articles) {
+      var articlesList = articles.value;
+      var maxLines = 1000;
+      var lines = articlesList.split('\n');
+      if (lines.length > maxLines) {
+        lines = lines.slice(0, maxLines);
+        articles.value = lines.join('\n');
+        alert('Currently we are limiting only 1000 articles per batch.');
+        return false;
+      }
     };
     populateArticleForm = function() {
       var url = "<%= request.getRequestURL() %>";
