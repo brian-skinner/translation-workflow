@@ -33,13 +33,27 @@ limitations under the License.
 <style>
 dt {
   font-weight: bold;
-  font-size: medium;
+  font-size: small;
   padding-top: 1.5em;
-  padding-bottom: 0.5em;
+  padding-bottom: 0.4em;
 }
 dd {
-  font-size: medium;
-  padding-bottom: 0.5em;
+  font-size: small;
+  padding-bottom: 0.2em;
+}
+.sign-up-button {
+  background: #115cce url(/site-config/button.png) no-repeat center 0;
+  box-shadow: 2px 2px 3px #999;
+  -moz-box-shadow: 2px 2px 3px #999;
+  -webkit-box-shadow: 2px 2px 3px #999;
+  color: #fff;
+  display: block;
+  font-size: 1.5em;
+  height: 2.5em;
+  margin: 3em auto 1em;
+  text-align: center;
+  text-decoration: none;
+  width: 10em; 
 }
 </style>
 
@@ -65,26 +79,28 @@ dd {
       <td>
         <h2>Find articles to translate or review</h2>
         
-        <p style="font-size:medium;"><%= siteName %> allows translators to quickly find documents to translate 
+        <p><%= siteName %> allows translators to quickly find documents to translate 
         or review, and to monitor progress as individuals or as part of a group.</p>
         
         <dl>
+        
           <dt>Register as a translator and/or reviewer</dt>
-          <dd>Create a profile with a nickname the languages you speak</dd>
+          Create a profile with your location and the languages you speak and specify how you’d like to appear to others
           
           <dt>Find and join discussion groups</dt>
-          <dd>Meet other translators working in your language and share questions and tips</dd>
+          Meet other translators working in your language and share questions and tips
           
           <dt>Browse current projects</dt>
-          <dd>Learn more about existing translation projects or competitions in your language(s)</dd>
+          Learn more about existing translation projects or competitions in your language(s)
           
           <dt>Select and claim articles to translate</dt>
-          <dd>Search available articles and claim those you’d like to work on in Google Translator Toolkit</dd>
+          Search available articles and claim those you’d like to work on in Google Translator Toolkit
           
           <dt>Monitor your progress</dt>
-          <dd>Keep track of your completed articles and see how others are doing</dd>
-        </dl>
-
+          Keep track of your completed articles and see how others are doing
+          
+       </dl>
+        
       </td>
       <td style="vertical-align:top;">
         <% if (userService.getCurrentUser() == null) { %>  
@@ -92,14 +108,13 @@ dd {
               id="delete-button"
               type="submit"
               value="Sign up"
-              style="font-size:xx-large; width:10em; height:3.5em; padding:1em; margin:3em 1em; color:blue;"
+              class="sign-up-button"
               onclick="window.location='<%= userService.createLoginURL("/")%>';"/>
         <% } %>
       </td>
     </tr>
   </table>
 
-  
   <%@ include file="/resource/footer.jsp" %>
   </body>
 </html>
