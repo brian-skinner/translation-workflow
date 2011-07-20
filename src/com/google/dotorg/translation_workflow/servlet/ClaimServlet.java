@@ -122,9 +122,7 @@ public class ClaimServlet extends HttpServlet {
               ? attemptToUploadToTranslatorToolkit(
                   translation, getLocallyServedConent(translation, cloud)) 
               : attemptToUploadToTranslatorToolkit(translation);
-          if (docEntry != null) {
-            attemptToShareDocumentWithUser(translation, user);
-          }
+          attemptToShareDocumentWithUser(translation, user);
           break;
         case ATTEMPT_TO_SHARE_AGAIN:
           attemptToShareDocumentWithUser(translation, user);
