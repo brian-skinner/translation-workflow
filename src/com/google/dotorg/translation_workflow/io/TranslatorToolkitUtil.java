@@ -60,6 +60,7 @@ import java.util.logging.Logger;
 
 /**
  * @author Brian Douglas Skinner
+ * @author Mahesh Balumuri (mbalumuri@google.com)
  */
 public class TranslatorToolkitUtil {
   private static final String TOOLKIT_URL = "http://translate.google.com/toolkit/";
@@ -196,6 +197,25 @@ public class TranslatorToolkitUtil {
       logger.severe("Error sharing with user " + emailId);
     } catch (IOException e) {
       logger.severe("Error sharing with user " + emailId);
+    }
+  }
+  
+  public void unshareDocumentWithUser(Translation translation, User user) {
+    String emailId = user.getEmail();
+    String aclUrl = DOC_ACL_URL + translation.getToolkitDocIdTail();
+
+    boolean failed = true;
+    emailId = emailId.toLowerCase();
+
+    String aclFeedUrl = aclUrl + '/' + emailId;
+    // TODO: have this retry a few times if it fails
+    try {
+      service.delete(new URL(aclFeedUrl));
+      logger.info("Unshare with user " + emailId);
+    } catch (ServiceException e) {
+      logger.severe("Error unsharing with user " + emailId);
+    } catch (IOException e) {
+      logger.severe("Error unsharing with user " + emailId);
     }
   }
   
