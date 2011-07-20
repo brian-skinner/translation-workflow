@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Brian Douglas Skinner
+ * @author Mahesh Balumuri (mbalumuri@google.com)
  */
 public class ClaimServlet extends HttpServlet {
   private static final Logger logger = Logger.getLogger(ClaimServlet.class.getName());
@@ -130,9 +131,11 @@ public class ClaimServlet extends HttpServlet {
           break;
         case UNCLAIM_FOR_TRANSLATION:
           translation.releaseClaimForTranslation();
+          attemptToUnshareDocumentWithUser(translation, user);
           break;
         case MARK_TRANSLATION_COMPLETE:
           translation.markTranslationComplete();
+          attemptToUnshareDocumentWithUser(translation, user);
           break;
         case CLAIM_FOR_REVIEW:
           translation.claimForReview(claimerId);
@@ -140,11 +143,13 @@ public class ClaimServlet extends HttpServlet {
           break;
         case UNCLAIM_FOR_REVIEW:
           translation.releaseClaimForReview();
+          attemptToUnshareDocumentWithUser(translation, user);
           break;
         case MARK_REVIEW_COMPLETE:
           String rawReviewScore = request.getParameter("reviewScore");
           int reviewScore = Integer.parseInt(rawReviewScore);
           translation.markReviewComplete(reviewScore);
+          attemptToUnshareDocumentWithUser(translation, user);
           break;
       }
     }
@@ -251,6 +256,25 @@ public class ClaimServlet extends HttpServlet {
       return false;
     }
     translation.addSharedWithUser(user);
+    return true;
+  }
+  
+  private boolean attemptToUnshareDocumentWithUser(Translation translation, User user) {
+    if (translation.isNewlyAuthoredNotTranslated()) {
+      return false;
+    }
+
+    TranslatorToolkitUtil toolkitUtil = getTranslatorToolkitUtil();
+    if (toolkitUtil == null) {
+      return false;
+    }
+
+    try {
+      toolkitUtil.unshareDocumentWithUser(translation, user);
+    } catch (RuntimeException e) {
+      logger.log(Level.SEVERE, "Error: RuntimeException unsharing document", e);
+      return false;
+    }
     return true;
   }
     
