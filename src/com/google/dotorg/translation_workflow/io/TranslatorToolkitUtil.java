@@ -21,6 +21,7 @@ import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.acl.AclEntry;
 import com.google.gdata.data.acl.AclRole;
 import com.google.gdata.data.acl.AclScope;
+import com.google.gdata.data.acl.AclFeed;
 import com.google.gdata.data.gtt.DocumentEntry;
 import com.google.gdata.data.gtt.DocumentSource;
 import com.google.gdata.data.gtt.GlossariesElement;
@@ -187,8 +188,26 @@ public class TranslatorToolkitUtil {
     int attempts = 0;
     boolean failed = true;
     emailId = emailId.toLowerCase();
-    
-    
+    if(roleName.equalsIgnoreCase("reader")){
+      String FeedUrl = DOC_ACL_URL + translation.getToolkitDocIdTail();
+      try {
+        AclFeed aclFeed = service.getFeed(new URL(FeedUrl), AclFeed.class);
+        int i = 1;
+        for (AclEntry feedEntry : aclFeed.getEntries()) {
+          if(feedEntry.getRole().getValue().equalsIgnoreCase("reader")){
+            String aclFeedUrl = aclUrl + '/' + feedEntry.getScope().getValue();
+            service.delete(new URL(aclFeedUrl));
+            logger.severe("Unsharing with user : "+
+              feedEntry.getScope().getValue() + "'"
+              + ", role = '" + feedEntry.getRole().getValue() + "'");
+          }
+        }
+      } catch (ServiceException e) {
+          logger.severe("Error unsharing with user");
+      } catch (IOException e) {
+          logger.severe("Error unsharing with user" );
+      }
+    }
     // TODO: have this retry a few times if it fails
     try {
       service.insert(new URL(aclUrl), entry);

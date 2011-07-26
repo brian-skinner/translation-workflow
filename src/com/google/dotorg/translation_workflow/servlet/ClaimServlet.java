@@ -65,7 +65,8 @@ public class ClaimServlet extends HttpServlet {
     MARK_TRANSLATION_COMPLETE,
     CLAIM_FOR_REVIEW,
     UNCLAIM_FOR_REVIEW,
-    MARK_REVIEW_COMPLETE
+    MARK_REVIEW_COMPLETE,
+    CLAIM_FOR_REVISIT
   }
 
   @Override
@@ -149,6 +150,10 @@ public class ClaimServlet extends HttpServlet {
           translation.markReviewComplete(reviewScore);
           attemptToUnshareDocumentWithUser(translation, user);
           break;
+        case CLAIM_FOR_REVISIT:
+          attemptToReshareDocumentWithUser(translation, user);
+          break;
+          
       }
     }
     
@@ -257,6 +262,25 @@ public class ClaimServlet extends HttpServlet {
     return true;
   }
   
+  private boolean attemptToReshareDocumentWithUser(Translation translation, User user) {
+    if (translation.isNewlyAuthoredNotTranslated()) {
+      return false;
+    }
+    
+    TranslatorToolkitUtil toolkitUtil = getTranslatorToolkitUtil();
+    if (toolkitUtil == null) {
+      return false;
+    }
+    
+    try {
+      toolkitUtil.shareDocumentWithUser(translation, user, "reader");
+    } catch (RuntimeException e) {
+      logger.log(Level.SEVERE, "Error: RuntimeException sharing document", e);
+      return false;
+    }
+    return true;
+  }
+  
   private boolean attemptToUnshareDocumentWithUser(Translation translation, User user) {
     if (translation.isNewlyAuthoredNotTranslated()) {
       return false;
@@ -275,5 +299,5 @@ public class ClaimServlet extends HttpServlet {
     }
     return true;
   }
-    
+
 }

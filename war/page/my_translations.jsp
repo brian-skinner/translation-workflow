@@ -514,10 +514,11 @@ limitations under the License.
           <th>Translated by</th>
           <th>Reviewed by</th>
           <th>Review Score</th>
+          <th></th>
         </tr>
         <% if (completedItems.isEmpty()) { %>
           <tr>
-            <td colspan="5">Your finished articles will show up here.</td>
+            <td colspan="6">Your finished articles will show up here.</td>
           </tr>
         <% } else { %>
           <% for (Translation item : completedItems) { 
@@ -532,6 +533,15 @@ limitations under the License.
               <td><c:out value='<%= (translator == null) ? "" : translator.getNickname()%>'/></td>
               <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
               <td><%= item.getReviewScore()%></td>
+              <td><form action="/claim_item" method="post">
+                    <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+                    <input type="hidden" name="projectId" value="<%= project.getId() %>">
+                    <input type="hidden" name="languageCode" value="<%= languageCode %>">
+                    <input type="hidden" name="translationId" value="<%= item.getId() %>">
+                    <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_REVISIT.toString() %>">
+                    <input type="submit" value="Revisit" onclick="javascript:lockPage()"></input>
+                  </form>
+              </td>
             </tr>
           <% } %>
         <% } %>
