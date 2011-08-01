@@ -43,17 +43,41 @@ dd {
 }
 .sign-up-button {
   background: #115cce url(/site-config/button.png) no-repeat center 0;
-  box-shadow: 2px 2px 3px #999;
+  border: 1px solid #2528e8;
   -moz-box-shadow: 2px 2px 3px #999;
   -webkit-box-shadow: 2px 2px 3px #999;
+  box-shadow: 2px 2px 3px #999;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   color: #fff;
   display: block;
   font-size: 1.5em;
-  height: 2.5em;
-  margin: 3em auto 1em;
+  height: 2em;
+  margin: 5px;
+  max-width: 247px;
+  padding: 5px 0;
   text-align: center;
   text-decoration: none;
-  width: 10em; 
+  width: 8em;
+}
+.sign-up-button:hover {
+  text-decoration: none;
+}
+.cta {
+  background: #edf6ff;
+  border: 1px solid #bfdfff;
+  float: right;
+  margin: .5em 0;
+  padding: 10px 0;
+  width: 99.5%;
+}
+.cta p {
+  color: #333;
+  font-size: 1em;
+  line-height: 1.4em;
+  margin: 0 23px;
+  text-align: center;
 }
 </style>
 
@@ -104,12 +128,14 @@ dd {
       </td>
       <td style="vertical-align:top;">
         <% if (userService.getCurrentUser() == null) { %>  
-          <input 
-              id="delete-button"
+        <div class="cta"><input 
+              id="sign-up-button"
               type="submit"
               value="Sign up"
               class="sign-up-button"
               onclick="window.location='<%= userService.createLoginURL("/")%>';"/>
+              <p><a href="/learnmore">Learn More .. »</a></p> 
+            </div> 
         <% } %>
       </td>
     </tr>
