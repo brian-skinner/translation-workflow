@@ -27,10 +27,11 @@ limitations under the License.
    your review comments.
 -------------------------------------------------------------- --%>
 
-<a href='https://code.google.com/p/translation-workflow/'>Translation Workflow Home</a> 
+©2011 Google - 
+<a href='http://www.google.com/privacy.html'>Privacy Policy</a> 
 -
-<a href='https://code.google.com/p/translation-workflow/w/list'>Wiki</a> 
+<a href='http://www.google.com/terms_of_service.html'>Terms of Service</a> 
 -
-<a href='https://code.google.com/p/translation-workflow/issues/list'>Bugs</a> 
--
-<a href='https://code.google.com/p/translation-workflow/source/checkout'>Source</a> 
+<a href='https://code.google.com/p/translation-workflow/issues/list'>Report a Problem</a>
+
+<p>Google Translator Community is subject to the Google Terms of Service.  Translations are authored through the Google Translator Toolkit, use of which is subject to <a href='http://translate.google.com/toolkit/TOS.html'> additional terms.</a></p>
