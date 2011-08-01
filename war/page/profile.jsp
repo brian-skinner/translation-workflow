@@ -54,8 +54,6 @@ limitations under the License.
   Cloud cloud = Cloud.open();
   Volunteer volunteer = cloud.getVolunteerByUser(user);
   
-  List<String> volunteerNicknames = cloud.getAllVolunteerNicknames();
-
   String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
   String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
   List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
@@ -68,50 +66,31 @@ limitations under the License.
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - My Profile</title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
   <script type="text/javascript" language="javascript">
-    myNickname = "<c:out value="<%= volunteerNickname %>"/>";
-    
-    allNicknames = [
-      <% for (String nickname : volunteerNicknames) { %>
-        /* We are embedding the user-entered nickname strings within the
-           JavaScript on this page, which is safe so long as we are sure
-           we restrict what characters can be in the nickname, which
-           we do in the ProfileServlet, using the TextValidator. */
-        "<%= nickname %>",
-      <% } %>
-      "nickname"
-    ];
-    
-    validateNickname = function() {
-      var nickname = document.getElementById('nickname').value;
+    validateuserNickname = function(){
+      var nickname= $("#nickname").val();
       var nicknameErrorSpan = document.getElementById('nickname-error');
       var nicknameTipSpan = document.getElementById('nickname-tip');
       var saveButton = document.getElementById('save-button');
-      if (isDuplicateNickname(nickname)) {
-        nicknameErrorSpan.style.display = "inline";
-        nicknameTipSpan.style.display = "none";
-        saveButton.disabled = true;
-      } else {
-        nicknameErrorSpan.style.display = "none";
-        nicknameTipSpan.style.display = "inline";
-        saveButton.disabled = false;
-      }
-    };
-    
-    /* Examples:
-     *   duplicate==true:  "  Example Nickname ", "examplenickname"
-     *   duplicate==false: "Foo", "Bar"
-     */
-    isDuplicateNickname = function(nickname) {
-      var lowercaseNickname = nickname.toLowerCase().replace(/ /gi, "");
-      for (var i=0; i<allNicknames.length; i++) {
-        if ((lowercaseNickname == allNicknames[i].toLowerCase().replace(/ /gi, "")) && 
-            (lowercaseNickname != myNickname.toLowerCase())) {
-          return true;
+      
+      $.post("validate_nickname", { name: nickname },
+        function(data) {
+        var results = data.getElementsByTagName("result")[0];
+        var result = results.childNodes[0];
+        //alert(result.nodeValue);
+        if(result.nodeValue == 0){
+          nicknameErrorSpan.style.display = "none";
+          nicknameTipSpan.style.display = "inline";
+          saveButton.disabled = false;         
         }
-      }
-      return false;
-    };
+        else{
+          nicknameErrorSpan.style.display = "inline";
+          nicknameTipSpan.style.display = "none";
+          saveButton.disabled = true;
+        }
+      });
+    }
     
     confirmDelete = function() {
       return confirm("Are you sure you want to completely delete your profile forever?");
@@ -144,10 +123,10 @@ limitations under the License.
                         id="nickname"
                         name="nickname"
                         value="<c:out value="<%= volunteerNickname %>"/>" 
-                        size="30" id="Nickname" 
+                        size="30" 
                         placeholder="<%= userShortNickname %>" 
-                        onkeyup="javascript:validateNickname()"
-                        onchange="javascript:validateNickname()">
+                        onkeyup="javascript:validateuserNickname()"
+                        onchange="javascript:validateuserNickname()">
                     <span class="error-message" id="nickname-error" style="display:none">That name is already taken.</span>
                     <span id="nickname-tip" >Your nickname will be visible to other people using this website</span>
                   </div>

@@ -197,7 +197,7 @@ public class TranslatorToolkitUtil {
           if(feedEntry.getRole().getValue().equalsIgnoreCase("reader")){
             String aclFeedUrl = aclUrl + '/' + feedEntry.getScope().getValue();
             service.delete(new URL(aclFeedUrl));
-            logger.severe("Unsharing with user : "+
+            logger.info("Unsharing with user : "+
               feedEntry.getScope().getValue() + "'"
               + ", role = '" + feedEntry.getRole().getValue() + "'");
           }
