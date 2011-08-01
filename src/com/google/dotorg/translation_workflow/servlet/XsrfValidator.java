@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 
 /**
  * @author Brian Douglas Skinner
+ * @author Mahesh Balumuri (mbalumuri@google.com)
  */
 public class XsrfValidator {
   private static final Logger logger = Logger.getLogger(XsrfValidator.class.getName());
@@ -68,7 +69,7 @@ public class XsrfValidator {
     settings.readConfigFile();
     String password = settings.getPassword();
     if (password != null) {
-      SimpleDigest digest = new SimpleDigest(password);
+      SimpleDigest digest = new SimpleDigest();
       UserService userService = UserServiceFactory.getUserService();
       User user = userService.getCurrentUser();
       String userId = user.getUserId();

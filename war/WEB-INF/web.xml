@@ -71,7 +71,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>claimServlet</servlet-name>
     <url-pattern>/claim_item</url-pattern>
   </servlet-mapping>
-
+  
+  <servlet>
+    <servlet-name>validateServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.NicknameValidateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>validateServlet</servlet-name>
+    <url-pattern>/validate_nickname</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>refreshProgressServlet</servlet-name>
