@@ -355,9 +355,17 @@ public class Cloud {
     Volunteer loggedVolunteer = getVolunteerByUserId(user.getUserId());
 
     for (Volunteer volunteer : getAllVolunteers()) {
-      if (nickname.equalsIgnoreCase(volunteer.getNickname()) && !loggedVolunteer.equals(volunteer)) {
-        return false;
+      if (loggedVolunteer == null) {
+        if (nickname.equalsIgnoreCase(volunteer.getNickname())) {
+          return false;
+        }
+      } else {
+        if (nickname.equalsIgnoreCase(volunteer.getNickname())
+            && !loggedVolunteer.equals(volunteer)) {
+          return false;
+        }
       }
+
     }
     return true;
   }
