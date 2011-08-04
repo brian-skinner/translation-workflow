@@ -78,7 +78,6 @@ limitations under the License.
         function(data) {
         var results = data.getElementsByTagName("result")[0];
         var result = results.childNodes[0];
-        //alert(result.nodeValue);
         if(result.nodeValue == 0){
           nicknameErrorSpan.style.display = "none";
           nicknameTipSpan.style.display = "inline";
@@ -97,8 +96,6 @@ limitations under the License.
     };
     
   </script>
-  
-  
 </head>
 
 <body>
