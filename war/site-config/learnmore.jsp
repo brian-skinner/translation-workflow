@@ -30,57 +30,6 @@ limitations under the License.
 
   <%@ include file="/resource/stopwatch.jsp" %>
 
-<style>
-dt {
-  font-weight: bold;
-  font-size: small;
-  padding-top: 1.5em;
-  padding-bottom: 0.4em;
-}
-dd {
-  font-size: small;
-  padding-bottom: 0.2em;
-}
-.sign-up-button {
-  background: #115cce url(/site-config/button.png) no-repeat center 0;
-  border: 1px solid #2528e8;
-  -moz-box-shadow: 2px 2px 3px #999;
-  -webkit-box-shadow: 2px 2px 3px #999;
-  box-shadow: 2px 2px 3px #999;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  color: #fff;
-  display: block;
-  font-size: 1.5em;
-  height: 2em;
-  margin: 5px;
-  max-width: 247px;
-  padding: 5px 0;
-  text-align: center;
-  text-decoration: none;
-  width: 8em;
-}
-.sign-up-button:hover {
-  text-decoration: none;
-}
-.cta {
-  background: #edf6ff;
-  border: 1px solid #bfdfff;
-  float: right;
-  margin: .5em 0;
-  padding: 10px 0;
-  width: 99.5%;
-}
-.cta p {
-  color: #333;
-  font-size: 1em;
-  line-height: 1.4em;
-  margin: 0 23px;
-  text-align: center;
-}
-</style>
-
 <%
   UserService userService = UserServiceFactory.getUserService();
   String siteName = Website.getInstance().getName();

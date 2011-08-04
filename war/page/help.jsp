@@ -30,20 +30,6 @@ limitations under the License.
 
   <%@ include file="/resource/stopwatch.jsp" %>
 
-<style>
-dt {
-  font-weight: bold;
-  padding-top: 1em;
-  padding-bottom: 0.5em;
-}
-h2 {
-  padding-top: 1em;
-}
-li {
-  padding-bottom: 1em;
-}
-</style>
-
 <%
   String siteName = Website.getInstance().getName();
 %>

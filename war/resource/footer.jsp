@@ -30,22 +30,6 @@ limitations under the License.
 
 </div>
 
-<style>
-.footer {
-  background-color: #e5ecf9;
-  padding: 0.4em;
-  text-align: center;
-}
-.loadtime {
-  padding-top: 0.4em;
-  color: gray;
-}
-.version {
-  padding-top: 0.3em;
-  color: gray;
-}
-</style>
-
 <div class="footer" align="center"> 
   <%@ include file="/site-config/footer-text.jsp" %>
     <% 

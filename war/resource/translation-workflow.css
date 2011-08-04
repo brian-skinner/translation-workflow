@@ -105,6 +105,148 @@ tr.add-articles th {
 tr.add-articles td {
   background-color: #ffc;
 }
+h2 {
+  padding-top: 1em;
+}
+li {
+  padding-bottom: 1em;
+}
+dt {
+  font-weight: bold;
+  font-size: small;
+  padding-top: 1.5em;
+  padding-bottom: 0.4em;
+}
+dd {
+  font-size: small;
+  padding-bottom: 0.2em;
+}
+.sign-up-button {
+  background: #115cce url(/site-config/button.png) no-repeat center 0;
+  border: 1px solid #2528e8;
+  -moz-box-shadow: 2px 2px 3px #999;
+  -webkit-box-shadow: 2px 2px 3px #999;
+  box-shadow: 2px 2px 3px #999;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #fff;
+  display: block;
+  font-size: 1.5em;
+  height: 2em;
+  margin: 5px;
+  max-width: 247px;
+  padding: 5px 0;
+  text-align: center;
+  text-decoration: none;
+  width: 8em;
+}
+.sign-up-button:hover {
+  text-decoration: none;
+}
+.cta {
+  background: #edf6ff;
+  border: 1px solid #bfdfff;
+  float: right;
+  margin: .5em 0;
+  padding: 10px 0;
+  width: 99.5%;
+}
+.cta p {
+  color: #333;
+  font-size: 1em;
+  line-height: 1.4em;
+  margin: 0 23px;
+  text-align: center;
+}
+/* Header styles */
+.header {
+  background-color: #e5ecf9;
+  padding-bottom: 10px;
+}
+.admin-header {
+  background: -webkit-gradient(linear, center bottom, center top, from(#e5ecf9), to(pink));
+}
+#upper-right {
+  font-weight: bold;
+  color: gray;
+  position: absolute; 
+  top: 6px; 
+  right: 10px;
+}
+#upper-right a {
+  color: #06C;
+  text-decoration: none;
+}
+#logo {
+  margin-top: 0.4em;
+  margin-left: 0.4em;
+  margin-bottom: 0.4em;
+}
+.content {
+  margin: 2em 0.8em;
+}
+.navbar {
+  background-color: #e5ecf9;
+  border-bottom: solid thin #bcd;
+  width: 100%;
+  list-style: none;
+  padding: 0.4em 0px;
+  margin: 0;
+}
+.navbar li {
+  display: inline;
+  padding: 0.4em 1em; 
+  margin: 0;
+}
+.navbar-item {
+  text-align: center;
+  font-size: large;
+}
+.selected-navbar-item {
+  background-color: white;
+  border-top: solid thin #bcd;
+  border-left: solid thin #bcd;
+  border-right: solid thin #bcd;
+  border-bottom: none;
+  -moz-border-radius: 1em 1em 0 0;
+  -webkit-border-radius: 1em 1em 0 0;
+}
+.navbar-item a {
+  text-decoration: none;
+}
+#glass-panel {
+  font-size: 1200%;
+  color: #fff;
+  text-align: center;
+  line-height: 4.7em;
+  background-color: #999;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 200%;
+  filter: alpha(opacity=50);
+  -moz-opacity:0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+  display: none;
+}
+
+/* Footer style */
+.footer {
+  background-color: #e5ecf9;
+  padding: 0.4em;
+  text-align: center;
+}
+.loadtime {
+  padding-top: 0.4em;
+  color: gray;
+}
+.version {
+  padding-top: 0.3em;
+  color: gray;
+}
 /*
 tr.closed-choices td {
   background-color: #e5ecf9;
