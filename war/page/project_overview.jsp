@@ -86,6 +86,7 @@ limitations under the License.
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/resource/translation-workflow.css">
   <title><%= siteName %> - <c:out value="<%= projectName %>"/></title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
   <script type="text/javascript" language="javascript">
     wikipediaArticleList = ["Ocean","Lake","River","Stream","Lemon","Pear","Peach"];
     
@@ -201,6 +202,24 @@ limitations under the License.
       document.getElementById('SaveButton').disabled = noLanguageSelected;
       document.getElementById('AddButton').disabled = noLanguageSelected;
     };
+    
+    confirmDelete = function() {
+      var n = $("input:checked").length;
+      if (n == 0) {
+        alert("No articles selected");
+        return false;
+      }
+      if ( confirm("Are you sure you want to delete selected articles?") ) {
+        document.getElementById('delete_translations').checked = true;
+        lockPage();
+        return true;
+      }
+      else {
+        document.getElementById('delete_translations').checked = false;
+        return false;
+      }        
+    };
+    
   </script>
   
 </head>
@@ -443,8 +462,11 @@ limitations under the License.
       <% if (!readOnly) { %>
         <% if (!projectTranslations.isEmpty()) { %>
           <tr>
-            <td><input type="checkbox" name="delete_translations"></input></td>
-            <td colspan="10"><input type="submit" value="Delete selected articles" style="font-size:large;"/></td>
+            <td><input type="checkbox" name="delete_translations" id="delete_translations" style="display: none;"></input></td>
+            <td colspan="10"><input 
+                                 type="submit" value="Delete selected articles"
+                                 style="font-size:large;"
+                                 onclick="return confirmDelete();"/></td>
           </tr>
           <% if (projectName.equals("READY_TO_BE_NUKED")) { %>
             <tr>
