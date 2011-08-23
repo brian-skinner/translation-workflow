@@ -220,6 +220,22 @@ limitations under the License.
       }        
     };
     
+    var hash = {'.csv'  : 1 };
+    check_extension = function(filename,submitId) {
+      var re = /\..+$/;
+      var ext = filename.match(re);
+      var submitEl = document.getElementById(submitId);
+      if (hash[ext]) {
+        submitEl.disabled = false;
+        return true;
+      } else {
+        alert("Invalid filetype, please select csv file");
+        submitEl.disabled = true;
+
+        return false;
+      }
+    }
+
   </script>
   
 </head>
@@ -508,9 +524,31 @@ limitations under the License.
       
     </tbody>
   </table>
-  
   </form>
-  
+  <form action="/upload_csv?projectId=<%= projectId %>" method="post" enctype="multipart/form-data">
+  <table class="listing" cellpadding="0" cellspacing="0" border="0">
+    <tbody>
+      <tr style="background-color: #e5ecf9;">
+      <td></td>
+      <td>Upload CSV :<input type="file" name="csv" onchange="check_extension(this.value,'upload')">
+      <input type="submit" value="Upload CSV" name="upload" id="upload" disabled="disabled" onclick="javascript:lockPage();">
+      <% 
+      String msg = request.getParameter("msg");
+      if (msg != null && !msg.isEmpty())  { %>
+      <span style="color: red;">
+      <% if (msg.equalsIgnoreCase("size_exceeded")) { %>
+      Max upload filesize exceeded
+      <% } %>
+      <% if (msg.equalsIgnoreCase("invalid_type")) { %>
+      Invalid file.
+      <% } %>
+      </span>
+      <% } %>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+  </form>
   <% if ((project != null) && userService.isUserAdmin()) { %>
     <p></p>
     <hr/>
