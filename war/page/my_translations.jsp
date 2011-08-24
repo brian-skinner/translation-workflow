@@ -55,9 +55,11 @@ limitations under the License.
   String siteName = Website.getInstance().getName();
   
   String projectId = request.getParameter("project");
+  String msg = request.getParameter("msg");
   String showParam = request.getParameter("show");
   String searchParam = request.getParameter("search");
   boolean showAll = "all".equals(showParam);
+  boolean itemsAvailable = true;
 
   Cloud cloud = Cloud.open();
   
@@ -104,7 +106,18 @@ limitations under the License.
   <%@ include file="/resource/header.jsp" %>
   
   <h2>My Translations</h2>
-  
+  <% if (msg!=null && !msg.isEmpty()) { %>
+  <% if (msg.equals("_not_available_for_translation")) { %>
+    <script>
+      alert("Sorry, this article has recently been claimed for translation by another user. Please choose another article.");
+    </script>
+  <% } %>
+  <% if (msg.equals("_not_available_for_review")) { %>
+    <script>
+      alert("Sorry, this article has recently been claimed for review by another user. Please choose another article.");
+    </script>
+  <% } %>
+  <% } %>
   <% if (projects.isEmpty()) { %>
     <input 
         type="button"
@@ -225,6 +238,7 @@ limitations under the License.
           itemsAvailableToTranslate = cloud.getAllTranslationItemsToTranslate(project);
         } else {
           itemsAvailableToTranslate= cloud.searchTranslationItemsToTranslate(project, searchParam);
+          if ( itemsAvailableToTranslate.size()>0 ) { itemsAvailable = false; }
         }
         boolean needItems = itemsToTranslate.isEmpty();
         boolean chooseMoreIsOpen = needItems || (searchParam != null);
@@ -256,7 +270,7 @@ limitations under the License.
                 <div style="margin-bottom:0.8em;">
                   <input 
                       type="text"
-                      id="searchTerm"
+                      id="searchTerm<%=project.getId()%>"
                       name="searchTerm"
                       onkeydown="if (event.keyCode == 13) document.getElementById('searchButton').click()"
                       size="20"
@@ -265,7 +279,7 @@ limitations under the License.
                       type="button" 
                       id="searchButton"
                       value="Search" 
-                      onclick="window.location='/my_translations?search='+document.getElementById('searchTerm').value;"
+                      onclick="window.location='/my_translations?search='+document.getElementById('searchTerm<%=project.getId()%>').value;"
                       ></input>
                   &nbsp; or &nbsp;
                   <input 
@@ -325,6 +339,13 @@ limitations under the License.
           </td>
         </tr>
       <% } %>
+    <% if (itemsAvailable && searchParam != null) { %>
+    <tr>
+      <td colspan="4" align="center">
+        <strong>Sorry, article not found, try again, or press try your luck button.</strong>
+      </td>
+    </tr>
+    <% } %>
     </table>
     <p>&nbsp;</p>
   

@@ -13,6 +13,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+ // -------------------------------------------------------------------
+ // Congratulations, if you're reading this comment, you're probably
+ // one of first in the world to look at this code!
+ //
+ // We checked in this first draft once we had the initial features
+ // working and the basic structure in place, and now the next step
+ // is to get a proper code review and start improving the quality
+ // of the code. All the code below this line is eagerly awaiting
+ // your review comments.
+ // -------------------------------------------------------------------
+
 /**
  * @author mbalumuri@google.com (Mahesh Balumuri)
  * 
@@ -36,8 +47,5 @@ public class NicknameValidateServlet extends HttpServlet {
       response.setHeader("Cache-Control", "no-cache");
       response.getWriter().write("<result>1</result>");      
     }
-
-    
   }
-
 }
