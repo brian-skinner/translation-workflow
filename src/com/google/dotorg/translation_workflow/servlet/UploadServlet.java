@@ -42,16 +42,17 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
-// -------------------------------------------------------------------
-// Congratulations, if you're reading this comment, you're probably
-// one of first in the world to look at this code!
-//
-// We checked in this first draft once we had the initial features
-// working and the basic structure in place, and now the next step
-// is to get a proper code review and start improving the quality
-// of the code. All the code below this line is eagerly awaiting
-// your review comments.
-// -------------------------------------------------------------------
+
+ // -------------------------------------------------------------------
+ // Congratulations, if you're reading this comment, you're probably
+ // one of first in the world to look at this code!
+ //
+ // We checked in this first draft once we had the initial features
+ // working and the basic structure in place, and now the next step
+ // is to get a proper code review and start improving the quality
+ // of the code. All the code below this line is eagerly awaiting
+ // your review comments.
+ // -------------------------------------------------------------------
 
 /**
  * @author Mahesh Balumuri (mbalumuri@google.com)

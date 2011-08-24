@@ -94,6 +94,7 @@ public class ClaimServlet extends HttpServlet {
 
     XsrfValidator xsrfValidator = new XsrfValidator(request.getSession().getId());
     String xsrfTokenReceived = request.getParameter("xsrfToken");
+    String msg = "";
     
     if (xsrfValidator.isValid(xsrfTokenReceived)) {
       Translation translation = null;
@@ -118,6 +119,10 @@ public class ClaimServlet extends HttpServlet {
           }
           break;
         case CLAIM_FOR_TRANSLATION:
+          if (!translation.isAvailableToTranslate()) {
+            msg = "msg=_not_available_for_translation";
+            break;
+          }
           translation.claimForTranslation(claimerId);
           DocumentEntry docEntry = isLocallyServedContent(translation, requestUrl)
               ? attemptToUploadToTranslatorToolkit(
@@ -137,6 +142,10 @@ public class ClaimServlet extends HttpServlet {
           attemptToUnshareDocumentWithUser(translation, user);
           break;
         case CLAIM_FOR_REVIEW:
+          if (!translation.isAvailableToReview()) {
+            msg = "msg=_not_available_for_review";
+            break;
+          }
           translation.claimForReview(claimerId);
           attemptToShareDocumentWithUser(translation, user);
           break;
@@ -158,8 +167,14 @@ public class ClaimServlet extends HttpServlet {
     }
     
     cloud.close();
-    response.sendRedirect(
-        "/my_translations?project=" + projectId + "&language=" + language.getCode());
+    if (msg.isEmpty()){
+      response.sendRedirect(
+          "/my_translations?project=" + projectId + "&language=" + language.getCode());
+    }
+    else {
+      response.sendRedirect(
+          "/my_translations?" + msg );
+    }
   }
 
   /*
