@@ -56,6 +56,7 @@ limitations under the License.
   
   String volunteerNickname = (volunteer != null) ? volunteer.getNickname() : "";
   String volunteerCountry = (volunteer != null) ? volunteer.getCountry() : "";
+  String userType = (volunteer != null) ? volunteer.getUserType(): "";
   List<String> volunteerLanguageCodes = (volunteer != null) ? volunteer.getLanguageCodes() : new ArrayList<String>();
 %>
 
@@ -95,12 +96,28 @@ limitations under the License.
       return confirm("Are you sure you want to completely delete your profile forever?");
     };
     
+    validateForm = function() {
+      var nickname = $("#nickname").val();
+      var trimmed = nickname.replace(/^\s+|\s+$/g, '');
+      var languages = $(".languages:checked").length;
+      var isAdmin = $("#isAdmin").val();
+      var userType = 1;
+      userRole =$("#userRole").val();
+      if (isAdmin == "false" && userRole == "") {
+        userType = $("#userType:checked").length;  
+      }
+      if (trimmed.length==0 || languages==0 || userType==0) {
+        alert("Please fill all the information.");
+        return false;
+      }
+      return true;
+    }
+    
   </script>
 </head>
 
 <body>
   <%@ include file="/resource/header.jsp" %>
-
   <h2>My Profile - <%= userNickname %></h2>
   
   <table>
@@ -146,7 +163,7 @@ limitations under the License.
               </tr>
               
               <tr>
-                <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">My languages:</span></td> 
+                <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Pick the languages you read, write and speak:</span></td> 
                 <td>
                   <div class="language-list">
                   <table>
@@ -162,7 +179,8 @@ limitations under the License.
                                 value="<%= language.getCode() %>"
                                 onclick="document.getElementById('discussion_<%= language.getCode() %>').style.display = (this.checked ? 'inline' : 'none')"
                                 id="Language_<%= language.getCode() %>"
-                                <%= selected ? "checked" : "" %>/>
+                                <%= selected ? "checked" : "" %>
+                                class="languages"/>
                           </td>
                           <td><%= language.getName() %></td>
                           <td><span id="discussion_<%= language.getCode() %>" style="display:<%= selected ? "inline" : "none" %>;">
@@ -178,16 +196,35 @@ limitations under the License.
                   </div>
                 </td>
               </tr>
-      
+              <% if ((!userService.isUserAdmin() && userType == null) || volunteer == null ) { %>
+              <tr>
+                <td nowrap valign="top" id="AttrLabelCellLanguage">
+                  <span class="label">Select that apply:</span>
+                </td>
+                <td>
+                  <input 
+                      type="radio"
+                      name="userType"
+                      id="userType"
+                      value="Translator"/>&nbsp;Translator<br>
+                  <input
+                      type="radio"
+                      name="userType"
+                      id="userType"
+                      value="Reviewer"/>&nbsp;Reviewer
+                </td>
+              </tr>
+              <% } %>
               <tr>
                 <td></td>
-                <td><input id="save-button" type="submit" value="Save" style="font-size:large;"/></td>
+                <td><input id="save-button" type="submit" value="Save" style="font-size:large;" onclick="return validateForm()"/></td>
               </tr>
               
             </tbody>
           </table>
-        </form>  
-
+        </form>
+        <input type="hidden" id="userRole" value="<%=userType %>">  
+        <input type="hidden" value="<%=userService.isUserAdmin() %>" id="isAdmin">
       </td>
       
       <% if (volunteer != null) { %>

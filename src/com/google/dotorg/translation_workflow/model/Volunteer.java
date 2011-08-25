@@ -53,6 +53,7 @@ public class Volunteer {
   @Persistent private String nickname;
   @Persistent private String country;
   @Persistent private String languageCodes;
+  @Persistent private String userType;
 
   public String getNickname() {
     return nickname;
@@ -67,6 +68,10 @@ public class Volunteer {
     return Arrays.asList(arrayOfCodes);
   }
 
+  public String getUserType() {
+    return userType;
+  }
+  
   public void setKey(Key key) {
     this.key = key;
   }
@@ -82,6 +87,10 @@ public class Volunteer {
   public void setLanguageCodes(List<String> languageCodes) {
     String commaSeparatedValues = join(languageCodes, ",");
     this.languageCodes = commaSeparatedValues;
+  }
+  
+  public void setUserType(String userType) {
+    this.userType = userType;
   }
   
   // TODO: double check to make sure this isn't available in a standard google/app-engine library

@@ -70,6 +70,8 @@ limitations under the License.
   } else {
     projects = cloud.getProjectsForUser(user);
   }
+  Volunteer volunteer = cloud.getVolunteerByUser(user);
+  String userType = volunteer.getUserType();
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -104,7 +106,10 @@ limitations under the License.
   
 <body>
   <%@ include file="/resource/header.jsp" %>
-  
+  <% if (userType == null && !userService.isUserAdmin()) { %>
+    <script>window.location="my_profile";</script>
+  <% } %>
+  <% if ((userType != null && userType.equals("Translator")) || userService.isUserAdmin()) { %>
   <h2>My Translations</h2>
   <% if (msg!=null && !msg.isEmpty()) { %>
   <% if (msg.equals("_not_available_for_translation")) { %>
@@ -118,12 +123,14 @@ limitations under the License.
     </script>
   <% } %>
   <% } %>
+  <% } %>
   <% if (projects.isEmpty()) { %>
     <input 
         type="button"
         value="Add more languages that I speak"
         onclick="window.location='my_profile'" />
   <% } else { %>
+  <% if ((userType != null && userType.equals("Translator")) || userService.isUserAdmin()) { %>
     <table cellspacing="0" cellpadding="4" class="listing">
       <% for (Project project : projects) { 
           List<Translation> itemsToTranslate = cloud.getTranslationItemsForTranslator(user, project);
@@ -348,7 +355,8 @@ limitations under the License.
     <% } %>
     </table>
     <p>&nbsp;</p>
-  
+    <% } %>
+    
     <h2>My Newly Authored Articles</h2>
     <table cellspacing="0" cellpadding="4" class="listing">
       <%
@@ -400,6 +408,7 @@ limitations under the License.
     </table>    
     <p>&nbsp;</p>
     
+    <% if ((userType != null && userType.equals("Reviewer")) || userService.isUserAdmin()) { %>
     <h2>My Articles to Review</h2>
   
     <%@ include file="/site-config/my-items-to-review-text.jsp" %>
@@ -517,7 +526,8 @@ limitations under the License.
     </table>
   
     <p>&nbsp;</p>
-  
+    <% } %>
+    
     <h2>My Completed Items</h2>
     <table cellspacing="0" cellpadding="4" class="listing">
       <%
