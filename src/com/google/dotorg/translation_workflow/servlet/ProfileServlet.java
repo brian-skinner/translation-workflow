@@ -97,6 +97,7 @@ public class ProfileServlet extends HttpServlet {
         logger.warning("Input validation failure for Country code: " + rawCountryCode);
       }
       
+      String userType = request.getParameter("userType");
       // String recognition = request.getParameter("recognition");
       // boolean anonymous = !"public".equals(recognition);
       
@@ -122,6 +123,9 @@ public class ProfileServlet extends HttpServlet {
       volunteer.setCountry(countryCode);
       // volunteer.setAnonymous(anonymous);
       volunteer.setLanguageCodes(selectedLanguages);
+      if (volunteer.getUserType() == null && !userService.isUserAdmin()) {
+        volunteer.setUserType(userType);
+      }
       cloud.close();
       
       response.sendRedirect("/my_translations");
