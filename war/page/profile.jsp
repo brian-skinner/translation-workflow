@@ -103,7 +103,7 @@ limitations under the License.
       var isAdmin = $("#isAdmin").val();
       var userType = 1;
       userRole =$("#userRole").val();
-      if (isAdmin == "false" && userRole == "") {
+      if (isAdmin == "false" && (userRole == "" || userRole == "null")) {
         userType = $("#userType:checked").length;  
       }
       if (trimmed.length==0 || languages==0 || userType==0) {
