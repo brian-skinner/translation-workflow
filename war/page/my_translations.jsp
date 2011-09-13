@@ -349,7 +349,7 @@ limitations under the License.
     <% if (itemsAvailable && searchParam != null) { %>
     <tr>
       <td colspan="4" align="center">
-        <strong>Sorry, article not found, try again, or press try your luck button.</strong>
+        <strong>Sorry, the search "<%=searchParam%>" return no result, try again, or press "Try My Luck" button to list articles.</strong>
       </td>
     </tr>
     <% } %>
