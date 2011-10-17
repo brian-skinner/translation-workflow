@@ -196,7 +196,7 @@ limitations under the License.
                   </div>
                 </td>
               </tr>
-              <% if ((!userService.isUserAdmin() && userType == null) || volunteer == null ) { %>
+              <% if (!userService.isUserAdmin() && (userType == null || volunteer == null) ) { %>
               <tr>
                 <td nowrap valign="top" id="AttrLabelCellLanguage">
                   <span class="label">Select that apply:</span>
@@ -223,7 +223,7 @@ limitations under the License.
             </tbody>
           </table>
         </form>
-        <input type="hidden" id="userRole" value="<%=userType %>">  
+        <input type="hidden" id="userRole" value="<%=userType %>">
         <input type="hidden" value="<%=userService.isUserAdmin() %>" id="isAdmin">
       </td>
       

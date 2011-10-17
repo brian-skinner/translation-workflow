@@ -22,6 +22,8 @@ import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.Project;
 import com.google.dotorg.translation_workflow.model.Translation;
 
+import com.sun.xml.internal.fastinfoset.Decoder;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.ServletException;
 import java.io.*;
+import java.net.URLDecoder;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -102,12 +105,20 @@ public class UploadServlet extends HttpServlet {
               List<Translation> newTranslations = new ArrayList<Translation>();
               articlesLength = lines.length;
               for (String line : lines) {
+                line = line.replaceAll("\",", "\";");
                 line = line.replaceAll("\"", "");
-                String[] fields = line.split(",");
-                String articleName = nameValidator.filter(fields[0]);
+                String[] fields = line.split(";");
+                String articleName = fields[0].replace("_", " ");
+                articleName = nameValidator.filter(URLDecoder.decode(articleName));
                 URL url = new URL(fields[1]);
-                String category = nameValidator.filter(fields[2]);
-                String difficulty = nameValidator.filter(fields[3]);
+                String category = "";
+                String difficulty = "";
+                if(fields.length>2){
+                  category = nameValidator.filter(fields[2]);
+                }
+                if(fields.length>3){
+                  difficulty = nameValidator.filter(fields[3]);
+                }
                 Translation translation =
                     project.createTranslation(articleName, url.toString(), category, difficulty);
                 newTranslations.add(translation);
@@ -122,7 +133,7 @@ public class UploadServlet extends HttpServlet {
         }
         cloud.close();
         logger.info(articlesLength + " articles uploaded from csv to the project "
-            + project.getName());
+            + project.getId() + " by User :" + user.getUserId());
 
         response.sendRedirect("/project_overview?project=" + rawProjectId);
       } catch (SizeLimitExceededException e) {

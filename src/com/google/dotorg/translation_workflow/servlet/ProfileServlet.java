@@ -70,6 +70,7 @@ public class ProfileServlet extends HttpServlet {
         cloud.deleteProfileForUser(user);
         response.sendRedirect("/home");
         cloud.close();
+        logger.info("deleted profile for User: " + user.getUserId());
         return;
       } else {
         logger.severe("DELETE profile request failed for user: " + user.getUserId());
@@ -115,6 +116,7 @@ public class ProfileServlet extends HttpServlet {
       Volunteer volunteer = cloud.getVolunteerByUser(user);
       if (volunteer == null) {
         volunteer = cloud.createVolunteer(user);
+        logger.info("New profile created for User: " + user.getUserId());
       }
       if (cloud.isNicknameAvailable(nickname)) {
         volunteer.setNickname(nickname);
