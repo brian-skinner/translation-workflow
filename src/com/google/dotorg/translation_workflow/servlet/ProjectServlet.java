@@ -91,13 +91,15 @@ public class ProjectServlet extends HttpServlet {
       // TODO: ideally we should go to an error page here
       response.sendRedirect("/all_projects");
       return;
-    } 
+    }
 
     String delete = request.getParameter("deleteProject");
     if (delete != null) {
       // slight sanity check, to reduce risk of some bug accidentally causing a delete
       if ("yes, really delete this project".equals(delete)) {
         project.setDeleted(true);
+        logger.info("Project : " + project.getId() +
+            " is deleted by User :" + user.getUserId());
         response.sendRedirect("/all_projects");
         cloud.close();
         return;
@@ -152,6 +154,14 @@ public class ProjectServlet extends HttpServlet {
       }
     }
     
+    if (projectId == 0){
+      logger.info("New Project : " + project.getId() +
+          " is created by User :" + user.getUserId() );
+    }
+    
+    logger.info("Updating the info for Project :" + project.getId() +
+        " entered by User : " + user.getUserId() );
+    
     project.setName(name);
     project.setDescription(description);
     if (language != null) {
@@ -160,6 +170,8 @@ public class ProjectServlet extends HttpServlet {
     
     String rawCsvArticleList = request.getParameter("articles");
     if (!rawCsvArticleList.isEmpty()) {
+      logger.info(" Saving the articles in the project : " + project.getId() +
+          " uploaded by User :" + user.getUserId());
       PersistenceManager pm = cloud.getPersistenceManager();
       Transaction tx = pm.currentTransaction();
       tx.begin();

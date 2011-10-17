@@ -117,6 +117,9 @@ public class ClaimServlet extends HttpServlet {
             translation.claimForTranslation(claimerId);
             translation.markTranslationComplete();
           }
+          logger.info(" Newly authored item : " + translation.getId() +
+              " has been added by User :" + user.getUserId());
+          
           break;
         case CLAIM_FOR_TRANSLATION:
           if (!translation.isAvailableToTranslate()) {
@@ -129,6 +132,8 @@ public class ClaimServlet extends HttpServlet {
                   translation, getLocallyServedConent(translation, cloud)) 
               : attemptToUploadToTranslatorToolkit(translation);
           attemptToShareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is claimed for translation by User :" + user.getUserId());
           break;
         case ATTEMPT_TO_SHARE_AGAIN:
           attemptToShareDocumentWithUser(translation, user);
@@ -136,10 +141,14 @@ public class ClaimServlet extends HttpServlet {
         case UNCLAIM_FOR_TRANSLATION:
           translation.releaseClaimForTranslation();
           attemptToUnshareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is unclaimed for translation by User :" + user.getUserId());
           break;
         case MARK_TRANSLATION_COMPLETE:
           translation.markTranslationComplete();
           attemptToUnshareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is marked as tranlation complete by User :" + user.getUserId());
           break;
         case CLAIM_FOR_REVIEW:
           if (!translation.isAvailableToReview()) {
@@ -148,19 +157,27 @@ public class ClaimServlet extends HttpServlet {
           }
           translation.claimForReview(claimerId);
           attemptToShareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is claimed for review by User :" + user.getUserId());
           break;
         case UNCLAIM_FOR_REVIEW:
           translation.releaseClaimForReview();
           attemptToUnshareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is unclaimed for review by User :" + user.getUserId());
           break;
         case MARK_REVIEW_COMPLETE:
           String rawReviewScore = request.getParameter("reviewScore");
           int reviewScore = Integer.parseInt(rawReviewScore);
           translation.markReviewComplete(reviewScore);
           attemptToUnshareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is marked as review complete by User :" + user.getUserId());
           break;
         case CLAIM_FOR_REVISIT:
           attemptToReshareDocumentWithUser(translation, user);
+          logger.info("Article : " + translation.getId() +
+              " is claimed for revisit by User :" + user.getUserId());
           break;
           
       }
@@ -268,7 +285,7 @@ public class ClaimServlet extends HttpServlet {
     }
     
     try {
-      toolkitUtil.shareDocumentWithUser(translation, user, "writer");
+      toolkitUtil.shareDocumentWithUser(translation, user, "owner");
     } catch (RuntimeException e) {
       logger.log(Level.SEVERE, "Error: RuntimeException sharing document", e);
       return false;
@@ -288,7 +305,7 @@ public class ClaimServlet extends HttpServlet {
     }
     
     try {
-      toolkitUtil.shareDocumentWithUser(translation, user, "reader");
+      toolkitUtil.shareDocumentWithUser(translation, user, "owner");
     } catch (RuntimeException e) {
       logger.log(Level.SEVERE, "Error: RuntimeException sharing document", e);
       return false;

@@ -37,7 +37,7 @@ public class TextValidator {
    */
   private static final String LATIN_HTML_SAFE_CHARACTERS = "\u0041-\u0240";  // unicode block
   private static final String COMBINING_DIACRITICAL_MARKS = "\u0300-\u036F"; // unicode block
-  private static final String WHITELISTED_CHARACTERS = "-.,_ \\d"; // regex
+  private static final String WHITELISTED_CHARACTERS = "-.,_' \\d"; // regex
   private static final String ACCEPTED_CHARACTERS =
       LATIN_HTML_SAFE_CHARACTERS + COMBINING_DIACRITICAL_MARKS + WHITELISTED_CHARACTERS;
   

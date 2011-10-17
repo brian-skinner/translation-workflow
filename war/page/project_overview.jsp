@@ -525,6 +525,7 @@ limitations under the License.
     </tbody>
   </table>
   </form>
+  <% if ((project != null) && userService.isUserAdmin()) { %>
   <form action="/upload_csv?projectId=<%= projectId %>" method="post" enctype="multipart/form-data">
   <table class="listing" cellpadding="0" cellspacing="0" border="0">
     <tbody>
@@ -549,6 +550,7 @@ limitations under the License.
     </tbody>
   </table>
   </form>
+  <% } %>
   <% if ((project != null) && userService.isUserAdmin()) { %>
     <p></p>
     <hr/>
