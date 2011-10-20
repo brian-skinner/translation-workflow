@@ -25,6 +25,8 @@ import com.google.dotorg.translation_workflow.model.Translation;
 import com.sun.xml.internal.fastinfoset.Decoder;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +34,14 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
+import javax.print.URIException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.ServletException;
+import javax.xml.crypto.URIReferenceException;
+
 import java.io.*;
 import java.net.URLDecoder;
 
@@ -65,7 +70,7 @@ public class UploadServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+      throws ServletException, IOException , MalformedURLException {
     String rawProjectId = request.getParameter("projectId");
     try {
       ServletFileUpload upload = new ServletFileUpload();
@@ -77,7 +82,9 @@ public class UploadServlet extends HttpServlet {
       int projectId = Integer.parseInt(rawProjectId);
       Project project = cloud.getProjectById(projectId);
       TextValidator nameValidator = TextValidator.BRIEF_STRING;
-
+      String invalidRows = "";
+      int validRows = 0;
+      
       try {
         FileItemIterator iterator = upload.getItemIterator(request);
         int articlesLength = 0;
@@ -104,25 +111,35 @@ public class UploadServlet extends HttpServlet {
               String[] lines = fileContents.split("\n");
               List<Translation> newTranslations = new ArrayList<Translation>();
               articlesLength = lines.length;
+              validRows = articlesLength;
+              int lineNo = 0;
               for (String line : lines) {
+                lineNo++;
                 line = line.replaceAll("\",", "\";");
                 line = line.replaceAll("\"", "");
                 String[] fields = line.split(";");
                 String articleName = fields[0].replace("_", " ");
                 articleName = nameValidator.filter(URLDecoder.decode(articleName));
-                URL url = new URL(fields[1]);
-                String category = "";
-                String difficulty = "";
-                if(fields.length>2){
-                  category = nameValidator.filter(fields[2]);
+                try {
+                  URL url = new URL(fields[1]);
+                  String category = "";
+                  String difficulty = "";
+                  if(fields.length>2){
+                    category = nameValidator.filter(fields[2]);
+                  }
+                  if(fields.length>3){
+                    difficulty = nameValidator.filter(fields[3]);
+                  }
+                  Translation translation =
+                      project.createTranslation(articleName, url.toString(), category, difficulty);
+                  newTranslations.add(translation);
+                } catch (MalformedURLException e) {
+                  validRows--;
+                  invalidRows = invalidRows + "," + lineNo;
+                  logger.warning("Invalid URL : " + fields[1]);
+                  
                 }
-                if(fields.length>3){
-                  difficulty = nameValidator.filter(fields[3]);
-                }
-                Translation translation =
-                    project.createTranslation(articleName, url.toString(), category, difficulty);
-                newTranslations.add(translation);
-              }
+             }
               pm.makePersistentAll(newTranslations);
               tx.commit();
             } finally {
@@ -132,10 +149,12 @@ public class UploadServlet extends HttpServlet {
           }
         }
         cloud.close();
-        logger.info(articlesLength + " articles uploaded from csv to the project "
-            + project.getId() + " by User :" + user.getUserId());
-
-        response.sendRedirect("/project_overview?project=" + rawProjectId);
+        logger.info(validRows + " of " + articlesLength +
+            " articles uploaded from csv to the project " +
+            project.getId() + " by User :" + user.getUserId());
+        
+        response.sendRedirect("/project_overview?project=" + rawProjectId +
+            "&_invalid=" + invalidRows.substring(1));
       } catch (SizeLimitExceededException e) {
 
         logger.warning("Exceeded the maximum size (" + e.getPermittedSize() + ") of the file ("
@@ -143,7 +162,7 @@ public class UploadServlet extends HttpServlet {
         response.sendRedirect("/project_overview?project=" + rawProjectId + "&msg=size_exceeded");
       }
     } catch (Exception ex) {
-
+      logger.info("String "+ex.toString());
       throw new ServletException(ex);
 
     }

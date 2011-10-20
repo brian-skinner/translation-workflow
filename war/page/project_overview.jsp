@@ -417,7 +417,12 @@ limitations under the License.
 
   <hr/>
   <h2>Articles</h2>
-
+  <% String invalidMsg = request.getParameter("_invalid");
+     if (invalidMsg != null && !invalidMsg.isEmpty())  { %>
+      <div style="color: red;text-align:center;">
+      Following rows could not be inserted : <%=invalidMsg %>
+      </div>
+     <% } %>
   <table class="listing" cellpadding="0" cellspacing="0" border="0">
     <tbody>
       <tr style="background-color: #e5ecf9;">
