@@ -152,9 +152,14 @@ public class UploadServlet extends HttpServlet {
         logger.info(validRows + " of " + articlesLength +
             " articles uploaded from csv to the project " +
             project.getId() + " by User :" + user.getUserId());
-        
-        response.sendRedirect("/project_overview?project=" + rawProjectId +
-            "&_invalid=" + invalidRows.substring(1));
+        if(invalidRows.length()>0){
+          response.sendRedirect("/project_overview?project=" + rawProjectId +
+              "&_invalid=" + invalidRows.substring(1));
+        } else {
+          response.sendRedirect("/project_overview?project=" + rawProjectId);
+        }
+        /*response.sendRedirect("/project_overview?project=" + rawProjectId +
+            "&_invalid=" + invalidRows.substring(1));*/
       } catch (SizeLimitExceededException e) {
 
         logger.warning("Exceeded the maximum size (" + e.getPermittedSize() + ") of the file ("
