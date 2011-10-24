@@ -324,6 +324,8 @@ limitations under the License.
   <%
     int countOfAllItems = projectTranslations.size();
     int countOfUploadedItems = 0;
+    int countOfArtilcesTranslationInprogress = 0;
+    int countOfArtilcesReviewInprogress = 0;
     int wordCountOfUploadedItems = 0;
     int cumulativePercentTranslated = 0;
     int countOfDeletedItems = 0;
@@ -341,6 +343,12 @@ limitations under the License.
       }
       if (translation.isDeleted()) {
         countOfDeletedItems++;
+      }
+      if(translation.getTranslationStageMessage().equals("assigned") ){
+        countOfArtilcesTranslationInprogress++;
+      }
+      if(translation.getReviewStageMessage().equals("in review")){
+        countOfArtilcesReviewInprogress++;
       }
       
       if (translation.hasBeenUploadedToTranslatorToolkit()) {
@@ -396,6 +404,16 @@ limitations under the License.
         <td nowrap valign="top"><span class="label">Number available to review</span></td> 
         <td><%= countOfItemsAvailableToReview %></td>
         <td><%= countOfItemsAvailableToReview %></td>
+      </tr>
+      <tr style="&quot;display: table-row&quot;">
+        <td nowrap valign="top"><span class="label">Number of articles in translation</span></td> 
+        <td><%= countOfArtilcesTranslationInprogress %></td>
+        <td><%= countOfArtilcesTranslationInprogress %></td>
+      </tr>
+      <tr style="&quot;display: table-row&quot;">
+        <td nowrap valign="top"><span class="label">Number of articles in review</span></td> 
+       <td><%= countOfArtilcesReviewInprogress %></td>
+       <td><%= countOfArtilcesReviewInprogress %></td>
       </tr>
       <tr style="&quot;display: table-row&quot;">
         <td nowrap valign="top"><span class="label">Unique contributors</span></td> 
