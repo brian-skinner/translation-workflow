@@ -124,7 +124,7 @@ limitations under the License.
     <tr>
       <td width="80%">
 
-        <form action="/profile" method="post">
+        <form action="/profile" method="post" onsubmit="return validateForm()">
           <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
           <table cellpadding="0" cellspacing="18" border="0">
             <tbody>
@@ -217,7 +217,7 @@ limitations under the License.
               <% } %>
               <tr>
                 <td></td>
-                <td><input id="save-button" type="submit" value="Save" style="font-size:large;" onclick="return validateForm()"/></td>
+                <td><input id="save-button" type="submit" value="Save" style="font-size:large;" /></td>
               </tr>
               
             </tbody>
