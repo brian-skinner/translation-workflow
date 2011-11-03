@@ -238,6 +238,32 @@ public class TranslatorToolkitUtil {
     }
   }
   
+  public boolean hasAccess(Translation translation, User user){
+    String emailId = user.getEmail();
+    String aclUrl = DOC_ACL_URL + translation.getToolkitDocIdTail();
+    AclScope scope = new AclScope(AclScope.Type.USER, emailId);
+    
+    int attempts = 0;
+    boolean failed = false;
+    emailId = emailId.toLowerCase();
+    String FeedUrl = DOC_ACL_URL + translation.getToolkitDocIdTail();
+    try {
+      AclFeed aclFeed = service.getFeed(new URL(FeedUrl), AclFeed.class);
+      for (AclEntry feedEntry : aclFeed.getEntries()) {
+        if(feedEntry.getScope().getValue().equals(user.getEmail())){
+          failed = true;
+        }
+      }
+    } catch (ServiceException e) {
+      logger.severe("Unable to retrieve the access role" );
+      return false;
+    } catch (IOException e) {
+      logger.severe("Error in retrieving the access for " + emailId);
+      return false;
+    }
+    return failed;
+  }
+  
   private DocumentEntry uploadHtmlDocument(
       String sourceLangCode, String targetLangCode, String title, String articleUrl,
       String htmlContent)

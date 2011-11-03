@@ -28,6 +28,7 @@ limitations under the License.
 
 <!-- TODO: we should try to remove this dependency on "servlet" -->
 <%@ page import="com.google.dotorg.translation_workflow.servlet.ClaimServlet" %>
+<%@ page import="com.google.dotorg.translation_workflow.io.TranslatorToolkitUtil" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 
@@ -72,6 +73,7 @@ limitations under the License.
   }
   Volunteer volunteer = cloud.getVolunteerByUser(user);
   String userType = (volunteer != null) ? volunteer.getUserType(): null;
+  TranslatorToolkitUtil toolkitUtil = new TranslatorToolkitUtil();
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -554,24 +556,31 @@ limitations under the License.
         <% } else { %>
           <% for (Translation item : completedItems) { 
               String translatorId = item.getTranslatorId();
+              boolean hasAccess = true;
+              if(item.getTranslatedTitle() == null){
+                hasAccess = false;
+              } else {
+                hasAccess = toolkitUtil.hasAccess(item,user);
+              }
               Volunteer translator = (translatorId == null) ? null : cloud.getVolunteerByUserId(translatorId);
               String reviewerId = item.getReviewerId();
               Volunteer reviewer = (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
           %>
             <tr>
               <td class="term"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
-              <td class="term"><%= (item.getTranslatedTitle() == null) ? "" : "<a target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
+              <td class="term"><%= (!hasAccess) ? "" : "<a target=\"_blank\" href=\"" + item.getToolkitArticleUrl() + "\">view translation</a>" %></td>
               <td><c:out value='<%= (translator == null) ? "" : translator.getNickname()%>'/></td>
               <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
               <td><%= item.getReviewScore()%></td>
-              <td><form action="/claim_item" method="post">
+              <td><% if(!hasAccess && item.getTranslatedTitle() != null) {%>
+                  <form action="/claim_item" method="post">
                     <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                     <input type="hidden" name="projectId" value="<%= project.getId() %>">
                     <input type="hidden" name="languageCode" value="<%= languageCode %>">
                     <input type="hidden" name="translationId" value="<%= item.getId() %>">
                     <input type="hidden" name="action" value="<%= ClaimServlet.Action.CLAIM_FOR_REVISIT.toString() %>">
                     <input type="submit" value="Revisit" onclick="javascript:lockPage()"></input>
-                  </form>
+                  </form><% } %>
               </td>
             </tr>
           <% } %>
