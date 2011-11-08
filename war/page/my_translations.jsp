@@ -102,6 +102,9 @@ limitations under the License.
         divForItemsToReview.style.display = "block";
       }
     };
+    confirmDelete = function() {
+      return confirm("Are you sure you want to delete?");
+    };
   </script>
     
 </head>
@@ -371,7 +374,7 @@ limitations under the License.
           <th rowspan="<%= 2 + authoredItems.size() %>" style="width:15%; font-size:large; color:#aaa; text-align:center;">
             <c:out value="<%=project.getName()%>"/> (<%=languageName%>)
           </th>
-          <th>Article</th>
+          <th colspan=2>Article</th>
         </tr>
         <% for (Translation item : authoredItems) { 
             String translatorId = item.getTranslatorId();
@@ -380,7 +383,18 @@ limitations under the License.
             Volunteer reviewer = (reviewerId == null) ? null : cloud.getVolunteerByUserId(reviewerId);
         %>
           <tr>
-            <td class="term" colspan="2"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
+            <td class="term" colspan="1"><a href="<%= item.getOriginalUrl() %>" target="_blank"><%= item.getOriginalTitle() %></a></td>
+            <td><% if(!item.getStage().equals("COMPLETED")) { %>
+            <form action="/claim_item" method="post">
+              <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
+              <input type="hidden" name="projectId" value="<%=project.getId()%>">
+              <input type="hidden" name="languageCode" value="<%= languageCode %>">
+              <input type="hidden" name="translationId" value="<%=item.getId()%>">
+              <input type="hidden" name="action" value="<%=ClaimServlet.Action.DELETE_NEWLY_AUTHORED_ITEM.toString()%>">
+              <input type="submit" value="Delete" onclick="return confirmDelete();" />
+            </form>
+            <% } %>
+            </td>
           </tr>
         <% } %>
         <tr class="add-articles">
@@ -389,7 +403,7 @@ limitations under the License.
             String lowercaseCode = languageCode.toLowerCase();
             String exampleArticle = "http://" + lowercaseCode + ".wikipedia.org/wiki/Jimmy_Wales";
             %>
-            <td colspan="1">
+            <td colspan="2">
               <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
               <input type="hidden" name="projectId" value="<%=project.getId()%>">
               <input type="hidden" name="languageCode" value="<%= languageCode %>">
@@ -402,7 +416,7 @@ limitations under the License.
                   size="60"
                   placeholder="<%=exampleArticle%>"></input>
               <input type="hidden" name="projectId" value="<%=project.getId()%>">
-              <input type="submit" value="Add" onclick="javascript:lockPage()" />
+              <input type="submit" value="Submit for Review" onclick="javascript:lockPage()" />
             </td>
           </form>           
         </tr>
@@ -572,7 +586,7 @@ limitations under the License.
               <td><c:out value='<%= (translator == null) ? "" : translator.getNickname()%>'/></td>
               <td><c:out value='<%= (reviewer == null) ? "" : reviewer.getNickname()%>'/></td>
               <td><%= item.getReviewScore()%></td>
-              <td><% if(!hasAccess && item.getTranslatedTitle() != null) {%>
+              <td><% if((!hasAccess && item.getTranslatedTitle() != null) || item.isUserTheReviewer(user)) {%>
                   <form action="/claim_item" method="post">
                     <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                     <input type="hidden" name="projectId" value="<%= project.getId() %>">

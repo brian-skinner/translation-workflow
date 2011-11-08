@@ -60,6 +60,7 @@ public class ClaimServlet extends HttpServlet {
   
   public static enum Action {
     ADD_NEWLY_AUTHORED_ITEM,
+    DELETE_NEWLY_AUTHORED_ITEM,
     CLAIM_FOR_TRANSLATION,
     ATTEMPT_TO_SHARE_AGAIN,
     UNCLAIM_FOR_TRANSLATION,
@@ -124,6 +125,11 @@ public class ClaimServlet extends HttpServlet {
               " has been added by User :" + user.getUserId());
           
           break;
+        case DELETE_NEWLY_AUTHORED_ITEM:
+          translation.setDeleted(true);
+          logger.info(" Newly authored item : " + translation.getId() +
+              " has been deleted by User :" + user.getUserId());
+          break;          
         case CLAIM_FOR_TRANSLATION:
           if (!translation.isAvailableToTranslate()) {
             msg = "msg=_not_available_for_translation";
