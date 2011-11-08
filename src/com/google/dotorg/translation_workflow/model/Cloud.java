@@ -531,7 +531,7 @@ public class Cloud {
 
     for (Translation translation : getTranslationItemsForUser(user, project)) {
       if ((translation.getStage() == Stage.AVAILABLE_TO_REVIEW)
-          && translation.isNewlyAuthoredNotTranslated()) {
+          && translation.isNewlyAuthoredNotTranslated() && !translation.isDeleted()) {
         returnValues.add(translation);
       }
     }
