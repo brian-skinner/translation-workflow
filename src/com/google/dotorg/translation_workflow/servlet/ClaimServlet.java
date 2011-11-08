@@ -23,6 +23,7 @@ import com.google.dotorg.translation_workflow.model.Language;
 import com.google.dotorg.translation_workflow.model.LexiconTerm;
 import com.google.dotorg.translation_workflow.model.Project;
 import com.google.dotorg.translation_workflow.model.Translation;
+import com.google.dotorg.translation_workflow.model.Volunteer;
 import com.google.dotorg.translation_workflow.view.LexiconUrl;
 import com.google.dotorg.translation_workflow.view.HtmlPageView;
 import com.google.dotorg.translation_workflow.view.LexiconTermView;
@@ -74,6 +75,8 @@ public class ClaimServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     Cloud cloud = Cloud.open();
+    Volunteer volunteer = cloud.getVolunteerByUser(user);
+    String userType = (volunteer != null) ? volunteer.getUserType(): null;
 
     // read the input parameters from the client and validate them all before using the values
     String rawProjectId = request.getParameter("projectId");
@@ -175,6 +178,9 @@ public class ClaimServlet extends HttpServlet {
               " is marked as review complete by User :" + user.getUserId());
           break;
         case CLAIM_FOR_REVISIT:
+          if ((userType != null && userType.equals("Reviewer")) || userService.isUserAdmin()) {
+            translation.markReviewIncomplete();
+          }
           attemptToReshareDocumentWithUser(translation, user);
           logger.info("Article : " + translation.getId() +
               " is claimed for revisit by User :" + user.getUserId());

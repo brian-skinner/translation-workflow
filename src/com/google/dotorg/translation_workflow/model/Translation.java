@@ -320,6 +320,10 @@ public class Translation {
     reviewComplete = true;
     this.reviewScore = reviewScore;
   }
+  
+  public void markReviewIncomplete() {
+    reviewComplete = false;
+  }
 
   public void addSharedWithUser(User user) {
     if (!isSharedWithUser(user)) {
