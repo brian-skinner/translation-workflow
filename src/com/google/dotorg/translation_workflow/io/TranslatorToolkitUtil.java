@@ -255,7 +255,8 @@ public class TranslatorToolkitUtil {
         }
       }
     } catch (ServiceException e) {
-      logger.severe("Unable to retrieve the access role" );
+      logger.severe("Unable to retrieve the access role for the document " +
+          translation.getId() +"  to user " + user.getUserId() );
       return false;
     } catch (IOException e) {
       logger.severe("Error in retrieving the access for " + emailId);
