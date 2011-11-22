@@ -102,6 +102,15 @@ limitations under the License.
         divForItemsToReview.style.display = "block";
       }
     };
+    
+    checkScore = function(itemId,score){
+      var submitBtnId = 'submitBtn'+itemId;
+      var saveButton = document.getElementById(submitBtnId);
+      saveButton.disabled = true;
+      if(score > 0){
+        saveButton.disabled = false;
+      }
+    };
     confirmDelete = function() {
       return confirm("Are you sure you want to delete?");
     };
@@ -458,7 +467,7 @@ limitations under the License.
             <td><c:out value="<%=translator.getNickname()%>"/></td>
             <td>
               <form action="/claim_item" method="post">
-                <select name="reviewScore">
+                <select name="reviewScore" onChange="javascript:checkScore(<%=item.getId()%>,this.value)">
                   <option value="0">0</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -471,7 +480,7 @@ limitations under the License.
                 <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.MARK_REVIEW_COMPLETE.toString()%>">
-                <input type="submit" value="Mark this as successfully reviewed!" onclick="javascript:lockPage()" />
+                <input type="submit" id="submitBtn<%=item.getId()%>" value="Mark this as successfully reviewed!" onclick="javascript:lockPage()" disabled="disabled" />
               </form>
               <form action="/claim_item" method="post">
                 <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
