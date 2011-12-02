@@ -107,7 +107,7 @@ limitations under the License.
       var submitBtnId = 'submitBtn'+itemId;
       var saveButton = document.getElementById(submitBtnId);
       saveButton.disabled = true;
-      if(score > 0){
+      if(score != ''){
         saveButton.disabled = false;
       }
     };
@@ -468,6 +468,7 @@ limitations under the License.
             <td>
               <form action="/claim_item" method="post">
                 <select name="reviewScore" onChange="javascript:checkScore(<%=item.getId()%>,this.value)">
+                  <option value="">-</option>
                   <option value="0">0</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
