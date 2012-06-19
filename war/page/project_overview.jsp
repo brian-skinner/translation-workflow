@@ -25,6 +25,8 @@ limitations under the License.
 <%@ page import="com.google.dotorg.translation_workflow.model.Project" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Translation" %>
 <%@ page import="com.google.dotorg.translation_workflow.model.Volunteer" %>
+<%@ page import="com.google.dotorg.translation_workflow.io.SpreadsheetClient" %>
+<%@ page import="com.google.gdata.data.spreadsheet.SpreadsheetEntry" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 
@@ -71,7 +73,8 @@ limitations under the License.
 
   String projectName = (project != null) ? project.getName() : "";
   String projectDescription = (project != null) ? project.getDescription() : placeholderDescription;
-  String projectLanguageCode = (project != null) ? project.getLanguageCode() : ""; 
+  String projectSourceLanguageCode = (project != null) ? project.getSourceLanguageCode() : ""; 
+  String projectTargetLanguageCode = (project != null) ? project.gettargetLanguageCode() : ""; 
   List<Translation> projectTranslations = 
       (project == null) ? new ArrayList<Translation>() : project.getTranslations();
   List<String> projectLanguages = new ArrayList<String>();
@@ -235,6 +238,16 @@ limitations under the License.
         return false;
       }
     }
+    check_spreadsheet = function(spreadsheet,submitId){
+      var submitEl = document.getElementById(submitId);
+      if(spreadsheet==0){
+        submitEl.disabled = true;
+        return false;
+      } else {
+        submitEl.disabled = false;
+        return true;
+      }
+    }
 
   </script>
   
@@ -263,14 +276,14 @@ limitations under the License.
         </td>
       </tr>
       <tr>
-        <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Language:</span></td> 
+        <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Source Language:</span></td> 
         <td id="AttrValueCellLangauge">
           <select 
-              name="languageCode"
+              name="sourceLanguageCode"
               id="Language"
               <%= (languageIsReadOnly) ? "disabled=\"disabled\"" : "" %>
               onchange="javascript:languageChanged();">
-            <% if (projectLanguageCode.isEmpty()) { %>
+            <% if (projectSourceLanguageCode.isEmpty()) { %>
               <option></option>
             <% } %>      
             <%
@@ -279,7 +292,28 @@ limitations under the License.
               %>
               <option 
                   value="<%= language.getCode() %>" 
-                  <%= (language.getCode().equals(projectLanguageCode) ? "selected" : "") %>><%= language.getName() %></option> 
+                  <%= (language.getCode().equals(projectSourceLanguageCode) ? "selected" : "") %>><%= language.getName() %></option> 
+            <% } %>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap valign="top" id="AttrLabelCellLanguage"><span class="label">Target Language:</span></td> 
+        <td id="AttrValueCellLangauge">
+          <select 
+              name="targetLanguageCode"
+              id="Language"
+              <%= (languageIsReadOnly) ? "disabled=\"disabled\"" : "" %>
+              onchange="javascript:languageChanged();">
+            <% if (projectTargetLanguageCode.isEmpty()) { %>
+              <option></option>
+            <% } %>      
+            <%
+            for (Language language : allLanguages) {
+              %>
+              <option 
+                  value="<%= language.getCode() %>" 
+                  <%= (language.getCode().equals(projectTargetLanguageCode) ? "selected" : "") %>><%= language.getName() %></option> 
             <% } %>
           </select>
         </td>
@@ -311,7 +345,7 @@ limitations under the License.
                 type="submit" 
                 value="Save" 
                 style="font-size:large;" 
-                <%= (projectLanguageCode.isEmpty()) ? "disabled=\"disabled\"" : "" %>
+                <%= (projectTargetLanguageCode.isEmpty()) ? "disabled=\"disabled\"" : "" %>
                 onclick="javascript:lockPage();"/>
           <% } %>      
         </td>
@@ -534,7 +568,7 @@ limitations under the License.
                 type="submit"
                 value="Add articles" 
                 style="font-size:large;"
-                <%= (projectLanguageCode.isEmpty()) ? "disabled=\"disabled\"" : "" %>
+                <%= (projectTargetLanguageCode.isEmpty()) ? "disabled=\"disabled\"" : "" %>
                 onclick="javascript:lockPage();"/>
             <div>Caution: If you plan to put thousands of articles in your project, 
             do not add them all as a single batch because that will overload the server
@@ -568,6 +602,30 @@ limitations under the License.
       <% } %>
       </span>
       <% } %>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+  </form>
+  <% } %>
+  <% if ((project != null) && userService.isUserAdmin()) { %>
+  <form action="/import_spreadsheet?projectId=<%= projectId %>" method="post">
+  <table class="listing" cellpadding="0" cellspacing="0" border="0">
+    <tbody>
+      <tr style="background-color: #e5ecf9;">
+      <td></td>
+      <td>Import from spreadsheet
+      <select name="sheetId" id="sheetId" onchange="check_spreadsheet(this.value,'import')">
+      <option value="0">Select spreadsheet</option>
+      <% SpreadsheetClient sheetClient = new SpreadsheetClient();
+      for (SpreadsheetEntry spreadsheet : sheetClient.getSpreadsheetEntries()) {
+        %>
+        <option value="<%=spreadsheet.getKey()%>">
+        <%=spreadsheet.getTitle().getPlainText()%>
+        </option>
+      <% } %>
+      </select>
+      <input type="submit" value="Import" name="import" id="import" disabled="disabled" onclick="javascript:lockPage();">
       </td>
       </tr>
     </tbody>

@@ -80,6 +80,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>uploadServlet</servlet-name>
     <url-pattern>/upload_csv</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>importServlet</servlet-name>
+    <servlet-class>com.google.dotorg.translation_workflow.servlet.ImportServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>importServlet</servlet-name>
+    <url-pattern>/import_spreadsheet</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>validateServlet</servlet-name>

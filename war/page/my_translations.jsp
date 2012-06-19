@@ -149,7 +149,7 @@ limitations under the License.
       <% for (Project project : projects) { 
           List<Translation> itemsToTranslate = cloud.getTranslationItemsForTranslator(user, project);
           boolean mayClaimMore = project.mayUserClaimMoreForTranslation(user);
-          String languageCode = project.getLanguageCode();
+          String languageCode = project.gettargetLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
         %>
         <tr>
@@ -228,7 +228,7 @@ limitations under the License.
                   <form action="/claim_item" method="post">
                     <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                    <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
+                    <input type="hidden" name="languageCode" value="<%=project.gettargetLanguageCode()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
                     <input type="hidden" name="action" value="<%=ClaimServlet.Action.MARK_TRANSLATION_COMPLETE.toString()%>">
                     <input type="submit" value="Request a review" onclick="javascript:lockPage()" />
@@ -238,7 +238,7 @@ limitations under the License.
                   <form action="/claim_item" method="post">
                     <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                     <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                    <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
+                    <input type="hidden" name="languageCode" value="<%=project.gettargetLanguageCode()%>">
                     <input type="hidden" name="translationId" value="<%=item.getId()%>">
                     <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_TRANSLATION.toString()%>">
                     <input type="submit" value="Let someone else do this item" onclick="javascript:lockPage()" />
@@ -376,7 +376,7 @@ limitations under the License.
       <%
         for (Project project : projects) {  
           List<Translation> authoredItems = cloud.getTranslationItemsAuthoredByUser(user, project);
-          String languageCode = project.getLanguageCode();
+          String languageCode = project.gettargetLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>
@@ -442,7 +442,7 @@ limitations under the License.
       <%
         for (Project project : projects) {
            List<Translation> itemsToReview = cloud.getTranslationItemsForReviewer(user, project);
-           String languageCode = project.getLanguageCode();
+           String languageCode = project.gettargetLanguageCode();
            String languageName = cloud.getLanguageByCode(languageCode).getName();
            boolean translationsAvailable = project.hasTranslationsAvailableForReview(user);
            %>
@@ -478,7 +478,7 @@ limitations under the License.
             <td>
                 <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
+                <input type="hidden" name="languageCode" value="<%=project.gettargetLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.MARK_REVIEW_COMPLETE.toString()%>">
                 <input type="submit" id="submitBtn<%=item.getId()%>" value="Mark this as successfully reviewed!" onclick="javascript:lockPage()" disabled="disabled" />
@@ -486,7 +486,7 @@ limitations under the License.
               <form action="/claim_item" method="post">
                 <input type="hidden" name="xsrfToken" value="<%= pageContext.getAttribute("xsrfToken") %>">
                 <input type="hidden" name="projectId" value="<%=project.getId()%>">
-                <input type="hidden" name="languageCode" value="<%=project.getLanguageCode()%>">
+                <input type="hidden" name="languageCode" value="<%=project.gettargetLanguageCode()%>">
                 <input type="hidden" name="translationId" value="<%=item.getId()%>">
                 <input type="hidden" name="action" value="<%=ClaimServlet.Action.UNCLAIM_FOR_REVIEW.toString()%>">
                 <input type="submit" value="Let someone else review this item" onclick="javascript:lockPage()" />
@@ -559,7 +559,7 @@ limitations under the License.
       <%
         for (Project project : projects) {  
           List<Translation> completedItems = cloud.getTranslationItemsCompletedByUser(user, project);
-          String languageCode = project.getLanguageCode();
+          String languageCode = project.gettargetLanguageCode();
           String languageName = cloud.getLanguageByCode(languageCode).getName();
       %>
         <tr>

@@ -133,8 +133,10 @@ public class ProjectServlet extends HttpServlet {
           "Raw: " + rawDescription + ", Filtered: " + description);
     }
     
-    String rawLanguageCode = request.getParameter("languageCode");
-    Language language = cloud.getLanguageByCode(rawLanguageCode);
+    String rawSourceLanguageCode = request.getParameter("sourceLanguageCode");
+    Language sourceLanguage = cloud.getLanguageByCode(rawSourceLanguageCode);
+    String rawtargetLanguageCode = request.getParameter("targetLanguageCode");
+    Language targetLanguage = cloud.getLanguageByCode(rawtargetLanguageCode);
     
     String nukeRequested = request.getParameter("nuke_translations");
     if (nukeRequested != null) {
@@ -164,8 +166,11 @@ public class ProjectServlet extends HttpServlet {
     
     project.setName(name);
     project.setDescription(description);
-    if (language != null) {
-      project.setLanguageCode(language.getCode());
+    if (sourceLanguage != null) {
+      project.setSourceLanguageCode(sourceLanguage.getCode());
+    }
+    if (targetLanguage != null) {
+      project.setTargetLanguageCode(targetLanguage.getCode());
     }
     
     String rawCsvArticleList = request.getParameter("articles");
