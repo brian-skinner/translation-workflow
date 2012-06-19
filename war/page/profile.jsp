@@ -110,6 +110,11 @@ limitations under the License.
         alert("Please fill all the information.");
         return false;
       }
+      if(languages<2)
+      {
+        alert("Please select atleast two languages you know");
+        return false;
+      }
       return true;
     }
     

@@ -59,6 +59,8 @@ public class Project {
 
   @Persistent private String name;
   @Persistent private Text description;
+  @Persistent private String sourceLanguageCode;
+  @Persistent private String targetLanguageCode;
   @Persistent private String languageCode;
   @Persistent private boolean hasBeenDeleted;
 
@@ -89,8 +91,16 @@ public class Project {
     return languageCode;
   }
   
+  public String getSourceLanguageCode() {
+    return sourceLanguageCode;
+  }
+  
+  public String gettargetLanguageCode() {
+    return targetLanguageCode;
+  }
+  
   public boolean includesLanguageCode(String languageCode) {
-    return (languageCode.equals(getLanguageCode()));
+    return (languageCode.equals(gettargetLanguageCode()));
   }
   
   /**
@@ -324,7 +334,7 @@ public class Project {
       translation.setOriginalUrl(url);
       translation.setCategory(category);
       translation.setDifficulty(difficulty);
-      translation.setLanguageCode(getLanguageCode());
+      translation.setLanguageCode(gettargetLanguageCode());
       getTranslations().add(translation);
       return translation;
     }
@@ -348,8 +358,16 @@ public class Project {
     this.description = new Text(description);
   }
 
-  public void setLanguageCode(String languageCode) {
+  /*public void setLanguageCode(String languageCode) {
     this.languageCode = languageCode;
+  }*/
+  
+  public void setSourceLanguageCode(String languageCode) {
+    this.sourceLanguageCode = languageCode;
+  }
+  
+  public void setTargetLanguageCode(String languageCode) {
+    this.targetLanguageCode = languageCode;
   }
   
 }

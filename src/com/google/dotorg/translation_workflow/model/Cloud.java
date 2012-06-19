@@ -58,16 +58,15 @@ public class Cloud {
   private static final Logger logger = Logger.getLogger(Cloud.class.getName());
 
   /* "transactions-optional" is a key value in our jdoconfig.xml */
-  private static final PersistenceManagerFactory pmfInstance = JDOHelper
-      .getPersistenceManagerFactory("transactions-optional");
+  private static final PersistenceManagerFactory pmfInstance =
+      JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
   private PersistenceManager pm;
   private List<Country> allCountries;
   private List<Language> allLanguages;
   private HashMap<String, LexiconTerm> lexiconTerms;
 
-  private Cloud() {
-  }
+  private Cloud() {}
 
   private static PersistenceManager getNewPersistenceManager() {
     return pmfInstance.getPersistenceManager();
@@ -118,9 +117,8 @@ public class Cloud {
   }
 
   public Translation getTranslationByIds(int projectId, int translationId) {
-    Key key =
-        new KeyFactory.Builder(Project.class.getSimpleName(), projectId).addChild(
-            Translation.class.getSimpleName(), translationId).getKey();
+    Key key = new KeyFactory.Builder(Project.class.getSimpleName(), projectId).addChild(
+        Translation.class.getSimpleName(), translationId).getKey();
     return pm.getObjectById(Translation.class, key);
   }
 
@@ -410,7 +408,9 @@ public class Cloud {
     if (volunteer != null) {
       List<String> volunteerLanguages = volunteer.getLanguageCodes();
       for (Project project : getAllProjects()) {
-        if (volunteerLanguages.contains(project.getLanguageCode())) {
+        // if (volunteerLanguages.contains(project.getLanguageCode())) {
+        if (volunteerLanguages.contains(project.getSourceLanguageCode())
+            && volunteerLanguages.contains(project.gettargetLanguageCode())) {
           selectedProjects.add(project);
         }
       }
@@ -466,8 +466,8 @@ public class Cloud {
 
     for (Translation translation : translations) {
       Stage stage = translation.getStage();
-      if (((stage == Stage.CLAIMED_FOR_TRANSLATION) || (stage == Stage.AVAILABLE_TO_REVIEW) || (stage == Stage.CLAIMED_FOR_REVIEW))
-          && !translation.isNewlyAuthoredNotTranslated()) {
+      if (((stage == Stage.CLAIMED_FOR_TRANSLATION) || (stage == Stage.AVAILABLE_TO_REVIEW)
+          || (stage == Stage.CLAIMED_FOR_REVIEW)) && !translation.isNewlyAuthoredNotTranslated()) {
         returnValues.add(translation);
       }
     }
@@ -604,8 +604,8 @@ public class Cloud {
     return availableItems;
   }
 
-  private List<Translation> getTranslationItemsToTranslate(Project project,
-      int numberOfItemsToReturn) {
+  private List<Translation> getTranslationItemsToTranslate(
+      Project project, int numberOfItemsToReturn) {
     List<Translation> returnValues = new ArrayList<Translation>();
     List<Translation> availableItems = getAvailableTranslationItems(project);
 
