@@ -1,0 +1,1 @@
+A web-based app for community translation projects that allows volunteers to pick what parts they want to translate, mark translations as ready for review, etc.  Designed to serve as a simple workflow system on top of Google Translator Toolkit, which is where volunteers translate individual documents.  Written in Java on App Engine.
